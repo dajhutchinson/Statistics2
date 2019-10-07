@@ -1,0 +1,170 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=1in, paperwidth=8.3in, paperheight=11.7in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{dsfont}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{changepage} 
+
+\begin{document}
+
+\pagestyle{fancy}
+\setlength\parindent{0pt}
+\allowdisplaybreaks
+
+\renewcommand{\headrulewidth}{0pt}
+
+% Cover page title
+\title{Statistics 2 - Notes}
+\author{Dom Hutchinson}
+\date{\today}
+\maketitle
+
+% Header
+\fancyhead[L]{Dom Hutchinson}
+\fancyhead[C]{Statistics 2 - Problem Sheet 1}
+\fancyhead[R]{\today}
+
+% Counters
+\newcounter{qpart}[section]
+
+% commands
+\newcommand{\dotprod}[0]{\boldsymbol{\cdot}}
+\newcommand{\cosech}[0]{\mathrm{cosech}\ }
+\newcommand{\cosec}[0]{\mathrm{cosec}\ }
+\newcommand{\sech}[0]{\mathrm{sech}\ }
+\newcommand{\prob}[0]{\mathbb{P}}
+\newcommand{\nats}[0]{\mathbb{N}}
+\newcommand{\cov}[0]{\mathrm{cov}}
+\newcommand{\var}[0]{\mathrm{var}}
+\newcommand{\expect}[0]{\mathbb{E}}
+\newcommand{\reals}[0]{\mathbb{R}}
+\newcommand{\integers}[0]{\mathbb{Z}}
+\newcommand{\indicator}[0]{\mathds{1}}
+\newcommand{\nb}[0]{\textit{N.B.} }
+\newcommand{\ie}[0]{\textit{i.e.} }
+\newcommand{\eg}[0]{\textit{e.g.} }
+
+\newcommand{\qpart}[0]{\stepcounter{qpart} \textbf{Question \arabic{section}.\arabic{qpart}\\}}
+\newcommand{\qpartnb}[0]{\stepcounter{qpart} \textbf{Question \arabic{section}.\arabic{qpart}} - }
+\newcommand{\ans}[0]{ \textbf{Answer \arabic{section}\\}}
+\newcommand{\apart}[0]{ \textbf{Answer \arabic{section}.\arabic{qpart}\\}}
+\newcommand{\apartnb}[0]{\stepcounter{qpart} \textbf{Answer \arabic{section}.\arabic{qpart}} - }
+\newcommand{\question}[0]{\stepcounter{section}\section*{Question - \arabic{section}.}}
+
+\question
+Derive the likelihood function and log-likelihood function for the following distributions.\\
+
+\qpartnb $\textbf{X}\overset{\mathrm{iid}}{\sim}\mathrm{Poisson}(\lambda)$ with $\lambda$ unknown.\\
+
+\apart
+Let $\textbf{X}\overset{\mathrm{iid}}{\sim}\mathrm{Poisson}(\lambda)$ with $\lambda$ unknown. Then
+\[\begin{array}{rcl}
+L(\lambda;\textbf{x})&\propto&f_n(\textbf{x};\lambda)\\
+&=&\prod\limits_{i=1}^nf(x_i;\lambda)\\
+&=&\prod\limits_{i=1}^ne^{-\lambda}\lambda^{x_i}(x_i!)^{-1}\\
+&=& e^{-\lambda n}\lambda^{\sum_{i=1}^n x_i}\prod\limits_{i=1}^n(x_i!)^{-1}\\
+&\propto&e^{-\lambda n}\lambda^{\sum_{i=1}^n x_i}\\
+\ell(\lambda;\textbf{x})&\propto&\ln L(\lambda;\textbf{x})\\
+&=&-\lambda n+\left(\sum\limits_{i=1}^n\right)(\ln\lambda)
+\end{array}\]
+
+\qpartnb $X\sim\mathrm{Binomial}(n,p)$ with $n\ \&\ p$ unknown.\\
+
+\apart
+Let $X\sim\mathrm{Binomial}(n,p)$ with $n\ \&\ p$ unknown. Then
+\[\begin{array}{rcl}
+L(n,p;x)&\propto&f(x;n,p)\\
+&=&{n \choose x}p^x(1-p)^{n-x}\\
+\ell(n,p;x)&\propto&\ln L(n,p;x)\\
+&=&ln{n \choose x} + x\ln p + (n-x)\ln(1-p)
+\end{array}\]
+
+\qpartnb $\textbf{X}\overset{\mathrm{iid}}{\sim}\mathrm{Normal}(\mu,\sigma^2)$ with $\mu\ \&\ \sigma$ unknown.\\
+
+\apart
+Let $\textbf{X}\overset{\mathrm{iid}}{\sim}\mathrm{Normal}(\mu,\sigma^2)$ with $\mu\ \&\ \sigma$ unknown. Then
+\[\begin{array}{rcl}
+L(\mu,\sigma^2);\textbf{x})&\propto&f_n(\textbf{x};\mu,\sigma^2)\\
+&=&\prod\limits_{i=1}^n (2\pi\sigma)^{-\frac{1}{2}} e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}\\
+&=&(2\pi\sigma)^{-\frac{n}{2}}\prod\limits_{i=1}^n e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}\\
+&\propto&\sigma^{-\frac{n}{2}}\prod\limits_{i=1}^n e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}\\
+\ell(\mu,\sigma^2;\textbf{x})&\propto&\ln L(\mu,\sigma^2;\textbf{x})\\
+&=&-\frac{n}{2}\ln\sigma -\frac{1}{2\sigma^2}\sum\limits_{i=1}^n(x_i-\mu)^2\\
+&\propto&n\ln\sigma +\frac{1}{\sigma^2}\sum\limits_{i=1}^n(x_i-\mu)^2
+\end{array}\]
+
+\qpartnb $\textbf{X}\overset{\mathrm{iid}}{\sim}\mathrm{Uniform}(a,b)$ with $a\ \&\ b$ unknown.\\
+
+\apart
+Let $\textbf{X}\overset{\mathrm{iid}}{\sim}\mathrm{Uniform}(a,b)$ with $a\ \&\ b$ unknown. Then
+\[\begin{array}{rcl}
+L(a,b;\textbf{x})&\propto&f_n(\textbf{x};a,b)\\
+&=&\prod\limits_{i=1}^nf(x_i;a,b)\\
+&=&\prod\limits_{i=1}^n\frac{1}{b-a}\\
+&=&\frac{1}{(b-a)^n}\\
+\ell(a,b;\textbf{x})&\propto&-n\ln(b-a)\\
+&\propto&-\ln(b-a)
+\end{array}\]
+
+\question
+Suppose that $X_1,X_2,X_3\overset{\mathrm{iid}}{\sim}\mathrm{Exponential}(\lambda)$ represent the lifetimes of three lightbulbs in my living room. I installed then $2\frac{1}{2}$ years ago, and one has just blown (the others are still working). Show that the likelihood function corresponding to this is
+$$L(\lambda;2.5)\propto\lambda e^{-7.5\lambda}$$
+
+\ans
+Let $X_1,X_2,X_3\overset{\mathrm{iid}}{\sim}\mathrm{Exponential}(\lambda)$.\\
+Define $Y=\min(X_1,X_2,X_3)$. Then
+\[\begin{array}{rrcl}
+&F_Y(y;\lambda)&=&\prob(Y\leq y)\\
+&&=&1-\prob(Y>y)\\
+&&=&1-\prob(X_1>y,X_2>y,X_3>y)\\
+&&=&1-\prob(X_1>y)^3\\
+&&=&1-(e^{-\lambda y})^3\\
+&&=&1-e^{-3\lambda y}\\
+\implies&f_Y(y;\lambda)&=&F_Y'(y;\lambda)\\
+&&=&3\lambda ye^{-3\lambda y}\\
+\implies&L(\lambda;2.5)&\propto&f_Y(2.5;\lambda)\\
+&&=&3\lambda e^{-7.5\lambda}\\
+&&\propto&\lambda e^{-7.5\lambda}
+\end{array}\]
+
+\question
+Suppose I construct a random variable $X$ in the following way. FIrst, I toss a biased coin with probability of heads $p$. If it comes up heads, then $X=0$, otherwise $X\sim\mathrm{Poisson}(\lambda)$. We call this the \textit{Zero-Inflated Poisson} distribution, and write $X\sim ZIP(p,\lambda)$. Derive the probabilitiy mass function for $X$ and the likelihood function for a realisation $\textbf{x}$ of $\textbf{X}\overset{\mathrm{iid}}{\sim}\mathrm{ZIP}(p,\lambda)$.\\
+
+\ans
+Let $X\sim\mathrm{ZIP}(p,\lambda),\ Y\sim\mathrm{Bernoulli}(p)\ \&\ Z\sim\mathrm{Poisson}(\lambda)$. Then
+\[\begin{array}{rcl}
+f_X(x)&=&\begin{cases}
+\prob(Y=1)+\prob(Z=0|Y=0)&, x=0\\
+\prob(Z=x|Y=0)&, x\in\nats\\
+0&\mathrm{otherwise}
+\end{cases}\\
+&=&\begin{cases}
+p+\prob(Z=0)\prob(Y=0)&, x=0\\
+\prob(Z=x)\prob(Y=0)&, x\in\nats\\
+0&\mathrm{otherwise}
+\end{cases}\\
+&=&\begin{cases}
+p+e^{-\lambda}\lambda^0(0!)^{-1}(1-p)&, x=0\\
+(e^{-\lambda}\lambda^x(x!)^{-1})(1-p)&, x\in\nats\\
+0&\mathrm{otherwise}
+\end{cases}\\
+&=&\begin{cases}
+p+e^{-\lambda}(1-p)&, x=0\\
+\frac{1}{x!}(e^{-\lambda}\lambda^x)(1-p)&, x\in\nats\\
+0&\mathrm{otherwise}
+\end{cases}\\
+&=&p\mathds{1}\{x=0\}+\frac{1}{x!}(e^{-\lambda}\lambda^x)(1-p)
+\end{array}\]
+Let $\textbf{X}\overset{\mathrm{iid}}{\sim}\mathrm{ZIP}(p,\lambda)$ with $p\ \&\ \lambda$ unknown. Then
+\[\begin{array}{rcl}
+L(p,\lambda;\textbf{x})&\propto&f_n(\textbf{x};p,\lambda)\\
+&=&\prod\limits_{i=1}^n\left[p\mathds{1}\{x=0\}+\frac{1}{x!}(e^{-\lambda}\lambda^x)(1-p)\right]
+\end{array}\]
+\end{document}
