@@ -1,0 +1,280 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=1in, paperwidth=8.3in, paperheight=11.7in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{dsfont}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{changepage} 
+
+\begin{document}
+
+\pagestyle{fancy}
+\setlength\parindent{0pt}
+\allowdisplaybreaks
+
+\renewcommand{\headrulewidth}{0pt}
+
+% Cover page title
+\title{Statistics 2 - Notes}
+\author{Dom Hutchinson}
+\date{\today}
+\maketitle
+
+% Header
+\fancyhead[L]{Dom Hutchinson}
+\fancyhead[C]{Statistics 2 - Notes}
+\fancyhead[R]{\today}
+
+% Counters
+\newcounter{definition}[section]
+\newcounter{example}[section]
+\newcounter{notation}[section]
+\newcounter{proposition}[section]
+\newcounter{proof}[section]
+\newcounter{remark}[section]
+\newcounter{theorem}[section]
+
+% commands
+\newcommand{\dotprod}[0]{\boldsymbol{\cdot}}
+\newcommand{\cosech}[0]{\mathrm{cosech}\ }
+\newcommand{\cosec}[0]{\mathrm{cosec}\ }
+\newcommand{\sech}[0]{\mathrm{sech}\ }
+\newcommand{\prob}[0]{\mathbb{P}}
+\newcommand{\nats}[0]{\mathbb{N}}
+\newcommand{\cov}[0]{\mathrm{cov}}
+\newcommand{\var}[0]{\mathrm{var}}
+\newcommand{\expect}[0]{\mathbb{E}}
+\newcommand{\reals}[0]{\mathbb{R}}
+\newcommand{\integers}[0]{\mathbb{Z}}
+\newcommand{\indicator}[0]{\mathds{1}}
+\newcommand{\nb}[0]{\textit{N.B.} }
+\newcommand{\ie}[0]{\textit{i.e.} }
+\newcommand{\eg}[0]{\textit{e.g.} }
+
+\newcommand{\definition}[1]{\stepcounter{definition} \textbf{Definition \arabic{section}.\arabic{definition}\ - }\textit{#1}\\}
+\newcommand{\proof}[1]{\stepcounter{proof} \textbf{Proof \arabic{section}.\arabic{definition}\ - }\textit{#1}\\}
+\newcommand{\example}[1]{\stepcounter{example} \textbf{Example \arabic{section}.\arabic{example}\ - }\textit{#1}\\}
+\newcommand{\notation}[1]{\stepcounter{notation} \textbf{Notation \arabic{section}.\arabic{notation}\ - }\textit{#1}\\}
+\newcommand{\proposition}[1]{\stepcounter{proposition} \textbf{Proposition \arabic{section}.\arabic{proposition}\ - }\textit{#1}\\}
+\newcommand{\remark}[1]{\stepcounter{remark} \textbf{Remark \arabic{section}.\arabic{remark}\ - }\textit{#1}\\}
+\newcommand{\theorem}[1]{\stepcounter{theorem} \textbf{Theorem \arabic{section}.\arabic{theorem}\ - }\textit{#1}\\}
+
+\tableofcontents
+
+% Start of content
+\newpage
+
+\section{Estimation}
+
+\subsection{Introduction}
+
+\definition{Probabiltiy Space, $(\Omega,\mathcal{F},\prob)$}
+A mathematical construct for modelling the real world. A \textit{Probabilty Space} has three elements
+\begin{enumerate}[label=\roman*)]
+	\item $\Omega$ - Sample space.
+	\item $\mathcal{F}$ - Set of events.
+	\item $\prob$ - Probability measure.
+\end{enumerate}
+and most fulfil the following conditions
+\begin{enumerate}[label=\roman*)]
+	\item $\Omega\in\mathcal{F}$;
+	\item $\forall\ A\in\mathcal{F}\implies A^c\in\mathcal{F}$;
+	\item $\forall\ A_0,\dots,A_n\in\mathcal{F}\implies\left(\bigcup\limits_iA_i\right)\in\mathcal{F}$;
+	\item $\prob(\Omega)=1$; and,
+	\item $\prob\left(\bigcup\limits_{i=1}^\infty A_i\right)=\sum_{i=1}^\infty\prob(A_i)$ for disjoint $A_1,A_2,...$ (Countable Additivity).
+\end{enumerate}
+
+\definition{Random Variable}
+A function which maps an event in the sample space to a value \eg $X:\Omega\to\reals$.\\
+
+\remark{Probability Density Function for iid Random Variable Vector}
+For $\textbf{X}\sim f_n(\cdot;\theta)$ where each component of $\textbf{X}$ is independent and identically distribution the probability density function of $\textbf{X}$ is
+$$f_n(\textbf{x};\theta)=\prod\limits_{i=1}^nf(x_i;\theta)$$
+
+\definition{Expectation}
+The mean value for a random variable. For rv $X$
+$$\expect(X):=\sum_{x\in\chi}xf_X(x)\quad\&\quad\expect(X):=\int_\reals xf_X(x)dx$$
+
+\theorem{Expection of a Function}
+For a function $g:\reals\to\reals$ and rv $X$ with pmf $f_X$
+$$\expect(g(X)):=\sum_{g(x)\in\chi}xf_X(x)\quad\&\quad\expect(g(X)):=\int_\reals g(x)f_X(x)dx$$
+
+\theorem{Expectation of a Linear Operator}
+For rv $X$ with pmf $f_X$ \& $a,b\in\reals$
+$$\expect(aX+b)=a\expect(X)+b$$
+
+\definition{Variance}
+For rv $X$
+$$\var(X):=\expect\big[(X-\expect(X))^2\big]=\expect(X^2)-\expect(X)^2$$
+
+\theorem{Variance of a Linear Operator}
+For rv $X$ and $a,b\in\reals$
+$$\var(aX+b)=a^2\var(X)$$
+
+\definition{Moment of a Random Variable}
+For rv $X$ the $n^{th}$ moment of $X$ is defined as $\expect(X^n)$.\\
+\nb - $\expect(X^n)\neq\expect(X)^n$.\\
+
+\definition{Covariance}
+For rv $X\ \&\ Y$
+$$\cov(X,Y):=\expect\big[(X-\expect(X))(Y-\expect(Y))\big]=\expect(XY)-\expect(X)\expect(Y)$$
+
+\theorem{Properties of Covaraince}
+Let $X\ \&\ Y$ be independent random varaibles
+\begin{enumerate}[label=\roman*)]
+	\item $\cov(X,X)=\var(X)$;
+	\item $\cov(X,Y)=0$
+\end{enumerate}
+
+\theorem{Variance of two Random Variables with linear operators}
+$$\var(aX+bY)=a^2\var(X)+b^2\var(Y)+2ab\cov(X,Y)$$
+
+\theorem{Independent Random Variables}
+Random variables $X_1,\dots,X_n$ are independent iff
+$$\prob(X_1\leq a_1,\dots,X_n\leq a_n)=\prod_{i=1}^n\prob(X_i\leq a_i)\ \forall\ a_1,\dots,a_n\in\reals$$
+
+%TODO frequentist v Bayesian
+
+\section{The Likelihood Function}
+
+\definition{Likelihood Function}
+Define $\textbf{X}\sim f_n(\cdot;\theta^*)$ for some unknown $\theta^*\in\Theta$ and let $\textbf{x}$ be an observation of $\textbf{X}$.\\
+A \textit{Likelihood Function} is any function, $L(\cdot;\textbf{x}):\Theta\to[0,\infty)$, which is proportional to the PMF/PDF of the obeserved realisation $\textbf{x}$.
+$$L(\theta;\textbf{x}):=Cf_b(\textbf{x};\theta)\ \forall\ C>0$$
+\nb Sometimes this is called the \textit{Observed} Likelihood Function since it is dependent on observed data.\\
+
+\definition{Log-Likelihood Function}
+Let $\textbf{X}\sim f_n(\cdot;\theta^*)$ for some unknown $\theta^*\in\Theta$ and $\textbf{x}$ be an observation of $\textbf{X}$.\\
+The \textit{Log-Likelihood Function} is the natural log of a \textit{Likelihood Function}
+$$\ell(\theta;\textbf{x}):=\ln f_n(\textbf{x};\theta)+C,\ C\in\reals$$
+
+\theorem{Multidiensional Transforms}
+Let $\textbf{X}$ be a continuous random vector in $\reals^n$ with PDF $f_{\textbf{X}}$; $g:\reals^n\to\reals^n$ be a continuous diferentiable bijection; and, $h:=g^{-1}$.\\
+Then $\textbf{Y}=g(\textbf{X})$ is a continuous random vector and its PDF is
+$$f_{\textbf{Y}}(\textbf{y})=f_{\textbf{X}}(h(\textbf{y})H_h(\textbf{Y})$$
+where
+$$J_h:=\left|\det\left(\frac{\partial h}{\partial\textbf{y}}\right)\right|$$
+
+\proposition{Invaraince of Likelihood Function by bijective transformation of the observations independent of $\theta$}
+Let $g:\reals^n\to\reals^n$ be a bijetive transformation which is independent of $\theta$; and $\textbf{Y}:=g(\textbf{X})$.\\
+Then $\textbf{Y}$ is a random variable with PDF/PMG
+$$f_{\textbf{Y}}(\textbf{y};\theta)\propto f_{\textbf{X}}(g^{-1}(\textbf{y});\theta)$$
+Hence, if $\textbf{y}=g(\textbf{x})$ then $L_{\textbf{Y}}(\theta;\textbf{y})\propto L_{\textbf{X}}(\theta;\textbf{x})$
+
+\proof{Proposition 2.1}
+Let $g:\reals^n\to\reals^n$ be a bijective transformation which is independent of $\theta$; $h:=g^{-1}$;  $\textbf{X},\textbf{Y}$ be a rvs st $\textbf{Y}:=g(\textbf{X})$.
+\begin{enumerate}[label=\roman*)]
+	\item \textit{Discrete Case} - Consider the case when $\textbf{X}$ is a discrete rv. Then
+	\[\begin{array}{rcl}
+	f_\textbf{Y}(y;\theta)&=&\prob(\textbf{Y}=\textbf{y};\theta)\\
+	&=&\prob(g^{-1}(\textbf{Y})=g^{-1}(\textbf{y});\theta)\\
+	&=&\prob(h(\textbf{Y})=h(\textbf{y});\theta)\\
+	&=&\prob(\textbf{X}=h(\textbf{y});\theta)\\
+	&=&f_\textbf{X}(g^{-1}(\textbf{y});\theta)
+	\end{array}\]
+	\item \textit{Continuous Case} - Consider the case when $\textbf{X}$ is a continuous rv.\\
+	Then, by \textbf{Theorem 2.1}
+	$$f_\textbf{Y}(\textbf{y};\theta)=f_\textbf{X}(g^{-1}(\textbf{y});\theta)J_{g^{-1}}(\textbf{y})$$
+	Since $J_{g^{-1}}$ does not depend on $\theta$ this case is solved.
+\end{enumerate}
+Thus in botoh cases $L_\textbf{Y}(\theta;y)=f_\textbf{Y}(y;\theta)\propto f_\textbf{X}(g^{-1}(\textbf{y});\theta)=L_\textbf{X}(\theta;\textbf{x})$.
+
+\section{Maximum Likelihood Estimates}
+
+\definition{Maximum Likelihood Estimate}
+Let $\textbf{X}\sim f_n(\cdot;\theta)$; and $\textbf{x}$ be a realisation of $\textbf{X}$.\\
+The \textit{Maximum Likelihood Estimate} is the value $\hat{\theta}\in\Theta$ st
+$$\forall\ \theta\in\Theta\ f_n(\textbf{x};\hat{\theta})\geq f_n(\textbf{x},\theta)$$
+Equivalently
+$$\forall\ \theta\in\Theta\ L(\hat{\theta};\textbf{x})\geq L(\theta;\textbf{x})\quad\mathrm{or}\quad\ell(\hat{\theta};\textbf{x})\geq\ell(\theta;\textbf{x})$$
+\ie $\hat{\theta}(\textbf{x}):=\mathrm{argmax}_\theta(L(\theta;\textbf{x})$.\\
+
+\remark{The Maximum Likelihood Estimate may \underline{not} be unique}
+
+\newpage
+\setcounter{section}{-1}
+\section{Appendix}
+
+\subsection{Notation}
+
+\begin{tabular}{|l|l|}
+\hline
+Notation&Denotes\\
+\hline
+$\theta\in\Theta\subseteq\reals^{d_\theta}$&Scalar or vector parameter characterising a probability distribution\\
+$\hat{\theta}$&Estimation for the value of the parameter $\theta$\\
+$\theta^*$&True value of the paramter $\theta$\\
+$\prob$&Probability measure $\prob:\mathcal{F}\to[0,1]$\\
+$\Omega$&Sample space\\
+$X$&Scalar random variable\\
+$\mathcal{F}$&Sigma field (Set of events)\\
+$\chi$&Support of rv $XX$. A set set $X$ is definitely in it \ie $\prob(X\in\chi;\theta)=1$\\
+$\textbf{X}$&Vector consiting of scalar random variables\\
+\hline
+\end{tabular}
+
+\subsection{R}
+\begin{tabular}{|l|l|}
+\hline
+Command&Result\\
+\hline
+\textit{hist(a)}&Plots a histogram of the values in array $a$\\
+\textit{mean(a)}&Returns the mean value of array $a$\\
+\textit{rbinom(s,n,p)}&Samples $n$ of $Bi(n,p)$ random variables\\
+\textit{rep(v,n)}&Produces an array of size $n$ where each entry has value $v$\\
+$x\leftarrow v$&Maps value $v$ to variable $x$\\
+\hline
+\end{tabular}
+
+\subsection{Probability Distributions}
+
+\definition{Binomial Distribution}
+Let $X$ be a discrete random variable modelled by a \textit{Binomial Distribution} with $n$ events and rate of success $p$.\\
+\[\begin{array}{rcl}
+p_X(k)&=&{n\choose k}p^k(1-p)^{n-k}\\
+\expect(X)np=&\&&Var(X)=np(1-p)
+\end{array}\]
+
+\definition{Gamma Distribution}
+Let $T$ be a continuous randmo variable modelled by a \textit{Gamma Distribution} with shape parameter $\alpha$ \& scale parameter $\lambda$. Then
+\[\begin{array}{rcll}
+f_T(x)&=&\dfrac{\lambda^\alpha x^{\alpha-1}e^{-\lambda x}}{\Gamma(\alpha)}&\mathrm{for\ }x>0\\
+\expect(T)=\dfrac{\alpha}{\lambda}&\&&Var(T)=\dfrac{\alpha}{\lambda^2}
+\end{array}\]
+\nb $\alpha,\lambda>0$.\\
+
+\definition{Exponential Distribution}
+Let $T$ be a continuous random variable modelled by a \textit{Exponential Distribution} with parameter $\lambda$. Then
+\[\begin{array}{rcl}
+f_T(t)&=&\indicator\{t\geq0\}.\lambda e^{-\lambda t}\\
+F_T(t)&=&\indicator\{t\geq0\}.\left(1-e^{-\lambda t}\right)\\
+\expect(X)=\frac{1}{\lambda}&\&&Var(X)=\frac{1}{\lambda^2}
+\end{array}\]
+\nb Exponential Distribution is used to model the wait time between decays of a radioactive source.\\
+
+\definition{Normal Distribution}
+Let $X$ be a continuous random variable modelled by a \textit{Normal Distribution} with mean $\mu$ \& variance $\sigma^2$.\\
+Then
+\[\begin{array}{rcl}
+f_X(x)&=&\dfrac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}\\
+F_X(x)&=&\dfrac{1}{\sqrt{2\pi\sigma^2}}\int\limits_{-\infty}^xe^{-\frac{(y-\mu)^2}{2\sigma^2}}dy\\
+M_X(\theta)&=&e^{\mu\theta+\sigma^2\theta^2(1/2)}\\
+\expect(X)=\mu&\&&Var(X)=\sigma^2
+\end{array}\]
+
+\definition{Poisson Distribution}
+Let $X$ be a discrete random variable modelled by a \textit{Poisson Distribution} with parameter $\lambda$. Then
+\[\begin{array}{rcll}
+p_X(k)&=&\dfrac{e^{-\lambda}\lambda^k}{k!}&\mathrm{For\ }k\in\nats_0\\
+\expect(X)=\lambda&\&&Var(X)=\lambda
+\end{array}\]
+\nb Poisson Distribution is used to model the number of radioactive decays in a time period.\\
+
+
+\end{document}
