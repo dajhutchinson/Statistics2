@@ -86,6 +86,7 @@ L(n,p;x)&\propto&f(x;n,p)\\
 &=&ln{n \choose x} + x\ln p + (n-x)\ln(1-p)
 \end{array}\]
 
+\newpage
 \qpartnb $\textbf{X}\overset{\mathrm{iid}}{\sim}\mathrm{Normal}(\mu,\sigma^2)$ with $\mu\ \&\ \sigma$ unknown.\\
 
 \apart
@@ -120,11 +121,11 @@ $$L(\lambda;2.5)\propto\lambda e^{-7.5\lambda}$$
 \ans
 Let $X_1,X_2,X_3\overset{\mathrm{iid}}{\sim}\mathrm{Exponential}(\lambda)$.\\
 Define $Y=\min(X_1,X_2,X_3)$. Then
-\[\begin{array}{rrcl}
+\[\begin{array}{rrcll}
 &F_Y(y;\lambda)&=&\prob(Y\leq y)\\
 &&=&1-\prob(Y>y)\\
-&&=&1-\prob(X_1>y,X_2>y,X_3>y)\\
-&&=&1-\prob(X_1>y)^3\\
+&&=&1-\prob(X_1>y,X_2>y,X_3>y)&\text{By independece}\\
+&&=&1-\prob(X_1>y)^3&\text{By indetical distribution}\\
 &&=&1-(e^{-\lambda y})^3\\
 &&=&1-e^{-3\lambda y}\\
 \implies&f_Y(y;\lambda)&=&F_Y'(y;\lambda)\\

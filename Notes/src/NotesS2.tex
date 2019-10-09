@@ -165,7 +165,7 @@ $$J_h:=\left|\det\left(\frac{\partial h}{\partial\textbf{y}}\right)\right|$$
 Let $g:\reals^n\to\reals^n$ be a bijetive transformation which is independent of $\theta$; and $\textbf{Y}:=g(\textbf{X})$.\\
 Then $\textbf{Y}$ is a random variable with PDF/PMG
 $$f_{\textbf{Y}}(\textbf{y};\theta)\propto f_{\textbf{X}}(g^{-1}(\textbf{y});\theta)$$
-Hence, if $\textbf{y}=g(\textbf{x})$ then $L_{\textbf{Y}}(\theta;\textbf{y})\propto L_{\textbf{X}}(\theta;\textbf{x})$
+Hence, if $\textbf{y}=g(\textbf{x})$ then $L_{\textbf{Y}}(\theta;\textbf{y})\propto L_{\textbf{X}}(\theta;\textbf{x})$\\
 
 \proof{Proposition 2.1}
 Let $g:\reals^n\to\reals^n$ be a bijective transformation which is independent of $\theta$; $h:=g^{-1}$;  $\textbf{X},\textbf{Y}$ be a rvs st $\textbf{Y}:=g(\textbf{X})$.
@@ -197,9 +197,124 @@ $$\forall\ \theta\in\Theta\ L(\hat{\theta};\textbf{x})\geq L(\theta;\textbf{x})\
 
 \remark{The Maximum Likelihood Estimate may \underline{not} be unique}
 
+\example{MLE for Uniform Distribution}
+Consider $\textbf{X}\overset{\text{iid}}{\sim}U[0,\theta]$ for $\theta>0$.\\
+Then
+\[\begin{array}{rrcl}
+&L(\theta;\textbf{x})&\propto&f_n(\textbf{x};\theta)\\
+&&=&\prod\limits_{i=1}^n\dfrac{1}{\theta}\mathds{1}\{x_i\in[0,\theta]\\
+&&=&\dfrac{1}{\theta^n}\prod\limits_{i=1}^n\mathds{1}\{x_i\in[0,\theta]\\
+\implies&\hat{\theta}&=&\max\{x_i:x_i\in\textbf{x}\}
+\end{array}\]
+
+\remark{MLE of Reparameterisation}
+Define $\tau(\theta):\reals\to\reals$. Then
+$$\hat{\tau}=\tau(\hat{\theta})$$
+\nb We often write $\tilde{f}$ to represent the pmf when $\tau$ is taken as a parameter rateher than $\theta$. \ie $f(x;\theta)=\tilde{f}(x;\tau(\theta))$.\\
+
+\theorem{Invariance of MLE under bijective Reparameterisation}
+Let $g:\Theta\to G$ be a bijective transformation of the statisitcal parameter $\theta$.\\
+Let $\textbf{X}\sim f(\cdot;\theta)=\tilde{f}(\cdot;g(\theta))$ for some $\theta$, and let $\textbf{x}$ be a realisation of $\textbf{X}$.
+\begin{center}
+If $\hat{\theta}$ s an MLE of $\theta$ then $\hat{\tau}=g(\hat{\theta})$ is an MLE of $\tau$.
+\end{center}
+
+\proof{Theorem 3.1}
+\textit{This is a proof by contradiction}.\\
+Suppose $\exists\ \tau^*\in G st \tilde{f}(x;\tau^*)>\tilde{f}(x;\tau^*)$
+We know that $\forall\ \theta\in\Theta,\ f(x;\theta)=\tilde{f}(x;g(\theta))$ and $\forall\ \tau\in G,\ f(x;g^{-1}(\tau))=\tilde{f}(x;\tau)$.\\
+We deduce that
+\[\begin{array}{rcl}
+f(x;g^{-1}(\tau^*))&=&\tilde{f}(x;\tau^*)\\
+&>&\tilde{f}(x;\hat{\tau})\text{ by assumption}\\
+&=&f(x;g^{-1}(\hat{\tau}))\\
+&=&f(x;\hat{\theta})
+\end{array}\]
+This contradicts the assumption that $\hat{\theta}$ is an maximum likelihood estimate of $\theta$.\\
+
+\remark{Not all Reparameterisations are Bijective}
+When reparameterisations $g:\reals\to\reals$ is not bijective it is helpful to consider the \textit{induced likelihood}
+$$L^*(\tau;\textbf{x}):=\underset{\theta\in G_\tau}{\text{max}}L(\theta;\textbf{x})\ \mathrm{where}\ G_\tau:=\{\theta:g(\theta)=\tau\}$$
+Since this reduces the domain to only where $g$ is bijective.
+
+\subsection{Determinig MLEs - The Tractable Case}
+
+\proposition{Differentiable Likelihood in the continuous case - Multivariate}
+When $L(\theta;\textbf{x}$ is differentiable one can find MLEs by considering its extrema. This is done equating \& solving the cases when the gradient is zero, \ie $\nabla L(\theta;\textbf{x})=0$, and then checking whether this is a maximum or minimum point.\\
+A point is a local minimum if the Hessian at the point is \textit{Negative Definite} \ie $x^TAx<0\ \forall\ x\neq\pmb{0}$.\\
+
+\example{MLE of Normal Distribution}
+Let $\textbf{X}\overset{\text{iid}}{\sim}\mathcal{N}(\mu,\sigma^2)$
+\[\begin{array}{rrcl}
+&L(\mu,\sigma^2;\textbf{x})&=&\prod\limits_{i=1}^n\dfrac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}\\
+\implies&\ell(\mu,\sigma^2;\textbf{x})&=&C-\frac{n}{2}\ln(\sigma^2)-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2\\
+\implies&\nabla\ell(\mu,\sigma^2;\textbf{x})&=&\left(\dfrac{-1}{\sigma^2}\sum\limits_{i=1}^n(x_i-\mu),\quad-\dfrac{n}{2\sigma^2}+\dfrac{1}{2\sigma^4}\sum\limits_{i=1}^n(x_i-\mu)^2\right)\\
+\text{Setting}&\dfrac{-1}{\sigma^2}\sum\limits_{i=1}^n(x_i-\mu)&=&0\\
+\implies&\hat{\mu}&=&\dfrac{1}{n}\sum_{i=1}^nx_i=\bar{x}\\
+\text{Setting}&-\dfrac{n}{2\sigma^2}+\dfrac{1}{2\sigma^4}\sum\limits_{i=1}^n(x_i-\mu)^2&=&0\\
+\implies&\hat{\sigma}^2&=&\dfrac{1}{n}\sum\limits_{i=1}^n(x_i\hat{\mu})^2
+\end{array}\]
+We now want to check whether $(\hat{\mu},\hat{\sigma^2})$ is a minimum.\\
+\[\begin{array}{rcl}
+\nabla^2\ell(\mu,\sigma^2;\textbf{x})&=&\begin{pmatrix}
+\dfrac{\partial^2\ell(\mu,\sigma^2;\textbf{x})}{\partial\mu^2}&\dfrac{\partial^2\ell(\mu,\sigma^2;\textbf{x})}{\partial\mu\partial\sigma^2}\\
+\dfrac{\partial^2\ell(\mu,\sigma^2;\textbf{x})}{\partial\mu\sigma^2}&\dfrac{\partial^2\ell(\mu,\sigma^2;\textbf{x})}{\partial(\sigma^2)^2}
+\end{pmatrix}\\
+&=&\begin{pmatrix}
+-\dfrac{n}{\hat{\sigma}^2}&0\\
+0&-\dfrac{n}{2\hat{\sigma}^4}
+\end{pmatrix}
+\end{array}\]
+Since $\begin{pmatrix}z_1&z_2\end{pmatrix}\begin{pmatrix}-a&0\\0&-b\end{pmatrix}\begin{pmatrix}z_1\\z_2\end{pmatrix}=-az_1^2-bz_2^2<0\ \forall\ a,b>0$ and we have $\frac{n}{\hat{\sigma}^2},\ \frac{n}{2\hat{\sigma}^4}>0$ then we can conclude that $\nabla^2\ell$ is negative definite.\\
+Thus $\hat{\mu}=\bar{x}\ \&\ \hat{\sigma}^2=\dfrac{1}{n}\sum\limits_{i=1}^n(x_i\hat{\mu})^2$ is an MLE for the normal distribution.\\
+
+\example{MLE for Capture-Recapture Model}
+Suppose you are wanting to calculate the unknown size of a population, $n$. The Capture-Recapture Model is one technique that can be used. You tag $t\leq n$ members of the population; wait for a while; then recapture $c\leq n$ members of which $x\leq\min\{t,c\}\leq n$ are tagged.\\
+With $t,c,x$ known produce a MLE for $n$.\\
+We first work out the associated probability distribution for $X$, the population size. We have
+\begin{enumerate}[label=\roman*)]
+	\item ${t \choose x}$ ways of choosing $x$ members among the tagged ones;
+	\item ${{n-t} \choose {c-x}}$ ways of choosing the remaining members among the non-tagged ones;
+	\item ${n \choose c}$ ways of choosing $c$ members in a population of $n$ individuals.
+\end{enumerate}
+Thus
+$$f_X(x;n)=\frac{{t \choose x}{{n-t} \choose {c-x}}}{{n \choose c}}$$
+This means that $X\sim\text{Hypergeometric}(t,n,c)$ with $t\ \&\ c$ known.\\
+Now we calculate the MLE for $X$
+\[\begin{array}{rcl}
+L(n;x)&=&f_X(x;n)\\
+&=&\dfrac{{t \choose x}{{n-t} \choose {c-x}}}{{n \choose c}}\\
+&=&\dfrac{\dfrac{t!}{x!(t-x)!}\dfrac{(n-t)!}{(c-x)!(n-t-c+x)!}}{\dfrac{n!}{c!(n-c)!}}\\
+\end{array}\]
+Now we consider $L(n;x)=0$ when $x>\min\{t,c\}$. We want to indetify values of $n$ for which $L(n;x)\geq L(n-1;x)$.\\
+Consider $n-1\geq\min\{t,c\}\implies L(n-1;x)>0$
+\[\begin{array}{rrrl}
+&\text{Let }r(n)&:=&\dfrac{L(n;x)}{L(n-1;x)}\\
+&&=&\dfrac{n-t}{n-t-c+x}\dfrac{n-c}{n}\\
+\Rightarrow&1&\leq&r(n)\\
+\Leftrightarrow&1&\leq&\dfrac{n-t}{n-t-c+x}\dfrac{n-c}{n}\\
+\Leftrightarrow&n(n-t-c+x)&\leq&(n-t)(n-c)\\
+\Leftrightarrow&n^2-nt-cn+xn&\leq&n^2-nt-cn+ct\\
+\Leftrightarrow&xn&\leq&ct\\
+\Leftrightarrow&x&\leq&\dfrac{ct}{n}
+\end{array}\]
+So $L(n;x)$ is increasing for $n\leq\left\lfloor\frac{ct}{x}\right\rfloor$ \& decreasing for $n>\left\lfloor\frac{ct}{x}\right\rfloor$.\\
+Consequently $\hat{n}_{\text{MLE}}(x)=\left\lfloor\frac{tc}{x}\right\rfloor$
+
 \newpage
 \setcounter{section}{-1}
 \section{Appendix}
+
+\definition{Gradient}
+$$\nabla f(\pmb{\theta};\textbf{x}):=\left(\dfrac{\partial f(\pmb{\theta};\textbf{x})}{\partial\theta_1},\dots,\dfrac{\partial f(\pmb{\theta};\textbf{x})}{\partial\theta_n}\right)$$
+
+\definition{Hessian}
+$$\nabla f(\pmb{\theta};\textbf{x}):=\begin{pmatrix}
+\dfrac{\partial^2 f(\pmb{\theta};\textbf{x})}{\partial\theta_1^2}&\dfrac{\partial^2 f(\pmb{\theta};\textbf{x})}{\partial\theta_1\partial\theta_2}&\dots&\dfrac{\partial^2 f(\pmb{\theta};\textbf{x})}{\partial\theta_n\theta_1}\\
+\dfrac{\partial^2 f(\pmb{\theta};\textbf{x})}{\partial\theta_1^2}&\dfrac{\partial^2 f(\pmb{\theta};\textbf{x})}{\partial\theta_1\theta_2}&\dots&\dfrac{\partial^2 f(\pmb{\theta};\textbf{x})}{\partial\theta_n\theta_2}\\
+\vdots&\vdots&\ddots&\vdots\\
+\dfrac{\partial^2 f(\pmb{\theta};\textbf{x})}{\partial\theta_1\partial\theta_n}&\dfrac{\partial^2 f(\pmb{\theta};\textbf{x})}{\partial\theta_2\theta_n}&\dots&\dfrac{\partial^2 f(\pmb{\theta};\textbf{x})}{\partial\theta_n^2}
+\end{pmatrix}$$
 
 \subsection{Notation}
 
