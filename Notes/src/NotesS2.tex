@@ -56,9 +56,11 @@
 \newcommand{\nb}[0]{\textit{N.B.} }
 \newcommand{\ie}[0]{\textit{i.e.} }
 \newcommand{\eg}[0]{\textit{e.g.} }
+\newcommand{\X}[0]{\textbf{X}}
+\newcommand{\x}[0]{\textbf{x}}
 
 \newcommand{\definition}[1]{\stepcounter{definition} \textbf{Definition \arabic{section}.\arabic{definition}\ - }\textit{#1}\\}
-\newcommand{\proof}[1]{\stepcounter{proof} \textbf{Proof \arabic{section}.\arabic{definition}\ - }\textit{#1}\\}
+\newcommand{\proof}[1]{\stepcounter{proof} \textbf{Proof \arabic{section}.\arabic{proof}\ - }\textit{#1}\\}
 \newcommand{\example}[1]{\stepcounter{example} \textbf{Example \arabic{section}.\arabic{example}\ - }\textit{#1}\\}
 \newcommand{\notation}[1]{\stepcounter{notation} \textbf{Notation \arabic{section}.\arabic{notation}\ - }\textit{#1}\\}
 \newcommand{\proposition}[1]{\stepcounter{proposition} \textbf{Proposition \arabic{section}.\arabic{proposition}\ - }\textit{#1}\\}
@@ -94,8 +96,8 @@ and most fulfil the following conditions
 A function which maps an event in the sample space to a value \eg $X:\Omega\to\reals$.\\
 
 \remark{Probability Density Function for iid Random Variable Vector}
-For $\textbf{X}\sim f_n(\cdot;\theta)$ where each component of $\textbf{X}$ is independent and identically distribution the probability density function of $\textbf{X}$ is
-$$f_n(\textbf{x};\theta)=\prod\limits_{i=1}^nf(x_i;\theta)$$
+For $\X\sim f_n(\cdot;\theta)$ where each component of $\X$ is independent and identically distribution the probability density function of $\X$ is
+$$f_n(\x;\theta)=\prod\limits_{i=1}^nf(x_i;\theta)$$
 
 \definition{Expectation}
 The mean value for a random variable. For rv $X$
@@ -144,67 +146,67 @@ $$\prob(X_1\leq a_1,\dots,X_n\leq a_n)=\prod_{i=1}^n\prob(X_i\leq a_i)\ \forall\
 \section{The Likelihood Function}
 
 \definition{Likelihood Function}
-Define $\textbf{X}\sim f_n(\cdot;\theta^*)$ for some unknown $\theta^*\in\Theta$ and let $\textbf{x}$ be an observation of $\textbf{X}$.\\
-A \textit{Likelihood Function} is any function, $L(\cdot;\textbf{x}):\Theta\to[0,\infty)$, which is proportional to the PMF/PDF of the obeserved realisation $\textbf{x}$.
-$$L(\theta;\textbf{x}):=Cf_b(\textbf{x};\theta)\ \forall\ C>0$$
+Define $\X\sim f_n(\cdot;\theta^*)$ for some unknown $\theta^*\in\Theta$ and let $\x$ be an observation of $\X$.\\
+A \textit{Likelihood Function} is any function, $L(\cdot;\x):\Theta\to[0,\infty)$, which is proportional to the PMF/PDF of the obeserved realisation $\x$.
+$$L(\theta;\x):=Cf_b(\x;\theta)\ \forall\ C>0$$
 \nb Sometimes this is called the \textit{Observed} Likelihood Function since it is dependent on observed data.\\
 
 \definition{Log-Likelihood Function}
-Let $\textbf{X}\sim f_n(\cdot;\theta^*)$ for some unknown $\theta^*\in\Theta$ and $\textbf{x}$ be an observation of $\textbf{X}$.\\
+Let $\X\sim f_n(\cdot;\theta^*)$ for some unknown $\theta^*\in\Theta$ and $\x$ be an observation of $\X$.\\
 The \textit{Log-Likelihood Function} is the natural log of a \textit{Likelihood Function}
-$$\ell(\theta;\textbf{x}):=\ln f_n(\textbf{x};\theta)+C,\ C\in\reals$$
+$$\ell(\theta;\x):=\ln f_n(\x;\theta)+C,\ C\in\reals$$
 
 \theorem{Multidiensional Transforms}
-Let $\textbf{X}$ be a continuous random vector in $\reals^n$ with PDF $f_{\textbf{X}}$; $g:\reals^n\to\reals^n$ be a continuous diferentiable bijection; and, $h:=g^{-1}$.\\
-Then $\textbf{Y}=g(\textbf{X})$ is a continuous random vector and its PDF is
-$$f_{\textbf{Y}}(\textbf{y})=f_{\textbf{X}}(h(\textbf{y})H_h(\textbf{Y})$$
+Let $\X$ be a continuous random vector in $\reals^n$ with PDF $f_{\X}$; $g:\reals^n\to\reals^n$ be a continuous diferentiable bijection; and, $h:=g^{-1}$.\\
+Then $\textbf{Y}=g(\X)$ is a continuous random vector and its PDF is
+$$f_{\textbf{Y}}(\textbf{y})=f_{\X}(h(\textbf{y})H_h(\textbf{Y})$$
 where
 $$J_h:=\left|\det\left(\frac{\partial h}{\partial\textbf{y}}\right)\right|$$
 
 \proposition{Invaraince of Likelihood Function by bijective transformation of the observations independent of $\theta$}
-Let $g:\reals^n\to\reals^n$ be a bijetive transformation which is independent of $\theta$; and $\textbf{Y}:=g(\textbf{X})$.\\
+Let $g:\reals^n\to\reals^n$ be a bijetive transformation which is independent of $\theta$; and $\textbf{Y}:=g(\X)$.\\
 Then $\textbf{Y}$ is a random variable with PDF/PMG
-$$f_{\textbf{Y}}(\textbf{y};\theta)\propto f_{\textbf{X}}(g^{-1}(\textbf{y});\theta)$$
-Hence, if $\textbf{y}=g(\textbf{x})$ then $L_{\textbf{Y}}(\theta;\textbf{y})\propto L_{\textbf{X}}(\theta;\textbf{x})$\\
+$$f_{\textbf{Y}}(\textbf{y};\theta)\propto f_{\X}(g^{-1}(\textbf{y});\theta)$$
+Hence, if $\textbf{y}=g(\x)$ then $L_{\textbf{Y}}(\theta;\textbf{y})\propto L_{\X}(\theta;\x)$\\
 
 \proof{Proposition 2.1}
-Let $g:\reals^n\to\reals^n$ be a bijective transformation which is independent of $\theta$; $h:=g^{-1}$;  $\textbf{X},\textbf{Y}$ be a rvs st $\textbf{Y}:=g(\textbf{X})$.
+Let $g:\reals^n\to\reals^n$ be a bijective transformation which is independent of $\theta$; $h:=g^{-1}$;  $\X,\textbf{Y}$ be a rvs st $\textbf{Y}:=g(\X)$.
 \begin{enumerate}[label=\roman*)]
-	\item \textit{Discrete Case} - Consider the case when $\textbf{X}$ is a discrete rv. Then
+	\item \textit{Discrete Case} - Consider the case when $\X$ is a discrete rv. Then
 	\[\begin{array}{rcl}
 	f_\textbf{Y}(y;\theta)&=&\prob(\textbf{Y}=\textbf{y};\theta)\\
 	&=&\prob(g^{-1}(\textbf{Y})=g^{-1}(\textbf{y});\theta)\\
 	&=&\prob(h(\textbf{Y})=h(\textbf{y});\theta)\\
-	&=&\prob(\textbf{X}=h(\textbf{y});\theta)\\
-	&=&f_\textbf{X}(g^{-1}(\textbf{y});\theta)
+	&=&\prob(\X=h(\textbf{y});\theta)\\
+	&=&f_\X(g^{-1}(\textbf{y});\theta)
 	\end{array}\]
-	\item \textit{Continuous Case} - Consider the case when $\textbf{X}$ is a continuous rv.\\
+	\item \textit{Continuous Case} - Consider the case when $\X$ is a continuous rv.\\
 	Then, by \textbf{Theorem 2.1}
-	$$f_\textbf{Y}(\textbf{y};\theta)=f_\textbf{X}(g^{-1}(\textbf{y});\theta)J_{g^{-1}}(\textbf{y})$$
+	$$f_\textbf{Y}(\textbf{y};\theta)=f_\X(g^{-1}(\textbf{y});\theta)J_{g^{-1}}(\textbf{y})$$
 	Since $J_{g^{-1}}$ does not depend on $\theta$ this case is solved.
 \end{enumerate}
-Thus in botoh cases $L_\textbf{Y}(\theta;y)=f_\textbf{Y}(y;\theta)\propto f_\textbf{X}(g^{-1}(\textbf{y});\theta)=L_\textbf{X}(\theta;\textbf{x})$.
+Thus in botoh cases $L_\textbf{Y}(\theta;y)=f_\textbf{Y}(y;\theta)\propto f_\X(g^{-1}(\textbf{y});\theta)=L_\X(\theta;\x)$.
 
 \section{Maximum Likelihood Estimates}
 
 \definition{Maximum Likelihood Estimate}
-Let $\textbf{X}\sim f_n(\cdot;\theta)$; and $\textbf{x}$ be a realisation of $\textbf{X}$.\\
+Let $\X\sim f_n(\cdot;\theta)$; and $\x$ be a realisation of $\X$.\\
 The \textit{Maximum Likelihood Estimate} is the value $\hat{\theta}\in\Theta$ st
-$$\forall\ \theta\in\Theta\ f_n(\textbf{x};\hat{\theta})\geq f_n(\textbf{x},\theta)$$
+$$\forall\ \theta\in\Theta\ f_n(\x;\hat{\theta})\geq f_n(\x,\theta)$$
 Equivalently
-$$\forall\ \theta\in\Theta\ L(\hat{\theta};\textbf{x})\geq L(\theta;\textbf{x})\quad\mathrm{or}\quad\ell(\hat{\theta};\textbf{x})\geq\ell(\theta;\textbf{x})$$
-\ie $\hat{\theta}(\textbf{x}):=\mathrm{argmax}_\theta(L(\theta;\textbf{x})$.\\
+$$\forall\ \theta\in\Theta\ L(\hat{\theta};\x)\geq L(\theta;\x)\quad\mathrm{or}\quad\ell(\hat{\theta};\x)\geq\ell(\theta;\x)$$
+\ie $\hat{\theta}(\x):=\mathrm{argmax}_\theta(L(\theta;\x)$.\\
 
 \remark{The Maximum Likelihood Estimate may \underline{not} be unique}
 
 \example{MLE for Uniform Distribution}
-Consider $\textbf{X}\overset{\text{iid}}{\sim}U[0,\theta]$ for $\theta>0$.\\
+Consider $\X\overset{\text{iid}}{\sim}U[0,\theta]$ for $\theta>0$.\\
 Then
 \[\begin{array}{rrcl}
-&L(\theta;\textbf{x})&\propto&f_n(\textbf{x};\theta)\\
+&L(\theta;\x)&\propto&f_n(\x;\theta)\\
 &&=&\prod\limits_{i=1}^n\dfrac{1}{\theta}\mathds{1}\{x_i\in[0,\theta]\\
 &&=&\dfrac{1}{\theta^n}\prod\limits_{i=1}^n\mathds{1}\{x_i\in[0,\theta]\\
-\implies&\hat{\theta}&=&\max\{x_i:x_i\in\textbf{x}\}
+\implies&\hat{\theta}&=&\max\{x_i:x_i\in\x\}
 \end{array}\]
 
 \remark{MLE of Reparameterisation}
@@ -214,7 +216,7 @@ $$\hat{\tau}=\tau(\hat{\theta})$$
 
 \theorem{Invariance of MLE under bijective Reparameterisation}
 Let $g:\Theta\to G$ be a bijective transformation of the statisitcal parameter $\theta$.\\
-Let $\textbf{X}\sim f(\cdot;\theta)=\tilde{f}(\cdot;g(\theta))$ for some $\theta$, and let $\textbf{x}$ be a realisation of $\textbf{X}$.
+Let $\X\sim f(\cdot;\theta)=\tilde{f}(\cdot;g(\theta))$ for some $\theta$, and let $\x$ be a realisation of $\X$.
 \begin{center}
 If $\hat{\theta}$ s an MLE of $\theta$ then $\hat{\tau}=g(\hat{\theta})$ is an MLE of $\tau$.
 \end{center}
@@ -234,21 +236,21 @@ This contradicts the assumption that $\hat{\theta}$ is an maximum likelihood est
 
 \remark{Not all Reparameterisations are Bijective}
 When reparameterisations $g:\reals\to\reals$ is not bijective it is helpful to consider the \textit{induced likelihood}
-$$L^*(\tau;\textbf{x}):=\underset{\theta\in G_\tau}{\text{max}}L(\theta;\textbf{x})\ \mathrm{where}\ G_\tau:=\{\theta:g(\theta)=\tau\}$$
+$$L^*(\tau;\x):=\underset{\theta\in G_\tau}{\text{max}}L(\theta;\x)\ \mathrm{where}\ G_\tau:=\{\theta:g(\theta)=\tau\}$$
 Since this reduces the domain to only where $g$ is bijective.
 
 \subsection{Determinig MLEs - The Tractable Case}
 
 \proposition{Differentiable Likelihood in the continuous case - Multivariate}
-When $L(\theta;\textbf{x}$ is differentiable one can find MLEs by considering its extrema. This is done equating \& solving the cases when the gradient is zero, \ie $\nabla L(\theta;\textbf{x})=0$, and then checking whether this is a maximum or minimum point.\\
+When $L(\theta;\x$ is differentiable one can find MLEs by considering its extrema. This is done equating \& solving the cases when the gradient is zero, \ie $\nabla L(\theta;\x)=0$, and then checking whether this is a maximum or minimum point.\\
 A point is a local minimum if the Hessian at the point is \textit{Negative Definite} \ie $x^TAx<0\ \forall\ x\neq\pmb{0}$.\\
 
 \example{MLE of Normal Distribution}
-Let $\textbf{X}\overset{\text{iid}}{\sim}\mathcal{N}(\mu,\sigma^2)$
+Let $\X\overset{\text{iid}}{\sim}\mathcal{N}(\mu,\sigma^2)$
 \[\begin{array}{rrcl}
-&L(\mu,\sigma^2;\textbf{x})&=&\prod\limits_{i=1}^n\dfrac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}\\
-\implies&\ell(\mu,\sigma^2;\textbf{x})&=&C-\frac{n}{2}\ln(\sigma^2)-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2\\
-\implies&\nabla\ell(\mu,\sigma^2;\textbf{x})&=&\left(\dfrac{-1}{\sigma^2}\sum\limits_{i=1}^n(x_i-\mu),\quad-\dfrac{n}{2\sigma^2}+\dfrac{1}{2\sigma^4}\sum\limits_{i=1}^n(x_i-\mu)^2\right)\\
+&L(\mu,\sigma^2;\x)&=&\prod\limits_{i=1}^n\dfrac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}\\
+\implies&\ell(\mu,\sigma^2;\x)&=&C-\frac{n}{2}\ln(\sigma^2)-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2\\
+\implies&\nabla\ell(\mu,\sigma^2;\x)&=&\left(\dfrac{-1}{\sigma^2}\sum\limits_{i=1}^n(x_i-\mu),\quad-\dfrac{n}{2\sigma^2}+\dfrac{1}{2\sigma^4}\sum\limits_{i=1}^n(x_i-\mu)^2\right)\\
 \text{Setting}&\dfrac{-1}{\sigma^2}\sum\limits_{i=1}^n(x_i-\mu)&=&0\\
 \implies&\hat{\mu}&=&\dfrac{1}{n}\sum_{i=1}^nx_i=\bar{x}\\
 \text{Setting}&-\dfrac{n}{2\sigma^2}+\dfrac{1}{2\sigma^4}\sum\limits_{i=1}^n(x_i-\mu)^2&=&0\\
@@ -256,9 +258,9 @@ Let $\textbf{X}\overset{\text{iid}}{\sim}\mathcal{N}(\mu,\sigma^2)$
 \end{array}\]
 We now want to check whether $(\hat{\mu},\hat{\sigma^2})$ is a minimum.\\
 \[\begin{array}{rcl}
-\nabla^2\ell(\mu,\sigma^2;\textbf{x})&=&\begin{pmatrix}
-\dfrac{\partial^2\ell(\mu,\sigma^2;\textbf{x})}{\partial\mu^2}&\dfrac{\partial^2\ell(\mu,\sigma^2;\textbf{x})}{\partial\mu\partial\sigma^2}\\
-\dfrac{\partial^2\ell(\mu,\sigma^2;\textbf{x})}{\partial\mu\sigma^2}&\dfrac{\partial^2\ell(\mu,\sigma^2;\textbf{x})}{\partial(\sigma^2)^2}
+\nabla^2\ell(\mu,\sigma^2;\x)&=&\begin{pmatrix}
+\dfrac{\partial^2\ell(\mu,\sigma^2;\x)}{\partial\mu^2}&\dfrac{\partial^2\ell(\mu,\sigma^2;\x)}{\partial\mu\partial\sigma^2}\\
+\dfrac{\partial^2\ell(\mu,\sigma^2;\x)}{\partial\mu\sigma^2}&\dfrac{\partial^2\ell(\mu,\sigma^2;\x)}{\partial(\sigma^2)^2}
 \end{pmatrix}\\
 &=&\begin{pmatrix}
 -\dfrac{n}{\hat{\sigma}^2}&0\\
@@ -301,19 +303,129 @@ Consider $n-1\geq\min\{t,c\}\implies L(n-1;x)>0$
 So $L(n;x)$ is increasing for $n\leq\left\lfloor\frac{ct}{x}\right\rfloor$ \& decreasing for $n>\left\lfloor\frac{ct}{x}\right\rfloor$.\\
 Consequently $\hat{n}_{\text{MLE}}(x)=\left\lfloor\frac{tc}{x}\right\rfloor$
 
+\section{Statistics and Estimators}
+
+\definition{Statistic}
+Given some data $\x$ a statistic is a fucntion of the data $T(\x)$.\\
+\nb A statistic cannot depend on an unknown statistical parameter.\\
+
+\definition{Estimate}
+Let $\X\sim f_n(\cdot;\theta^*)$ with $\theta^*\in\Theta$ and $\x$ be a realisation of $\X$.\\
+An \textit{Estimate} $\theta^*$ is a statistic $\hat{\theta}(\x)=T(\x)$ which is intended to approximate the real value of $\theta^*$.\\
+\nb An \textit{Estimate} is a real value \& thus is hard to evaluate.\\
+
+\definition{Estimator}
+Let $\X\sim f_n(\cdot;\theta^*)$ with $\theta^*\in\Theta$ and $\x$ be a realisation of $\X$.\\
+An \textit{Estimator} of $\theta^*$ is $\hat{\theta}$ where $\hat{\theta}(\x)$ is an \textit{estimate}.\\
+\nb We call $T(\X)$ an estimator. This is a random variable.\\
+
+\definition{Distribution of an Estimator}
+Let $\X|sim f_n(\cdot;\theta^*)$ with $\theta^*\in\Theta\subseteq\reals$.\\
+If $\hat{\theta}(\X)$ is a real-valued random variable, we can write its CDF as
+\[\begin{array}{rcl}
+F_{\hat{\theta}(\X)}(t;\theta^*)&=&\prob(\hat{\theta}(\X)\leq t;\theta^*)\\
+&=&{\displaystyle \int_{\chi^n}\mathds{1}\{\hat{\theta}(\x)\leq t\}f_n(\x;\theta^*)d\x}
+\end{array}\]
+
+\remark{Estimator dependends upon true value}
+The distribution of $\hat{theta}(\X)$ depends on the distribution of $\X$ which in turn depends upon the distribution of $\theta^*$.\\
+Thus the distribution of an estimator depends on the true parameter of the variable it is estimating.\\
+
+\remark{Estimator Distribution \& Sample Size}
+As sample size increasesthe distribution of an estimator may converge to a more standard distribution (\eg Normal, Poisson).
+
+\definition{Bias}
+\textit{Bias} is a measure of how much an estimator deviates from the true value, on average.
+\[\begin{array}{rrl}
+\text{Bias}(\hat{\theta};\theta^*)&:=&\expect(\hat{\theta}(\X)-\theta^*;\theta^*)\\
+&=&\expect(\hat{\theta};\theta^*)-\expect(\theta^*;\theta^*)\\
+&=&\expect(\hat{\theta};\theta^*)-\theta^*
+\end{array}\]
+
+\definition{Unbiased Estimator}
+An \textit{Estimator}, $\hat{\theta}$, is said to be \textit{Unbiased} if $\forall\ \theta\in\Theta,\ \text{Bias}(\hat{\theta};\theta)=0$.\\
+Equivalently $\expect(\hat{\theta};\theta)=\theta$.\\
+
+\definition{Mean Square Error}
+The \textit{Mean Square Error} of an estimator is the mean of the squared error associated with rv $\hat{\theta}$.
+$$MSE(\hat{\theta};\theta^*):=\expect\left[(\hat{\theta}(\X)-\theta^*)^2;\theta^2\right]$$
+
+\proposition{Simplifcation of MSE Formula}
+The MSE is a combination of variance \& bias.
+\[\begin{array}{rcl}
+MSE(\hat{\theta};\theta^*)&=&\expect\left[(\hat{\theta}(\X)-\theta^*)^2;\theta^2\right]\\
+&=&\expect\left[\left\{\hat{\theta}-\expect(\hat{\theta};\theta^*)\right\}^2;\theta^*\right]+\left(\expect(\hat{\theta}-\theta^*;\theta^*\right)^2\\
+&=&\text{Var}(\hat{\theta};\theta^*)+\text{Bias}(\hat{\theta};\theta^*)^2
+\end{array}\]
+
+\example{Sample mean as an Estimator}
+Let $\X\overset{\text{iid}}{\sim}\text{Poisson}(\lambda^*)$.\\
+Suppose we are using the sample mean, $\hat{\lambda}(\x):=\frac{1}{n}\sum_{i=1}^nx_i$, as an estimate of $\lambda^*$. We first want to show this estimator is \textit{Unbiased}
+\[\begin{array}{rrl}
+\expect(\hat{\lambda};\lambda)&=&\expect\left(\dfrac{1}{n}\sum\limits_{i=1}^nX_i;\lambda\right)\\
+&=&d\frac{1}{n}\sum\limits_{i=1}^n\expect(X_i;\lambda)\\
+&=&\frac{1}{n}n\lambda\\
+&=&\lambda\\
+\end{array}\]
+Thus $\hat{\lambda}$ is unbiased.\\
+Now we consider the MSE of $\hat{\lambda}$
+\[\begin{array}{rcl}
+MSE(\hat{\lambda};\lambda)&=&\text{Var}(\hat{\lambda};\lambda)\\
+&=&\text{Var}\left(\dfrac{1}{n}\sum\limits_{i=1}^nX_i;\lambda\right)\\
+&=&\dfrac{1}{n^2}\sum\limits_{i=1}^n\text{Var}(X_i;\lambda)\\
+&=&\frac{1}{n^2}n\lambda\\
+&=&\frac{\lambda}{n}
+\end{array}\]
+This shows that as the sample size increases the MSE of $\hat{\lambda}$ converges to $0$.
+
+\section{Probabilistic Convergence}
+
+\remark{Motivation}
+Here we consider the properties of a maximum likelihood estimators as the sample size increases.\\
+
+\theorem{Markov's Inequality}
+For a \textit{non-negative} random variable $X$ and a constant $a>0$
+$$\prob(X\geq a)\leq\dfrac{\expect(X)}{a}$$
+
+\proof{Markov's Inequality}
+Consider continuous $X$. We have
+\[\begin{array}{rrcl}
+&a\prob(X\geq a)&=&a{\displaystyle\int_a^\infty f_X(x)dx}\\
+&&\leq&{\displaystyle\int_a^\infty xf_X(x)dx}\\
+&&\leq&{\displaystyle\int_0^\infty xf_X(x)dx}\\
+&&=&\expect(X)\\
+\implies&a\prob(X\geq a)&=&\expect(X)\\
+\implies&\prob(X\geq a)&\leq&\dfrac{\expect(X)}{a}
+\end{array}\]
+$\hfill\square$
+% TODO discrete case
+
+\theorem{Chebyshev's Inequality}
+Let $\mu=\expect(X)$ and $\sigma^2=\text{Var}(X)$. Then
+$$\forall\ a>0,\ \prob(|X-\mu|\geq a)\leq\dfrac{\sigma^2}{a^2}$$
+
+\proof{Chebyshev's Inequality}
+We have
+\[\begin{array}{rcl}
+\prob(|X-\mu|\geq a)&=&\prob(|X-\mu|^2\geq a^2)\\
+&\leq&\dfrac{\expect\left((X-\mu)^2\right)}{a^2}\ \text{By Markov's Inequality}\\
+&=&\dfrac{\sigma^2}{a^2}
+\end{array}\]
+$\hfill\square$
+
 \newpage
 \setcounter{section}{-1}
 \section{Appendix}
 
 \definition{Gradient}
-$$\nabla f(\pmb{\theta};\textbf{x}):=\left(\dfrac{\partial f(\pmb{\theta};\textbf{x})}{\partial\theta_1},\dots,\dfrac{\partial f(\pmb{\theta};\textbf{x})}{\partial\theta_n}\right)$$
+$$\nabla f(\pmb{\theta};\x):=\left(\dfrac{\partial f(\pmb{\theta};\x)}{\partial\theta_1},\dots,\dfrac{\partial f(\pmb{\theta};\x)}{\partial\theta_n}\right)$$
 
 \definition{Hessian}
-$$\nabla f(\pmb{\theta};\textbf{x}):=\begin{pmatrix}
-\dfrac{\partial^2 f(\pmb{\theta};\textbf{x})}{\partial\theta_1^2}&\dfrac{\partial^2 f(\pmb{\theta};\textbf{x})}{\partial\theta_1\partial\theta_2}&\dots&\dfrac{\partial^2 f(\pmb{\theta};\textbf{x})}{\partial\theta_n\theta_1}\\
-\dfrac{\partial^2 f(\pmb{\theta};\textbf{x})}{\partial\theta_1^2}&\dfrac{\partial^2 f(\pmb{\theta};\textbf{x})}{\partial\theta_1\theta_2}&\dots&\dfrac{\partial^2 f(\pmb{\theta};\textbf{x})}{\partial\theta_n\theta_2}\\
+$$\nabla f(\pmb{\theta};\x):=\begin{pmatrix}
+\dfrac{\partial^2 f(\pmb{\theta};\x)}{\partial\theta_1^2}&\dfrac{\partial^2 f(\pmb{\theta};\x)}{\partial\theta_1\partial\theta_2}&\dots&\dfrac{\partial^2 f(\pmb{\theta};\x)}{\partial\theta_n\theta_1}\\
+\dfrac{\partial^2 f(\pmb{\theta};\x)}{\partial\theta_1^2}&\dfrac{\partial^2 f(\pmb{\theta};\x)}{\partial\theta_1\theta_2}&\dots&\dfrac{\partial^2 f(\pmb{\theta};\x)}{\partial\theta_n\theta_2}\\
 \vdots&\vdots&\ddots&\vdots\\
-\dfrac{\partial^2 f(\pmb{\theta};\textbf{x})}{\partial\theta_1\partial\theta_n}&\dfrac{\partial^2 f(\pmb{\theta};\textbf{x})}{\partial\theta_2\theta_n}&\dots&\dfrac{\partial^2 f(\pmb{\theta};\textbf{x})}{\partial\theta_n^2}
+\dfrac{\partial^2 f(\pmb{\theta};\x)}{\partial\theta_1\partial\theta_n}&\dfrac{\partial^2 f(\pmb{\theta};\x)}{\partial\theta_2\theta_n}&\dots&\dfrac{\partial^2 f(\pmb{\theta};\x)}{\partial\theta_n^2}
 \end{pmatrix}$$
 
 \subsection{Notation}
@@ -330,7 +442,7 @@ $\Omega$&Sample space\\
 $X$&Scalar random variable\\
 $\mathcal{F}$&Sigma field (Set of events)\\
 $\chi$&Support of rv $XX$. A set set $X$ is definitely in it \ie $\prob(X\in\chi;\theta)=1$\\
-$\textbf{X}$&Vector consiting of scalar random variables\\
+$\X$&Vector consiting of scalar random variables\\
 \hline
 \end{tabular}
 
