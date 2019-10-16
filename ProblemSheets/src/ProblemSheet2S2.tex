@@ -1,0 +1,179 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=1in, paperwidth=8.3in, paperheight=11.7in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{dsfont}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{changepage} 
+
+\begin{document}
+
+\pagestyle{fancy}
+\setlength\parindent{0pt}
+\allowdisplaybreaks
+
+\renewcommand{\headrulewidth}{0pt}
+
+% Cover page title
+\title{Statistics 2 - Problem Sheet 2}
+\author{Dom Hutchinson}
+\maketitle
+
+% Header
+\fancyhead[L]{Dom Hutchinson}
+\fancyhead[C]{Statistics 2 - Problem Sheet 2}
+\fancyhead[R]{\today}
+
+% Counters
+\newcounter{qpart}[section]
+
+% commands
+\newcommand{\dotprod}[0]{\boldsymbol{\cdot}}
+\newcommand{\cosech}[0]{\mathrm{cosech}\ }
+\newcommand{\cosec}[0]{\mathrm{cosec}\ }
+\newcommand{\sech}[0]{\mathrm{sech}\ }
+\newcommand{\prob}[0]{\mathbb{P}}
+\newcommand{\nats}[0]{\mathbb{N}}
+\newcommand{\cov}[0]{\mathrm{cov}}
+\newcommand{\var}[0]{\mathrm{var}}
+\newcommand{\expect}[0]{\mathbb{E}}
+\newcommand{\reals}[0]{\mathbb{R}}
+\newcommand{\integers}[0]{\mathbb{Z}}
+\newcommand{\indicator}[0]{\mathds{1}}
+\newcommand{\nb}[0]{\textit{N.B.} }
+\newcommand{\ie}[0]{\textit{i.e.} }
+\newcommand{\eg}[0]{\textit{e.g.} }
+\newcommand{\x}[0]{\textbf{x} }
+\newcommand{\X}[0]{\textbf{X} }
+
+\newcommand{\qpart}[0]{\stepcounter{qpart} \textbf{Question \arabic{section}.\arabic{qpart}\\}}
+\newcommand{\qpartnb}[0]{\stepcounter{qpart} \textbf{Question \arabic{section}.\arabic{qpart}} - }
+\newcommand{\ans}[0]{ \textbf{Answer \arabic{section}\\}}
+\newcommand{\apart}[0]{ \textbf{Answer \arabic{section}.\arabic{qpart}\\}}
+\newcommand{\apartnb}[0]{\stepcounter{qpart} \textbf{Answer \arabic{section}.\arabic{qpart}} - }
+\newcommand{\question}[0]{\stepcounter{section}\section*{Question - \arabic{section}.}}
+
+\question
+Derive the Maximum Likelihood estimates for the following distributions.\\
+
+\qpartnb $\textbf{X}\overset{\mathrm{iid}}{\sim}\mathrm{Poisson}(\lambda)$ with $\lambda$ unknown.\\
+
+\apart
+Let $\X\overset{\text{iid}}{\sim}\text{Poisson}(\lambda)$ with $\lambda$ unknown. Then
+\[\begin{array}{rrcl}
+&\ell(\lambda;\x)&=&-\lambda n+\left(\sum\limits_{i=1}^nx_i\right)\ln\lambda+c\\
+\implies&\ell'(\lambda;\x)&=&-n+\frac{1}{\lambda}\sum\limits_{i=1}^nx_i\\
+\text{Setting}&0&=&\ell'(\lambda;\x)\\
+\implies&0&=&-n+\frac{1}{\hat{\lambda}}\sum\limits_{i=1}^nx_i\\
+\implies&\hat{\lambda}&=&\frac{1}{n}\sum\limits_{i=1}^nx_i\\
+&&=&\bar{x}\\
+\text{We have}&\ell''(\lambda;\x)&=&-\frac{1}{\lambda^2}\sum\limits_{i=1}^nx_i\\
+&&<&0\ \forall\ \lambda>0
+\end{array}\]
+Meaning $\hat{\lambda}=\bar{x}$ is a local maximum and thus a maximum likelihood estimate for $\lambda$.\\
+
+\qpartnb $X\sim\mathrm{Binomial}(n,p)$ with $n$ known by $p$ unknown.\\
+
+\apart
+Let $X\sim\text{Binomial}(n,p)$ with $n$ known, but $p$ unknown. Then
+\[\begin{array}{rrcl}
+&\ell(p;x,n)&=&\ln{n\choose x}+x\ln p+(n-x)\ln(1-p)+c\\
+\implies&\ell'(p;x,n)&=&\frac{n}{p}-\frac{n-x}{1-p}\\
+\mathrm{Setting}&0&=&\ell'(p;x,n)\\
+\implies&0&=&\frac{n}{\hat{p}}-\frac{n-x}{1-\hat{p}}\\
+\implies&x(1-\hat{p})&=&\hat{p}(n-x)\\
+\implies&x-x\hat{p}&=&\hat{p}n-\hat{p}x\\
+\implies&\hat{p}&=&\frac{x}{n}\\
+\text{We have}&\ell'(\hat{p};x,b)&=&-\frac{x}{\hat{p}^2}-\frac{n-x}{(1-\hat{p})^2}\\
+&&=&-\frac{xn^2}{x^2}-\frac{n-x}{\left(\frac{n-x}{n}\right)^2}\\
+&&=&-\frac{n^2}{x}-\frac{n^2}{n-x}
+\end{array}\]
+Since $n\geq x\geq0$ then $\ell''(\hat{p};x,n)<0\ \forall\ n,x$.\\
+Meaning $\hat{p}=\frac{x}{n}$ is a maximum and thus a maximum likelihood estimate for $p$.
+
+\qpartnb $\X\overset{\mathrm{iid}}{\sim}\mathrm{Normal}(\mu,\sigma^2)$ with $\mu\ \&\ \sigma$ unknown.\\
+
+\apart
+Let $\X\overset{\text{iid}}{\sim}\text{Normal}(\mu,\sigma^2)$ with $\mu\ \&\ \sigma^2$ unknown. Then
+\[\begin{array}{rrcl}
+&\ell(\mu,\sigma^2;\x)&=&n\ln\sigma^2+\frac{1}{\sigma^2}\sum\limits_{i=1}^n(x_i-\mu)^2+c\\
+\implies&\frac{\partial}{\partial\sigma^2}\ell(\mu,\sigma^2;\x)&=&\frac{n}{\sigma^2}-\frac{1}{(\sigma^2)^2}\sum\limits_{i=1}^n(x_i-\mu)^2\\
+\text{Setting}&0&=&\frac{\partial}{\partial\sigma^2}\ell(\hat{\mu},\hat{\sigma}^2;\x)\\
+\Longleftrightarrow&0&=&\frac{n}{\hat{\sigma}^2}-\frac{1}{(\hat{\sigma}^2)^2}\sum\limits_{i=1}^n(x_i-\hat{\mu})^2\\
+\implies&n\hat{\sigma}^2&=&\sum\limits_{i=1}^n(x_i-\hat{\mu})^2\\
+\implies&\hat{\sigma^2}&=&\frac{1}{n}\sum\limits_{i=1}^n(x_i-\hat{\mu})^2\\
+\text{We have}&\frac{\partial}{\partial\mu}\ell(\mu,\sigma^2;\x)&=&-\frac{2}{\sigma^2}\sum\limits_{i=1}^n(x_i-\mu)\\
+\text{Setting}&0&=&\frac{\partial}{\partial\mu}\ell(\hat{\mu},\hat{\sigma}^2;\x)\\
+\Longleftrightarrow&0&=&-\frac{2}{\hat{\sigma}^2}\sum\limits_{i=1}^n(x_i-\hat{\mu})\\
+\implies&0&=&\sum\limits_{i=1}^n(x_i-\hat{\mu})\\
+\implies&0&=&\left(\sum\limits_{i=1}^nx_i\right)-n\hat{\mu}\\
+\implies&\hat{\mu}&=&\frac{1}{n}\sum\limits_{i=1}^nx_i
+\end{array}\]
+
+\qpartnb $\X\overset{\mathrm{iid}}{\sim}\mathrm{Uniform}(a,b)$ with $a\ \&\ b$ unknown.\\
+
+\apart
+Let $\X\overset{\text{iid}}{\sim}\text{Uniform}[a,b]$ with $a\ \&\ b$ unknown, and $a\leq b$.\\
+We have $L(a,b;\x)=\dfrac{1}{(b-a)^n}$ if $\ \forall x_i\in\textbf{x},\ x_i\in[a,b]$.\\
+To maximise $L(a,b;\x)$ we want to minimise $(b-a)$.\\
+We should not the further constraints that $a\leq\min\{x_i:i\in[1,n]\}$ \& $b\geq\max\{x_i:i\in[1,n]\}$ in order for the sample $x_1,\dots,x_n$ to be valid.\\
+For fixed $b$ we want to maximise $a\implies\hat{a}=\min\{x_i:i\in[1,n]\}$.\\
+For fixed $a$ we want to minimise $b\implies\hat{b}=\max\{x_i:i\in[1,n]\}$.
+
+\question
+Let $X\sim\text{Pareto}(x_0,\theta)$ where $x_0>0$ and $\theta>0$.\\
+Note that
+$$f_X(x;x_0;\theta)=\dfrac{\theta x_0^\theta}{x^{\theta+1}}\mathds{1}(x\geq x_0)$$
+
+\qpartnb Show that the cumulative density function of $X$ is
+$$F_X(x;x_0,\theta)=\left\{1-\left(\frac{x}{x_0}\right)^\theta\right\}\mathds{1}(x\geq x_0)$$
+
+\apart
+\[\begin{array}{rcl}
+F_X(x;x_0,\theta)&=&{\displaystyle \int_{-\infty}^xf_X(t;x_0,\theta)dt }\\
+&=&{\displaystyle \int_{-\infty}^x\frac{\theta x_0^\theta}{t^{\theta+1}}\mathds{1}(t\geq x_0)dt }\\
+&=&\theta x_0^\theta{\displaystyle \int_{-\infty}^x t^{-(\theta+1)}\mathds{1}(t\geq x_0)dt }\\
+&=&\theta x_0^\theta\left[\dfrac{t^{-(\theta+1)+1}}{-(\theta+1)+1}\right]_{x_0}^x\\
+&=&\theta x_0^\theta\left[\dfrac{t^{-\theta}}{\theta}\right]_{x_0}^x\\
+&=&\theta x_0^\theta\left[\dfrac{1}{-\theta x^\theta}-\dfrac{1}{-\theta x_0^\theta}\right]\\
+&=&\theta x_0^\theta\left[\dfrac{1}{\theta x_0^\theta}-\dfrac{1}{\theta x^\theta}\right]\\
+&=&1-\left(\dfrac{x_0}{x}\right)^\theta\mathds{1}(x\geq x_0)
+\end{array}\]
+
+\qpartnb Show that the quantile function for $X$ is
+$$F_X^{-1}(u;x_0,\theta)=x_0(1-u)^{-\frac{1}{\theta}}$$
+
+\apart
+\[\begin{array}{rrcl}
+\text{Set}&F_X(x;x_0,\theta)&=&u\\
+\implies&1=\left(\dfrac{x_0}{x}\right)^\theta&=&u\\
+\implies&\dfrac{x_0}{x}&=&(1-u)^{\frac{1}{\theta}}\\
+\implies&x&=&x_0(1-u)^{-\frac{1}{\theta}}\\
+\implies&F_X^{-1}(u;x_0,\theta)&=&x_0(1-u)^{-\frac{1}{\theta}}
+\end{array}\]
+
+\qpartnb How can we generate random quantities from this distribution?\\
+\textit{Hint} - Show that the cumulative density function of random variable $Y:=F_{X}^{-1}(U)$ for ${U\sim\text{Uniform}[0,1]}$ is the same as $X\sim\text{Pareto}(x_0,\theta)$.\\
+
+\apart
+Let $U\sim\text{Uniform}[0,1]$, $Y:=F_X^{-1}(U)$ and $y\in[x_0,\infty)$ be a realisation of $Y$. Then
+\[\begin{array}{rcl}
+F_Y(y)&=&\prob(Y\leq y)\\
+&=&\prob(F_X^{-1}(U)\leq y)\\
+&=&\prob(U\leq F_X(y))\\
+&=&\begin{cases}
+0&,\ \text{if}\ F_X(y)<0\\
+F_X(y)&,\ \text{if}\ F_X(y)\in[0,1]\\
+1&\text{otherwise}
+\end{cases}\\
+&=&F_X(y)\ \text{by definition of $F_X(y)$ being a CDF}
+\end{array}\]
+Thus $F_Y(y)=F_X(y)\ \forall\ y\in[x_0,\infty]$.
+
+\end{document}

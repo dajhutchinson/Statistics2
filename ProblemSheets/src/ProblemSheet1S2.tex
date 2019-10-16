@@ -21,9 +21,8 @@
 \renewcommand{\headrulewidth}{0pt}
 
 % Cover page title
-\title{Statistics 2 - Notes}
+\title{Statistics 2 - Problem Sheet 1}
 \author{Dom Hutchinson}
-\date{\today}
 \maketitle
 
 % Header
@@ -71,8 +70,8 @@ L(\lambda;\textbf{x})&\propto&f_n(\textbf{x};\lambda)\\
 &=&\prod\limits_{i=1}^ne^{-\lambda}\lambda^{x_i}(x_i!)^{-1}\\
 &=& e^{-\lambda n}\lambda^{\sum_{i=1}^n x_i}\prod\limits_{i=1}^n(x_i!)^{-1}\\
 &\propto&e^{-\lambda n}\lambda^{\sum_{i=1}^n x_i}\\
-\ell(\lambda;\textbf{x})&\propto&\ln L(\lambda;\textbf{x})\\
-&=&-\lambda n+\left(\sum\limits_{i=1}^n\right)(\ln\lambda)
+\ell(\lambda;\textbf{x})&=&\ln L(\lambda;\textbf{x})\\
+&=&-\lambda n+\left(\sum\limits_{i=1}^nx_i\right)(\ln\lambda)+c
 \end{array}\]
 
 \qpartnb $X\sim\mathrm{Binomial}(n,p)$ with $n\ \&\ p$ unknown.\\
@@ -82,8 +81,8 @@ Let $X\sim\mathrm{Binomial}(n,p)$ with $n\ \&\ p$ unknown. Then
 \[\begin{array}{rcl}
 L(n,p;x)&\propto&f(x;n,p)\\
 &=&{n \choose x}p^x(1-p)^{n-x}\\
-\ell(n,p;x)&\propto&\ln L(n,p;x)\\
-&=&ln{n \choose x} + x\ln p + (n-x)\ln(1-p)
+\ell(n,p;x)&=&\ln L(n,p;x)\\
+&=&ln{n \choose x} + x\ln p + (n-x)\ln(1-p)+c
 \end{array}\]
 
 \newpage
@@ -93,12 +92,11 @@ L(n,p;x)&\propto&f(x;n,p)\\
 Let $\textbf{X}\overset{\mathrm{iid}}{\sim}\mathrm{Normal}(\mu,\sigma^2)$ with $\mu\ \&\ \sigma$ unknown. Then
 \[\begin{array}{rcl}
 L(\mu,\sigma^2);\textbf{x})&\propto&f_n(\textbf{x};\mu,\sigma^2)\\
-&=&\prod\limits_{i=1}^n (2\pi\sigma)^{-\frac{1}{2}} e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}\\
-&=&(2\pi\sigma)^{-\frac{n}{2}}\prod\limits_{i=1}^n e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}\\
-&\propto&\sigma^{-\frac{n}{2}}\prod\limits_{i=1}^n e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}\\
-\ell(\mu,\sigma^2;\textbf{x})&\propto&\ln L(\mu,\sigma^2;\textbf{x})\\
-&=&-\frac{n}{2}\ln\sigma -\frac{1}{2\sigma^2}\sum\limits_{i=1}^n(x_i-\mu)^2\\
-&\propto&n\ln\sigma +\frac{1}{\sigma^2}\sum\limits_{i=1}^n(x_i-\mu)^2
+&=&\prod\limits_{i=1}^n (2\pi\sigma^2)^{-\frac{1}{2}} e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}\\
+&=&(2\pi\sigma^2)^{-\frac{n}{2}}\prod\limits_{i=1}^n e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}\\
+&\propto&(\sigma^2)^{-\frac{n}{2}} e^{-\frac{1}{2\sigma^2}\sum\limits_{i=1}^n(x_i-\mu)^2}\\
+\ell(\mu,\sigma^2;\textbf{x})&=&\ln L(\mu,\sigma^2;\textbf{x})\\
+&=&-\frac{n}{2}\ln\sigma^2 -\frac{1}{2\sigma^2}\sum\limits_{i=1}^n(x_i-\mu)^2+c
 \end{array}\]
 
 \qpartnb $\textbf{X}\overset{\mathrm{iid}}{\sim}\mathrm{Uniform}(a,b)$ with $a\ \&\ b$ unknown.\\
@@ -107,11 +105,15 @@ L(\mu,\sigma^2);\textbf{x})&\propto&f_n(\textbf{x};\mu,\sigma^2)\\
 Let $\textbf{X}\overset{\mathrm{iid}}{\sim}\mathrm{Uniform}(a,b)$ with $a\ \&\ b$ unknown. Then
 \[\begin{array}{rcl}
 L(a,b;\textbf{x})&\propto&f_n(\textbf{x};a,b)\\
-&=&\prod\limits_{i=1}^nf(x_i;a,b)\\
-&=&\prod\limits_{i=1}^n\frac{1}{b-a}\\
-&=&\frac{1}{(b-a)^n}\\
-\ell(a,b;\textbf{x})&\propto&-n\ln(b-a)\\
-&\propto&-\ln(b-a)
+&=&\prod\limits_{i=1}^n\begin{cases}
+\frac{1}{b-a}&,x_i\in[a,b]\\
+0&\text{otherwise}
+\end{cases}\\
+&=&\left(\frac{1}{b-a}\right)^n\mathds{1}\{\forall\ x_i\in\textbf{x},\ x_i\in[a,b]\}\\
+\ell(a,b;\textbf{x})&=&\begin{cases}
+-n\ln(b-a)+c&,\ \mathrm{if}\ \forall\ x_i\in\textbf{x},\ x_i\in[a,b]\\
+\text{undefined}&\text{otherwise}
+\end{cases}
 \end{array}\]
 
 \question
@@ -125,7 +127,7 @@ Define $Y=\min(X_1,X_2,X_3)$. Then
 &F_Y(y;\lambda)&=&\prob(Y\leq y)\\
 &&=&1-\prob(Y>y)\\
 &&=&1-\prob(X_1>y,X_2>y,X_3>y)&\text{By independece}\\
-&&=&1-\prob(X_1>y)^3&\text{By indetical distribution}\\
+&&=&1-\prob(X_1>y)^3&\text{By identical distribution}\\
 &&=&1-(e^{-\lambda y})^3\\
 &&=&1-e^{-3\lambda y}\\
 \implies&f_Y(y;\lambda)&=&F_Y'(y;\lambda)\\
@@ -136,7 +138,7 @@ Define $Y=\min(X_1,X_2,X_3)$. Then
 \end{array}\]
 
 \question
-Suppose I construct a random variable $X$ in the following way. FIrst, I toss a biased coin with probability of heads $p$. If it comes up heads, then $X=0$, otherwise $X\sim\mathrm{Poisson}(\lambda)$. We call this the \textit{Zero-Inflated Poisson} distribution, and write $X\sim ZIP(p,\lambda)$. Derive the probabilitiy mass function for $X$ and the likelihood function for a realisation $\textbf{x}$ of $\textbf{X}\overset{\mathrm{iid}}{\sim}\mathrm{ZIP}(p,\lambda)$.\\
+Suppose I construct a random variable $X$ in the following way. First, I toss a biased coin with probability of heads $p$. If it comes up heads, then $X=0$, otherwise $X\sim\mathrm{Poisson}(\lambda)$. We call this the \textit{Zero-Inflated Poisson} distribution, and write $X\sim ZIP(p,\lambda)$. Derive the probabilitiy mass function for $X$ and the likelihood function for a realisation $\textbf{x}$ of $\textbf{X}\overset{\mathrm{iid}}{\sim}\mathrm{ZIP}(p,\lambda)$.\\
 
 \ans
 Let $X\sim\mathrm{ZIP}(p,\lambda),\ Y\sim\mathrm{Bernoulli}(p)\ \&\ Z\sim\mathrm{Poisson}(\lambda)$. Then

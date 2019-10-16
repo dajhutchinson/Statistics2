@@ -1,0 +1,71 @@
+---
+title: "Problems Sheet 1"
+subtitle: "Statistics 2"
+author: "Dom Hutchinson"
+output:
+  pdf_document: 
+     fig_width: 6
+     fig_height: 4
+  html_notebook: default
+  html_document: default
+  word_document: default
+---
+
+# Question 4
+## Part a)
+```{r}
+xobs <- rexp(10,rate=0.3) # Sample 10 values from Exp(0.3) distribution
+xobs
+```
+
+## Part b)
+```{r}
+# Returns log-likelihood for different values of lambda, using observed values
+ell <- function(lambda,obs) {
+  n <- length(obs)
+  n*log(lambda)-lambda*n*mean(xobs) # Log-likelihood function for exponential distribution
+}
+```
+
+## Part c)
+```{r}
+# Generate 101 equally seperated values between 0 & 2
+lvals <- seq(from=0,to=2,length=101)
+
+# Plot log-likelihood value for each element of lvals, using observed values
+plot(lvals,ell(lvals,xobs),type = 'l',
+main = 'Log-likelihood for lambda', xlab = 'Lambda',
+ylab = 'Log-likelihood')
+```
+
+## Part d)
+```{r}
+# For each element in lambda return sum of dexp for observed values
+elll <- function(lambda,obs) {
+  sapply(lambda, function(lv) sum(dexp(obs, rate=lv, log=TRUE)))
+}
+
+# Line produced by ell()
+plot(lvals,ell(lvals,xobs),type = 'l',
+main = 'Log-likelihood for lambda', xlab = 'Lambda',
+ylab = 'Log-likelihood')
+
+# Line produced by elll()
+lines(lvals,elll(lvals,xobs),col="green",lty=2)
+
+legend("topright",legend=c('ell()','elll()'),lty=c(1,2),col=c('black','green'),pch=NA,bty='n')
+```
+
+## Part e)
+```{r}
+x<-1:5 # [1,2,3,4,5]
+
+# Print each element
+sapply(x,function(xv) xv)
+
+# Print square of each element
+sapply(x,function(xv) xv^2)
+
+# For each element, print 'foo'
+sapply(x, function(xv) 'foo')
+```

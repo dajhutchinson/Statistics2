@@ -1,0 +1,73 @@
+---
+title: "Problems Sheet 2"
+subtitle: "Statistics 2"
+author: "Dom Hutchinson"
+output:
+  pdf_document: 
+     fig_width: 6
+     fig_height: 4
+  html_notebook: default
+  html_document: default
+  word_document: default
+---
+
+# Question 3
+```{r}
+#f_X(x) for X~Pareto(x0,theta)
+dpareto<-function(x,x0,theta) {
+  stopifnot(all(x0>0), all(theta>0)) # Stop if x0 or theta are invalid
+  ifelse(x<x0, 0, (theta/x)*(x0/x)^theta) # Implement indicator function to return 0 if x<x0, otherwise f_X(x)
+}
+
+#F_X(x) for X~Pareto(x0,theta)
+ppareto<-function(x,x0,theta) {
+  stopifnot(all(x0>0), all(theta>0))
+  ifelse(x<x0, 0, 1-(x0/x)^theta) # Implement indicator function to return 0 if x<x0 otherwise F_X(x)
+}
+
+#F_X^{-1}(x) for X~Pareto(x0,theta)
+qpareto<-function(u,x0,theta) {
+  stopifnot(all(x0>0), all(theta>0), all(u>=0), all(u<=1))
+  x0 * (1-u)^(-1/theta) # Return F_X^{-1}(u)
+}
+
+# Produce n random samples from X~Pareto(x0,theta)
+rpareto<-function(n,x0,theta) {
+  stopifnot(all(x0>0), all(theta>0), n>=0)
+  u <- runif(n) # Samples Uniform[0,1] n times
+  qpareto(u,x0=x0,theta=theta) # Returns values of x such F_X^{-1}(x)=u, effectively sampling X n times 
+}
+```
+
+## Part a)
+```{r}
+x0=2; theta=15
+rsam<-rpareto(1000,x0=x0,theta=theta) # Sample X~Pareto(2,15) 1000 times
+```
+
+## Part b)
+```{r}
+hist(rsam, freq=FALSE) # Histogram of sample
+xvals<-seq(from=2,to=max(rsam),length=101) # Produce 101 linear intervals in [2,max(rsam)]
+lines(xvals,dpareto(xvals,x0=x0,theta=theta),col='red') # Plot distribution of Pareto(2,15)
+```
+
+## Part c)
+```{r}
+# Estimates Prob(X<=x)
+Fhat<-function(x) {
+  sapply(x,function(xv) mean(rsam<=xv)) # Returns propotion of sample <=x
+}
+
+plot(xvals, Fhat(xvals), type='l', main="Estimated and correct distribution function", bty='n') # Fhat
+lines(xvals,ppareto(xvals,x0=x0,theta=theta),col="red") # True distribution
+legend('topleft',legend=c("Estimated","Correct"),lty=1,pch=NA,col=c("black","red"),bty="n")
+```
+
+## Part d)
+```{r}
+n<-length(rsam)
+u<-(1:n)/n # n linear intervals of [0,1]
+plot(sort(rsam),qpareto(u,x0=x0,theta=theta),main="QQ Plot") # Quantile plot
+abline(a=0,b=1,col="red") # y=x
+```

@@ -60,12 +60,19 @@
 \newcommand{\x}[0]{\textbf{x}}
 
 \newcommand{\definition}[1]{\stepcounter{definition} \textbf{Definition \arabic{section}.\arabic{definition}\ - }\textit{#1}\\}
+\newcommand{\definitionn}[1]{\stepcounter{definition} \textbf{Definition \arabic{section}.\arabic{definition}\ - }\textit{#1}}
 \newcommand{\proof}[1]{\stepcounter{proof} \textbf{Proof \arabic{section}.\arabic{proof}\ - }\textit{#1}\\}
+\newcommand{\prooff}[1]{\stepcounter{proof} \textbf{Proof \arabic{section}.\arabic{proof}\ - }\textit{#1}}
 \newcommand{\example}[1]{\stepcounter{example} \textbf{Example \arabic{section}.\arabic{example}\ - }\textit{#1}\\}
+\newcommand{\examplee}[1]{\stepcounter{example} \textbf{Example \arabic{section}.\arabic{example}\ - }\textit{#1}}
 \newcommand{\notation}[1]{\stepcounter{notation} \textbf{Notation \arabic{section}.\arabic{notation}\ - }\textit{#1}\\}
+\newcommand{\notationn}[1]{\stepcounter{notation} \textbf{Notation \arabic{section}.\arabic{notation}\ - }\textit{#1}}
 \newcommand{\proposition}[1]{\stepcounter{proposition} \textbf{Proposition \arabic{section}.\arabic{proposition}\ - }\textit{#1}\\}
+\newcommand{\propositionn}[1]{\stepcounter{proposition} \textbf{Proposition \arabic{section}.\arabic{proposition}\ - }\textit{#1}}
 \newcommand{\remark}[1]{\stepcounter{remark} \textbf{Remark \arabic{section}.\arabic{remark}\ - }\textit{#1}\\}
+\newcommand{\remarkk}[1]{\stepcounter{remark} \textbf{Remark \arabic{section}.\arabic{remark}\ - }\textit{#1}}
 \newcommand{\theorem}[1]{\stepcounter{theorem} \textbf{Theorem \arabic{section}.\arabic{theorem}\ - }\textit{#1}\\}
+\newcommand{\theoremm}[1]{\stepcounter{theorem} \textbf{Theorem \arabic{section}.\arabic{theorem}\ - }\textit{#1}}
 
 \tableofcontents
 
@@ -413,6 +420,159 @@ We have
 \end{array}\]
 $\hfill\square$
 
+\definition{Convergence in Probability}
+We say the sequence of random variables $\{Z_n\}_{n\in\nats}$ converges in probability to the random variable $Z$ if
+$$\forall\ \varepsilon>0,\ \lim_{n\to\infty}\prob(|Z_n-Z|>\varepsilon)=0$$
+\nb This is denoted $Z_n\to_\prob Z$.\\
+\nb The random variables $\{Z_n\}_{n\in\nats}$ \& $Z$ must be in the same probability space.\\
+
+\theorem{Weak Law of Large Numbers}
+If $\{X_n\}_{n\in\nats}$ are idependent \& identically distributed and $\expect(X_1)=\mu<\infty$ then
+$$Z_n=\frac{1}{n}\sum_{i=1}^nX_i\to_\prob\mu$$
+\nb This is an example of Convergence in Probability.\\
+
+\definition{Convergence in Distribution}
+We say the sequence of random variables $\{Z_n\}_{n\in\nats}$ converges in distribution to random variable $Z$ if
+$$\forall\ z\in\text{Z where }\prob(Z\leq z)\text{ is continuous, }\lim_{n\to\infty}\prob(Z_n\leq z)=\prob(Z\leq z)$$
+\nb This is denoted $Z_n\to_\mathcal{D} Z$.\\
+\nb The random variables $\{Z_n\}_{n\in\nats}$ \& $Z$ need not be in the same probability space.\\
+
+\remark{Equivalent Statements to Convergence in Distribution}
+Saying that $Z_n\to_\mathcal{D} Z$ is equivalent to saying that
+$$\forall\ z\in\text{Z where }F_Z(z)\text{ is continuous, }\lim_{n\to\infty}F_{Z_n}(z)=F_Z(z)$$
+
+\theorem{Central Limit Theorem}
+If $\{X_n\}_{n\in\nats}$ are idependent \& identically distributed, $\expect(X_1)=\mu<\infty$ and $\var(X_1)=\sigma^2<\infty$ then
+$$\frac{\sqrt{n}}{\sigma}(Z_n-\mu)\to_\mathcal{D}Z\sim\text{Normal}(0,1)$$
+
+\theorem{Convergence in Probability \& Distribution}
+Convergence in probabilitiy $\implies$ Convergence in distribution, \textbf{but} the opposite is not necessarily true.\\
+
+\theorem{Convergence in Probability \& Distribution to a Constant}
+Convergence in distribution to a constant \textbf{and} convergence in probability to a constant are equivalent.\\
+
+\example{}
+Let $X\sim\text{Bernoulli}\left(\frac{1}{2}\right)$ and $\{X_n\}_{n\in\nats}$ be a sequence of random variables where $X_i:=(1-X)+\frac{1}{n}$.\\
+We have
+$$F_X(x)=\begin{cases}
+0&,\ x<0\\
+\frac{1}{2}&,\ x\in[0,1)\\
+1&,x\geq1
+\end{cases}\quad F_{X_n}(x)=\begin{cases}
+0&,\ x<\frac{1}{n}\\
+\frac{1}{2}&,\ x\in\left[\frac{1}{n},1+\frac{1}{n}\right)\\
+1&,x\geq1+\frac{1}{n}
+\end{cases}$$
+Clearly $F_{X_n}(x)\to F_X(x)$ at all points at which $F_X$ is continuous (\ie $x\in\reals\backslash\{0,1\}$).\\
+Thus $X_n\to_\mathcal{D}X$.\\
+
+\theorem{Continuous Mapping Theorem}
+Let $g:Z\to G$ be a \textit{continuous} function. Then
+\begin{enumerate}[label=\roman*)]
+	\item If $Z_n\to_\prob Z$, then $g(Z_n)\to_\prob g(Z)$;
+	\item If $Z_n\to_\mathcal{D} Z$, then $g(Z_n)\to_\mathcal{D} g(Z)$
+\end{enumerate}
+
+\theorem{Slutsky's Theorem}
+Let $\{Y_n\}_{n\in\nats}\ \&\ \{Z_n\}_{n\in\nats}$ be sequences of random variables, $Y$ be a random variable \& $c\in\reals\backslash0$ be a constant.\\
+If $Y_n\to_\mathcal{D}Y$ and $Z_n\to_\mathcal{D}c$, then
+\begin{enumerate}[label=\roman*)]
+	\item $Y_n+Z_n\to_\mathcal{D}Y+c$;
+	\item $Y_nZ_n\to_\mathcal{D}Yc$; and,
+	\item $\frac{Y_n}{Z_n}\to_\mathcal{D}\frac{Y}{c}$.
+\end{enumerate}
+
+\definition{Convergence in Quadratic Mean}
+Let $\{Z_n\}_{n\in\nats}$ be a sequence of random variables \& $Z$ be a random variable.\\
+We say that $\{Z_n\}_{n\in\nats}$ \textit{Converges in Quadratic Mean} to the random variable $Z$ if
+$$\lim_{n\to\infty}\expect\left[(Z_n-Z)^2\right]=0$$
+\nb This is denoted $Z_n\to_{qm}Z$.\\
+
+\theorem{If $Z_n\to_{qm}Z$ then $Z_n\to_\prob Z$}
+
+\proof{Theorem 5.9}
+Fix any $\varepsilon>0$. We have
+\[\begin{array}{rcl}
+\prob(|Z_n-Z|>\varepsilon)&=&\prob(|Z_n-Z|^2>\varepsilon^2)\\
+&\leq&\frac{1}{\varepsilon^2}\expect\left[(Z_n-Z)^2\right]\text{ by Markov's Inequality}\\
+&\to&0\text{ since $Z_n\to_{qm}Z$.}
+\end{array}\]
+Hence $Z_n\to_\prob Z$.
+
+\subsection{Probabilistic Convergence \& Estimators}
+
+\definition{Consistency of a Sequence of Estimators}
+A sequence of estimators, $\{\hat{\theta}_n(\cdots):\chi^n\to\Theta\}$, are said to be \textit{Consistent} if
+$$\forall\ \theta\in\Theta\text{ with }\X_n\sim f_n(\cdot;\theta),\ \hat{\theta}_n(\X_n)\to_{\prob(\cdot;\theta)}\theta$$
+
+\remarkk{Consistency of a Sequence of Estimators}
+\begin{enumerate}[label=\roman*)]
+	\item In numerous situations one will talk about the consistency of \textit{the} estimator, \eg for the MLE, but also for the mean, etc. This implicitly refers to the corresponding sequence of MLEs, sequence of means, etc.
+	\item Note the $\prob(\cdot;\theta)$ in the limit above, and in particular the dependence on $\theta$. This is often omitted in practice, you should however not forget what the symbols actually mean.
+	\item Quadratic mean / Mean Square convergence $\implies$ consistency.\\
+	That is, if the MSE of the estimator converges to 0, the estimator is consistent.
+\end{enumerate}
+
+\example{Flipping Coins}
+Let $X_i\overset{\text{iid}}{\sim}\text{Bernoulli}(\theta^*)$ for some $\theta^*\in\Theta=[0,1]$.\\
+The MLE and method of moments estimator are the sample mean
+$$\hat{\theta}_n(X_1,\dots,X_n)=\frac{1}{n}\sum\limits_{i=1}^nX_i$$
+\begin{enumerate}[label=\roman*)]
+	\item Consistency of $\{\hat{\theta})n\}$ is provided by the \textit{Weak Law of Large Numbers}, since $\expect(X_1)=\theta^*$.
+	\item Now we consider a crude way to \textit{capture} $\theta^*$ in a random interval with high probability. We write $\hat{\theta}_n:=\hat{\theta}_n(X_1,\dots,X_n)$. Note that
+	$$\expect(\hat{\theta}_n;\theta^*)=\theta^*\quad\text{and}\quad\var(\hat{\theta}_n;\theta^*)=\frac{\theta^*(1-\theta^*)}{n}$$
+	Using \textit{Chebyshev's Inequality}
+	$$\prob\left(|\hat{\theta}_n-\theta^*|\geq\varepsilon;\theta^*\right)\leq\frac{\theta^*(1-\theta^*)}{n\varepsilon^2}$$
+	We don't know $\theta^*$, but can deduce that $\theta^*(1-\theta^*)\leq\frac{1}{4}$ thus
+	$$\prob\left(|\hat{\theta}_n-\theta^*|\geq\varepsilon;\theta^*\right)\leq\frac{1}{4n\varepsilon^2}$$
+	To have a probability bound of our choosing we can substitute $\alpha=\frac{1}{4n\varepsilon^2}$ to get
+	$$\prob\left(|\hat{\theta}_n-\theta^*|\geq\frac{1}{2\sqrt{n\alpha}};\theta^*\right)\leq\alpha$$
+	Thus
+	$$\prob\left(\hat{\theta}_n-\frac{1}{2\sqrt{n\alpha}}<\theta^*<\hat{\theta}_n+\frac{1}{2\sqrt{n\alpha}};\theta^*\right)\geq1-\alpha$$
+	This means the random interval $(\hat{\theta}_n-\frac{1}{2\sqrt{n\alpha}},\ \hat{\theta}_n+\frac{1}{2\sqrt{n\alpha}};\theta^*)$ contains $\theta^*$ with probability $1-\alpha$.\\
+	We can note that the interval decreases as $n$ increases, and increases as $\alpha$ decreases.
+	\item We can improve on this crude bound.\\
+	Let $W\sim\text{Normal}(0,1)$. We shall show that
+	$$\frac{\sqrt{n}(\hat{\theta}_n-\theta^*)}{\sqrt{\hat{\theta}_n(1-\hat{\theta}_n)}}\to_\mathcal{D}W$$
+	Note that $\hat{\theta}_n\to_\prob\theta^*$ by the \textit{Weak Law of Large Numbers}. In addition $\var(X_1)=\theta^*(1-\theta^*)$. The \textit{Central Limit Theorem} gives
+	$$\frac{\sqrt{n}(\hat{\theta}_n-\theta^*)}{\sqrt{\hat{\theta}_n(1-\hat{\theta}_n)}}\to_\mathcal{D}W$$
+	Now we define $Y_n=\dfrac{\sqrt{n}(\hat{\theta}_n-\theta^*}{\sqrt{\theta^*(1-\theta^*}}$ and $Z_n=\dfrac{\sqrt{\theta^*(1-\theta^*)}}{\sqrt{\hat{\theta}_n(1-\hat{\theta}_n}}$.\\
+	The \textit{Continuous Mapping Theorem} tells us that $Z_n\to_{(\mathcal{D}\text{ or }\prob)}1$.\\
+	Hence by \textit{Slutsky's Theorem} we obtain
+	$$\frac{\sqrt{n}(\hat{\theta}_n-\theta^*)}{\sqrt{\hat{\theta}_n(1-\hat{\theta}_n)}}=Y_nZ_n\to_\mathcal{D}W$$
+	This gives us random interval
+	$$\left(\hat{\theta}_n-z_{\alpha/2}\sqrt{\frac{\hat{\theta}_n(1-\hat{\theta}_n)}{n}},\hat{\theta}_n+z_{\alpha/2}\sqrt{\frac{\hat{\theta}_n(1-\hat{\theta}_n)}{n}}\right)$$
+	This interval captures $\theta^*$ asymptotically (in $n$) with probability $1-\alpha$.\\
+	\nb $z_\alpha=\Phi^{-1}(1-\alpha)$ where $\Phi$ is the cumulative denisty function of a $\text{Normal}(0,1)$
+\end{enumerate}
+
+\section{The Fisher Information}
+
+\definition{Fisher Information Regularity Conditions}
+%TODO relate this to when used
+Let $\Theta$ be an open interval in $\reals$ and $f(x;\theta)$ be a pmf/pdf. Then they satisfy the following properties
+\begin{enumerate}[label=\roman*)]
+	\item Both $L'(\theta;x)=\frac{d}{d\theta}f(x;\theta)$ and $L''(\theta;x)=\frac{d^2}{d\theta^2}f(x;\theta)$ exist for any $x\in\mathcal{X}$.
+	\item $\forall\ \theta\in\Theta$ the set $S:=\{x\in\mathcal{X}:\ f(x;\theta)>0\}$ does not depend on $\theta\in\Theta$.
+	\item The idenity below exists
+	$$\int_S\frac{d}{d\theta}f(x;\theta)dx=\frac{d}{d\theta}\int_Sf(x;\theta)dx=0$$
+\end{enumerate}
+
+\definition{The Score Function}
+Let $\ell(\theta;x):=\ln f(x;\theta)$. The \textit{Score Function} defined on $\Theta\times\mathcal{X}$ is
+$$\ell'(\theta;x):=\frac{d}{d\theta}\ell(\theta,;x)=\frac{\frac{d}{d\theta}f(x;\theta)}{f(x;\theta}$$
+The score measures the sensitivity of the likelihood function to changes in $\theta$.
+
+\remark{}
+Note that under the \textit{Fisher Information Regularity Conitions} we have that $\forall\ theta\in|\Theta$
+\[\begin{array}{rcl}
+\expect(\ell'(\theta;x)\theta)&=&{\displaystyle\int_S\dfrac{\frac{d}{d\theta}f(x;\theta)}{f(x;\theta)}f(x;\theta)dx}\\
+&=&{\displaystyle\int_S\frac{d}{d\theta}f(x;\theta)dx}\\
+&=&{\displaystyle\frac{d}{d\theta}\int_Sf(x;\theta)dx}\\
+&=&\frac{d}{d\theta}(1)\\
+&=&0
+\end{array}\]
+
 \newpage
 \setcounter{section}{-1}
 \section{Appendix}
@@ -434,6 +594,9 @@ $$\nabla f(\pmb{\theta};\x):=\begin{pmatrix}
 \hline
 Notation&Denotes\\
 \hline
+$Z_n\to_{\prob}Z$&$\{Z_n\}_{n\in\nats}$ converges in \textit{Probabilitiy} to random variable $Z$.\\
+$Z_n\to_\mathcal{D}Z$&$\{Z_n\}_{n\in\nats}$ converges in \textit{Distribution} to random variable $Z$.\\
+$Z_n\to_{qm}Z$&$\{Z_n\}_{n\in\nats}$ converges in \textit{Quadratic Mean} to random variable $Z$.\\
 $\theta\in\Theta\subseteq\reals^{d_\theta}$&Scalar or vector parameter characterising a probability distribution\\
 $\hat{\theta}$&Estimation for the value of the parameter $\theta$\\
 $\theta^*$&True value of the paramter $\theta$\\
