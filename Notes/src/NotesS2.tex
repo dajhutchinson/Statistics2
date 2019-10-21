@@ -48,7 +48,7 @@
 \newcommand{\prob}[0]{\mathbb{P}}
 \newcommand{\nats}[0]{\mathbb{N}}
 \newcommand{\cov}[0]{\mathrm{cov}}
-\newcommand{\var}[0]{\mathrm{var}}
+\newcommand{\var}[0]{\mathrm{Var}}
 \newcommand{\expect}[0]{\mathbb{E}}
 \newcommand{\reals}[0]{\mathbb{R}}
 \newcommand{\integers}[0]{\mathbb{Z}}
@@ -58,6 +58,7 @@
 \newcommand{\eg}[0]{\textit{e.g.} }
 \newcommand{\X}[0]{\textbf{X}}
 \newcommand{\x}[0]{\textbf{x}}
+\newcommand{\iid}[0]{\overset{\text{iid}}{\sim}}
 
 \newcommand{\definition}[1]{\stepcounter{definition} \textbf{Definition \arabic{section}.\arabic{definition}\ - }\textit{#1}\\}
 \newcommand{\definitionn}[1]{\stepcounter{definition} \textbf{Definition \arabic{section}.\arabic{definition}\ - }\textit{#1}}
@@ -207,7 +208,7 @@ $$\forall\ \theta\in\Theta\ L(\hat{\theta};\x)\geq L(\theta;\x)\quad\mathrm{or}\
 \remark{The Maximum Likelihood Estimate may \underline{not} be unique}
 
 \example{MLE for Uniform Distribution}
-Consider $\X\overset{\text{iid}}{\sim}U[0,\theta]$ for $\theta>0$.\\
+Consider $\X{\iid}U[0,\theta]$ for $\theta>0$.\\
 Then
 \[\begin{array}{rrcl}
 &L(\theta;\x)&\propto&f_n(\x;\theta)\\
@@ -253,7 +254,7 @@ When $L(\theta;\x$ is differentiable one can find MLEs by considering its extrem
 A point is a local minimum if the Hessian at the point is \textit{Negative Definite} \ie $x^TAx<0\ \forall\ x\neq\pmb{0}$.\\
 
 \example{MLE of Normal Distribution}
-Let $\X\overset{\text{iid}}{\sim}\mathcal{N}(\mu,\sigma^2)$
+Let $\X{\iid}\mathcal{N}(\mu,\sigma^2)$
 \[\begin{array}{rrcl}
 &L(\mu,\sigma^2;\x)&=&\prod\limits_{i=1}^n\dfrac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}\\
 \implies&\ell(\mu,\sigma^2;\x)&=&C-\frac{n}{2}\ln(\sigma^2)-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2\\
@@ -366,7 +367,7 @@ MSE(\hat{\theta};\theta^*)&=&\expect\left[(\hat{\theta}(\X)-\theta^*)^2;\theta^2
 \end{array}\]
 
 \example{Sample mean as an Estimator}
-Let $\X\overset{\text{iid}}{\sim}\text{Poisson}(\lambda^*)$.\\
+Let $\X{\iid}\text{Poisson}(\lambda^*)$.\\
 Suppose we are using the sample mean, $\hat{\lambda}(\x):=\frac{1}{n}\sum_{i=1}^nx_i$, as an estimate of $\lambda^*$. We first want to show this estimator is \textit{Unbiased}
 \[\begin{array}{rrl}
 \expect(\hat{\lambda};\lambda)&=&\expect\left(\dfrac{1}{n}\sum\limits_{i=1}^nX_i;\lambda\right)\\
@@ -513,44 +514,86 @@ $$\forall\ \theta\in\Theta\text{ with }\X_n\sim f_n(\cdot;\theta),\ \hat{\theta}
 	That is, if the MSE of the estimator converges to 0, the estimator is consistent.
 \end{enumerate}
 
-\example{Flipping Coins}
-Let $X_i\overset{\text{iid}}{\sim}\text{Bernoulli}(\theta^*)$ for some $\theta^*\in\Theta=[0,1]$.\\
-The MLE and method of moments estimator are the sample mean
-$$\hat{\theta}_n(X_1,\dots,X_n)=\frac{1}{n}\sum\limits_{i=1}^nX_i$$
-\begin{enumerate}[label=\roman*)]
-	\item Consistency of $\{\hat{\theta})n\}$ is provided by the \textit{Weak Law of Large Numbers}, since $\expect(X_1)=\theta^*$.
-	\item Now we consider a crude way to \textit{capture} $\theta^*$ in a random interval with high probability. We write $\hat{\theta}_n:=\hat{\theta}_n(X_1,\dots,X_n)$. Note that
+\example{Consistency of Flipping Coins}
+Let $\X{\iid}\text{Bernoulli}(\theta^*)$ for some $\theta^*\in[0,1]$.\\
+The maximum likelihood estimate and method of moments for $\hat{\theta}_n$ are the sample mean.\\
+$${\hat{\theta}_n(X_1,\dots,X_n)=\frac{1}{n}\sum\limits_{i=1}^nX_i}$$
+By the \textit{Weak Law of Large Numbers} we have that \textit{consistency} of $\{\hat{\theta}n\}$ , since $\expect(X_1)=\theta^*$.\\
+
+\example{Crude Confidence Interval when Flipping Coins}
+Let $\X{\iid}\text{Bernoulli}(\theta^*)$ for some $\theta^*\in[0,1]$ and define $\hat{\theta}_n:=\hat{\theta}_n(X_1,\dots,X_n)$.\\
+We shall produce a \textit{confidence interval} for $\theta^*$.\\
 	$$\expect(\hat{\theta}_n;\theta^*)=\theta^*\quad\text{and}\quad\var(\hat{\theta}_n;\theta^*)=\frac{\theta^*(1-\theta^*)}{n}$$
-	Using \textit{Chebyshev's Inequality}
-	$$\prob\left(|\hat{\theta}_n-\theta^*|\geq\varepsilon;\theta^*\right)\leq\frac{\theta^*(1-\theta^*)}{n\varepsilon^2}$$
-	We don't know $\theta^*$, but can deduce that $\theta^*(1-\theta^*)\leq\frac{1}{4}$ thus
-	$$\prob\left(|\hat{\theta}_n-\theta^*|\geq\varepsilon;\theta^*\right)\leq\frac{1}{4n\varepsilon^2}$$
-	To have a probability bound of our choosing we can substitute $\alpha=\frac{1}{4n\varepsilon^2}$ to get
-	$$\prob\left(|\hat{\theta}_n-\theta^*|\geq\frac{1}{2\sqrt{n\alpha}};\theta^*\right)\leq\alpha$$
-	Thus
-	$$\prob\left(\hat{\theta}_n-\frac{1}{2\sqrt{n\alpha}}<\theta^*<\hat{\theta}_n+\frac{1}{2\sqrt{n\alpha}};\theta^*\right)\geq1-\alpha$$
-	This means the random interval $(\hat{\theta}_n-\frac{1}{2\sqrt{n\alpha}},\ \hat{\theta}_n+\frac{1}{2\sqrt{n\alpha}};\theta^*)$ contains $\theta^*$ with probability $1-\alpha$.\\
-	We can note that the interval decreases as $n$ increases, and increases as $\alpha$ decreases.
-	\item We can improve on this crude bound.\\
-	Let $W\sim\text{Normal}(0,1)$. We shall show that
-	$$\frac{\sqrt{n}(\hat{\theta}_n-\theta^*)}{\sqrt{\hat{\theta}_n(1-\hat{\theta}_n)}}\to_\mathcal{D}W$$
-	Note that $\hat{\theta}_n\to_\prob\theta^*$ by the \textit{Weak Law of Large Numbers}. In addition $\var(X_1)=\theta^*(1-\theta^*)$. The \textit{Central Limit Theorem} gives
-	$$\frac{\sqrt{n}(\hat{\theta}_n-\theta^*)}{\sqrt{\hat{\theta}_n(1-\hat{\theta}_n)}}\to_\mathcal{D}W$$
-	Now we define $Y_n=\dfrac{\sqrt{n}(\hat{\theta}_n-\theta^*}{\sqrt{\theta^*(1-\theta^*}}$ and $Z_n=\dfrac{\sqrt{\theta^*(1-\theta^*)}}{\sqrt{\hat{\theta}_n(1-\hat{\theta}_n}}$.\\
-	The \textit{Continuous Mapping Theorem} tells us that $Z_n\to_{(\mathcal{D}\text{ or }\prob)}1$.\\
-	Hence by \textit{Slutsky's Theorem} we obtain
-	$$\frac{\sqrt{n}(\hat{\theta}_n-\theta^*)}{\sqrt{\hat{\theta}_n(1-\hat{\theta}_n)}}=Y_nZ_n\to_\mathcal{D}W$$
-	This gives us random interval
-	$$\left(\hat{\theta}_n-z_{\alpha/2}\sqrt{\frac{\hat{\theta}_n(1-\hat{\theta}_n)}{n}},\hat{\theta}_n+z_{\alpha/2}\sqrt{\frac{\hat{\theta}_n(1-\hat{\theta}_n)}{n}}\right)$$
-	This interval captures $\theta^*$ asymptotically (in $n$) with probability $1-\alpha$.\\
-	\nb $z_\alpha=\Phi^{-1}(1-\alpha)$ where $\Phi$ is the cumulative denisty function of a $\text{Normal}(0,1)$
-\end{enumerate}
+\[\begin{array}{rcll}
+\prob\left(|\hat{\theta}_n-\theta^*|\geq\varepsilon;\theta^*\right)&\leq&\frac{\theta^*(1-\theta^*)}{n\varepsilon^2}&\text{by Chebyshev's Inequality}\\
+\text{We don't know $\theta^*$, but can deduce that }\theta^*(1-\theta^*)&\leq&\frac{1}{4}\\
+\implies\prob\left(|\hat{\theta}_n-\theta^*|\geq\varepsilon;\theta^*\right)&\leq&\frac{1}{4n\varepsilon^2}\\
+\text{Define }\alpha&:=&\frac{1}{4n\varepsilon^2}\\
+\implies\prob\left(|\hat{\theta}_n-\theta^*|\geq\frac{1}{2\sqrt{n\alpha}};\theta^*\right)&\leq&\alpha\\
+\implies\prob\left(\hat{\theta}_n-\frac{1}{2\sqrt{n\alpha}}<\theta^*<\hat{\theta}_n+\frac{1}{2\sqrt{n\alpha}};\theta^*\right)&\geq&1-\alpha
+\end{array}\]
+This means the random interval $(\hat{\theta}_n-\frac{1}{2\sqrt{n\alpha}},\ \hat{\theta}_n+\frac{1}{2\sqrt{n\alpha}};\theta^*)$ contains $\theta^*$ with probability $1-\alpha$.\\
+We can note that the interval decreases as $n$ increases, and increases as $\alpha$ decreases.
+\nb $\hat{\theta}_n$ is a random variable, while $\theta^*$ is not.\\
+
+\example{Assymptotically Exact Confidence Interval when Flipping Coins}
+\textit{This is an improvement on the bound produced in }\textbf{Example 5.3}.\\
+Let $\X{\iid}\text{Bernoulli}(\theta^*)$ for some $\theta^*\in[0,1]$, $W\sim\text{Normal}(0,1)$ and define $\hat{\theta}_n:=\hat{\theta}_n(X_1,\dots,X_n)$.\\
+We shall show that
+$$\frac{\sqrt{n}(\hat{\theta}_n-\theta^*)}{\sqrt{\hat{\theta}_n(1-\hat{\theta}_n)}}\to_\mathcal{D}W$$
+We know that $\var(X_1)=\theta^*(1-\theta^*)$.\\
+By the \textit{Weak Law of Large Numbers} $\hat{\theta}_n\to_\prob\theta^*$ .\\
+By the \textit{Central Limit Theorem}
+$$\frac{\sqrt{n}(\hat{\theta}_n-\theta^*)}{\sqrt{\hat{\theta}_n(1-\hat{\theta}_n)}}\to_\mathcal{D}W$$
+Define $Y_n=\dfrac{\sqrt{n}(\hat{\theta}_n-\theta^*)}{\sqrt{\theta^*(1-\theta^*)}}$ and $Z_n=\dfrac{\sqrt{\theta^*(1-\theta^*)}}{\sqrt{\hat{\theta}_n(1-\hat{\theta}_n)}}$.\\
+By the \textit{Continuous Mapping Theorem} tells us that $Z_n\to_\mathcal{D}1$ and $Z_n\to_\prob1$.\\
+Hence, by \textit{Slutsky's Theorem}
+$$\frac{\sqrt{n}(\hat{\theta}_n-\theta^*)}{\sqrt{\hat{\theta}_n(1-\hat{\theta}_n)}}=Y_nZ_n\to_\mathcal{D}W$$
+This gives us random interval
+$$\left(\hat{\theta}_n-z_{\alpha/2}\sqrt{\frac{\hat{\theta}_n(1-\hat{\theta}_n)}{n}},\hat{\theta}_n+z_{\alpha/2}\sqrt{\frac{\hat{\theta}_n(1-\hat{\theta}_n)}{n}}\right)$$
+This interval captures $\theta^*$ asymptotically (in $n$) with probability $1-\alpha$.\\
+\nb $z_\alpha=\Phi^{-1}(1-\alpha)$ where $\Phi$ is the cumulative denisty function of a $\text{Normal}(0,1)$.
 
 \section{The Fisher Information}
 
+\remark{Motivation}
+In the next part of the content we shall show that given $\X_n{\iid}f(\cdot;\theta^*)$ then for sufficiently regular models
+\begin{enumerate}[label=\roman*)]
+	\item There exists a lower bound on the achievable performance of any estimate of $\theta^*$.
+	\item A scaled \& centered sequence of maximum likelihood estimators $\{\hat{\theta}_n(\X_n)\}$ become asymptotically normal as $n\to\infty$.
+\end{enumerate}
+
+\remark{Measuring Performance of Estimator}
+We measure the performance of an estimator $\hat{\theta}$ in terms of variance, since its mean should be $\theta^*$. Lower variance indicates better performance.\\
+
+\definition{The Score Function}
+Let $\ell(\theta;x):=\ln f(x;\theta)$.\\
+The \textit{Score Function} is a measure of the sensitivity of the likelihood function wrt $\theta$
+$$\ell'(\theta;x):=\frac{d}{d\theta}\ell(\theta,;x)=\frac{\frac{d}{d\theta}f(x;\theta)}{f(x;\theta)}=\frac{L'(\theta;x)}{L(\theta;x)}$$
+
+\remark{$\theta^*$ is a turning point of $\ell(\theta;x)$}
+Note that under the \textit{Fisher Information Regularity Conitions} we have that $\forall\ \theta\in\Theta$
+\[\begin{array}{rcl}
+\expect(\ell'(\theta;X);\theta)&=&{\displaystyle\int_S\dfrac{\frac{d}{d\theta}f(x;\theta)}{f(x;\theta)}f(x;\theta)dx}\\
+&=&{\displaystyle\int_S\frac{d}{d\theta}f(x;\theta)dx}\\
+&=&{\displaystyle\frac{d}{d\theta}\int_Sf(x;\theta)dx}\\
+&=&\frac{d}{d\theta}(1)\\
+&=&0
+\end{array}\]
+This shows that we expect the derivative to equal $0$ at $\theta^*$. Further, this means $\theta^*$ is a turning point of the log-likelihood function (hopefully a maximum).\\
+
+\example{Application of \textbf{Remark 6.3}}
+Let $X\sim\text{Poisson}(\theta)$. Then $f_X(x;\theta)=\frac{\theta^x}{x!}e^{-\theta}\mathds{1}\{x\in\nats\}$.
+\[\begin{array}{rrcl}
+\implies&\ell(\theta;x)&=&-\theta+x\ln\theta-\ln x!\\
+\implies&\ell'(\theta;x)&=&-1+\frac{x}{\theta}\\
+\implies&\expect(\ell'(\theta;X);\theta)&=&-1+\frac{\theta}{\theta}\\
+&&=&0
+\end{array}\]
+
 \definition{Fisher Information Regularity Conditions}
-%TODO relate this to when used
-Let $\Theta$ be an open interval in $\reals$ and $f(x;\theta)$ be a pmf/pdf. Then they satisfy the following properties
+Let $\Theta$ be an open interval in $\reals$ and $f(x;\theta)$ be a pmf/pdf.\\
+Below are conditions which a model is required to meet in order to be considered sufficiently regular such that \textit{Fisher Information} can be drawn from it.
 \begin{enumerate}[label=\roman*)]
 	\item Both $L'(\theta;x)=\frac{d}{d\theta}f(x;\theta)$ and $L''(\theta;x)=\frac{d^2}{d\theta^2}f(x;\theta)$ exist for any $x\in\mathcal{X}$.
 	\item $\forall\ \theta\in\Theta$ the set $S:=\{x\in\mathcal{X}:\ f(x;\theta)>0\}$ does not depend on $\theta\in\Theta$.
@@ -558,19 +601,76 @@ Let $\Theta$ be an open interval in $\reals$ and $f(x;\theta)$ be a pmf/pdf. The
 	$$\int_S\frac{d}{d\theta}f(x;\theta)dx=\frac{d}{d\theta}\int_Sf(x;\theta)dx=0$$
 \end{enumerate}
 
-\definition{The Score Function}
-Let $\ell(\theta;x):=\ln f(x;\theta)$. The \textit{Score Function} defined on $\Theta\times\mathcal{X}$ is
-$$\ell'(\theta;x):=\frac{d}{d\theta}\ell(\theta,;x)=\frac{\frac{d}{d\theta}f(x;\theta)}{f(x;\theta}$$
-The score measures the sensitivity of the likelihood function to changes in $\theta$.
+\definition{Fisher Information}
+\textit{Fisher Information} is a technique for measuring the amount of information that an observable random variable $X$ carries about an unknown parameter $\theta$ upon which the probability of $X$ depends.\\
+Let $X\sim f(\cdots;\theta)$. Then the \textit{Fisher Information} for any $\theta\in\Theta$ is
+$$I(\theta):=\expect(\ell'(\theta;X)^2;\theta)\geq0$$
+\nb This is the \textit{Expectation of the score, squared} $\equiv$ \textit{Second moment of the score}.\\
 
-\remark{}
-Note that under the \textit{Fisher Information Regularity Conitions} we have that $\forall\ theta\in|\Theta$
+\remarkk{Fisher Information}
+\begin{enumerate}[label=\roman*)]
+	\item \textit{Fisher Information} is a function of the parameter, $\theta$, not the data, $X$.
+	\item $I(\theta)$ can be thought of as being the average \textit{information} brought by a single observation $X$ about $\theta$, assuming $X\sim f(\cdot;\theta)$.
+	\item Since $\forall\ \theta\in\Theta,\ \expect(\ell'(\theta;X);\theta)=0$ then
+	$$I(\theta)=\var(\ell'(\theta;X);\theta)$$
+	The variance of the score.
+\end{enumerate}
+
+\example{Fisher Information of Poisson}
+Let $X\sim\text{Poisson}(\theta)$.\\
+From \textbf{Example 6.1} we kown that $\ell'(\theta;x)=-1+\frac{x}{\theta}$. Then
 \[\begin{array}{rcl}
-\expect(\ell'(\theta;x)\theta)&=&{\displaystyle\int_S\dfrac{\frac{d}{d\theta}f(x;\theta)}{f(x;\theta)}f(x;\theta)dx}\\
-&=&{\displaystyle\int_S\frac{d}{d\theta}f(x;\theta)dx}\\
-&=&{\displaystyle\frac{d}{d\theta}\int_Sf(x;\theta)dx}\\
-&=&\frac{d}{d\theta}(1)\\
-&=&0
+I(\theta)&=&\var(\ell'(\theta;X);\theta)\\
+&=&\var\left(-1+\frac{X}{\theta};\theta\right)\\
+&=&\var\left(\frac{X}{\theta};\theta\right)\\
+&=&\frac{1}{\theta^2}\var(X;\theta)\\
+&=&\frac{1}{\theta^2}.\theta\text{ since }X\sim\text{Poisson}(\theta)\\
+&=&\frac{1}{\theta}
+\end{array}\]
+
+\theorem{Alternative Expression of Fisher Information}
+Let $f(x;\theta)$ be a pmf/pdf which statisfies the conditions of \textbf{Definition 6.2}. If
+$$\forall\ \theta\in\Theta\quad \int_\mathcal{X}\frac{d^2}{d\theta^2}f(x;\theta)dx=\frac{d}{d\theta}\int_\mathcal{X}\frac{d}{d\theta}f(x;\theta)dx$$
+Then
+$$I(\theta)=-\expect\left(\frac{d^2}{d\theta^2}\ell(\theta;X);\theta\right)$$
+\nb ${\displaystyle\frac{d}{d\theta}\int_\mathcal{X}\frac{d}{d\theta}f(x;\theta)dx=0}$ by the regularity conditions.\\
+
+\proof{Theorem 6.1}
+By the \textit{Quotient Rule}
+\[\begin{array}{rcl}
+\frac{d^2}{d\theta^2}\ell(\theta;x)&=&\dfrac{d}{d\theta}\dfrac{\frac{d}{d\theta}f(x;\theta}{f(x;\theta)}\\
+&=&\dfrac{\frac{d^2}{d\theta^2}f(x;\theta)}{f(x;\theta)}-\left(\dfrac{\frac{d}{d\theta}f(x;\theta)}{f(x;\theta)}\right)^2
+\end{array}\]
+Consequently
+\[\begin{array}{rrcl}
+&\expect\left(\frac{d^2}{d\theta^2}\ell(\theta;X);\theta\right)&=&{\displaystyle\int_S\frac{\frac{d^2}{d\theta^2}f(x;\theta)}{f(x;\theta}f(x;\theta)dx-\int_S\left(\frac{\frac{d}{d\theta}f(x;\theta)}{f(x;\theta)}\right)^2f(x;\theta)dx}\\
+&&=&{\displaystyle\int_S\frac{d^2}{d\theta^2}f(x;\theta)dx-\int_S\left(\frac{d}{d\theta}\ell'(\theta;x)\right)^2f(x;\theta)dx}\\
+&&=&0-\expect(\ell'(\theta;X)^2;\theta)\\
+&&=&-I(\theta)\\
+\implies&I(\theta)&=&-\expect\left(\frac{d^2}{d\theta^2}\ell(\theta;X);\theta\right)
+\end{array}\]
+
+\section{Efficiency and The Cramer-Rao Bound}
+
+\definition{IID Score Function}
+Let $\X{\iid}f(\cdot;\theta)$ for some $\theta\in\Theta$. Then the \textit{Score Function} is
+$$\ell'_n(\theta;\x):=\frac{d}{d\theta}\ell_n(\theta;\x)\text{ where }l_n(\theta;\x):=\ln f_n(\x;\theta)=\sum_{i=1}^n\ell(\theta;x_i)$$
+
+\definition{IID Fisher Information}
+Let $\X{\iid}f(\cdot;\theta)$ for some $\theta\in\Theta$. Then the \textit{Fisher Information} is
+$$I_n(\theta):=\expect(l'_n(\theta;\X)^2;\theta)=\var(l'_n(\theta;\X);\theta)$$
+
+\theorem{Relationship between IID Fisher Information \& Fisher Information}
+Consider the sitatution where $\forall\ \theta\in\Theta,\ f_n(\x;\theta)=\prod_{i=1}^nf(x_i;\theta)$. Then
+$$\forall\ \theta\in\Theta,\ I_n(\theta)=nI(\theta)$$
+
+\proof{Theorem 7.1}
+Let $\X\overset{iid}{\sim}f(\cdot;\theta)$. Then
+\[\begin{array}{rrcl}
+&I_n(\theta)&=&\var(\ell'_n(\theta;\X);\theta)\\
+&&=&\var\left(\sum\limits_{i=1}^n\ell'(\theta;X_i);\theta\right)\\
+&&=&n\var\left(\sum\limits_{i=1}^n\ell'(\theta;X_1);\theta\right)\\
+\implies&I_n(\theta)&=&nI(\theta)
 \end{array}\]
 
 \newpage

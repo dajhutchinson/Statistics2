@@ -1,0 +1,54 @@
+---
+title: "Problem Sheet 3"
+subtitle: "Statistics 2"
+author: "Dom Hutchinson"
+output:
+  pdf_document: 
+     fig_width: 6
+     fig_height: 4
+  html_notebook: default
+  html_document: default
+  word_document: default
+---
+
+# Question 3
+```{r}
+N<-1000
+X<-rexp(N,rate=2)
+
+X_bar<-cumsum(X) / 1:N
+
+plot(1:N,X_bar,main="Means of samples of increasing size", xlab="N",ylab="Sample Mean")
+abline(h=.5,col="red")
+```
+
+```{r}
+alpha<-2; lambda<-2
+X<-rgamma(N,shape=alpha,rate=lambda)
+
+X_bar<-cumsum(X) / 1:N
+mu<-alpha/lambda
+
+plot(1:N,X_bar,main="Means of samples of increasing size", xlab="N",ylab="Sample Mean")
+abline(h=mu,col="red")
+```
+
+# Question 4
+```{r}
+N<-1000
+X<-rexp(N,rate=2)
+
+Fx<-mean(X<=1.5)
+cat("Prediction:",Fx"\nTrue:",pexp(1.5,rate=2))
+```
+
+```{r}
+alpha<-2; lambda<-2
+X<-rgamma(N,shape=alpha,rate=lambda)
+
+Fx<-mean(X<=1.5)
+cat("Prediction:",Fx," True:",pgamma(1.5,shape=alpha,rate=lambda),"\n")
+
+Fx<-mean(.5<=X & X<=1.5)
+cat("Prediction:",Fx," True:",pgamma(1.5,shape=alpha,rate=lambda)-pgamma(.5,shape=alpha,rate=lambda))
+```

@@ -1,0 +1,168 @@
+---
+title: "Computer Practical 1"
+subtitle: "Statistics 2"
+author: "Dom Hutchinson"
+output:
+  pdf_document: 
+     fig_width: 6
+     fig_height: 4
+  html_notebook: default
+  html_document: default
+  word_document: default
+---
+
+# 2 Binomial Maximum Likelihood Estimators
+
+Let $Y\sim\text{Binomial}(n,p)$.
+The maximum likelihood estimate for $p$ is $\hat{p}(Y)=\frac{Y}{n}$. $\hat{p}$ is an unbiased estimator.
+
+## Question 1
+Let $X_1,\dots,X_n\overset{\text{iid}}{\sim}\text{Bernoulli}(p)$. Then
+$$
+\begin{array}{rcl}
+\text{Var}(\hat{p})&=&\text{Var}\left(\frac{1}{n}\sum\limits_{i=1}^nX_i\right)\\
+&=&\dfrac{1}{n^2}\text{Var}\left(\sum\limits_{i=1}^nX_i\right)\\
+&=&\dfrac{1}{n^2}.n\text{Var}\left(X_1\right)\\
+&=&\dfrac{1}{n}p(1-p)
+\end{array}
+$$
+
+## Question 2
+
+```{r}
+n<-13; p<-.31; sample_size<-25; trials<-1000
+var_hat=(1/n)*p*(1-p)
+var_hat
+
+phat<-function(Y) {
+  Y/n
+}
+
+x_values<-rbinom(n=sample_size*trials,size=n,prob=p)
+x_samples<-matrix(x_values,nrow=sample_size)
+p_hat.samples<-apply(x_samples,1,phat)
+p_hat.sigma2=apply(p_hat.samples,1,var)
+hist(p_hat.sigma2,breaks=20)
+abline(v=var_hat,col="red")
+```
+
+# 3 Clinic Data
+
+```{r}
+year.data<-read.csv("AssessedProblemSheet1S2_files/year_data.csv")
+knitr::kable(year.data)
+```
+
+Let $Y_i\sim\text{Binomial}(n_i,p_i)$ model the number of deaths in clinic $i$ where $n_i$ is the total number of births in clinic $i$ & $p_i$ is the mortality rate for clinic $i$. Assume $Y_1$ & $Y_2$ are independent.
+
+```{r}
+n1 <- sum(year.data[year.data$clinic==1,]$births) # number of births in clinic 1
+y1 <- sum(year.data[year.data$clinic==1,]$deaths) # number of deaths in clinic 1
+cat("Number of births in clinic 1:",prettyNum(n1,big.mark=","),"\nNumber of deaths in clinic 1:",prettyNum(y1,big.mark=","),"\n\n")
+
+n2 <- sum(year.data[year.data$clinic==2,]$births) # number of births in clinic 2
+y2 <- sum(year.data[year.data$clinic==2,]$deaths) # number of deaths in clinic 2
+cat("Number of births in clinic 2:",prettyNum(n2,big.mark=","),"\nNumber of deaths in clinic 2:",prettyNum(y2,big.mark=","),"\n")
+```
+
+## Question 3
+
+```{r}
+p1_hat=y1/n1
+p2_hat=y2/n2
+
+cat("p1_hat:",p1_hat,"\np2_hat:",p2_hat)
+```
+
+## Quetion 4
+Assume that $p=p_1=p_2$ and define $W:=\hat{p}_1(Y_1)-\hat{p}_2(Y_2)$. Then
+$$
+\begin{array}{rcl}
+\mathbb{E}(W)&=&\mathbb{E}(\hat{p}_1(Y_1)-\hat{p}_2(Y_2))\\
+&=&\mathbb{E}(\hat{p}_1(Y_1))-\mathbb{E}(\hat{p}_2(Y_2))\\
+&=&p_1-p_2\\
+&=&p-p\\
+&=&0\\
+\text{Var}(W)&=&\text{Var}(\hat{p}_1(Y_1)-\hat{p}_2(Y_2))\\
+&=&\text{Var}(\hat{p}_1(Y_1))+\text{Var}(\hat{p}_2(Y_2))\\
+&=&\frac{1}{n_1}p_1(1-p_1)+\frac{1}{n_2}p_2(1-p_2)\\
+&=&\frac{1}{n_1}p(1-p)+\frac{1}{n_2}p(1-p)\\
+&=&\frac{n_1+n_2}{n_1n_2}p(1-p)
+\end{array}
+$$
+
+## Question 5
+Suppose $p=p_1=p_2$. We have $\hat{p}=\frac{`r y1`+`r y2`}{`r n1`+`r n2`}=\frac{`r y1+y2`}{`r n1+n2`}=`r p_hat<-(y1+y2)/(n1+n2); p_hat`$.
+$$
+\begin{array}{rcl}
+\mathbb{P}(|W-\mu_W|\geq\hat{p}_1(y_1)-\hat{p}_1(y_2))&=&\mathbb{P}(|W-0|\geq`r p1_hat`-`r p2_hat`)\\
+&=&\mathbb{P}(|W|\geq`r p1_hat-p2_hat`)\\
+&\leq&\dfrac{\sigma^2_W}{`r p1_hat-p2_hat`^2}\text{ by Chebyshev's Inequality}\\
+&=&\dfrac{1}{`r p1_hat-p2_hat`^2}\times\dfrac{n_1+n_2}{n_1n_2}\hat{p}(1-\hat{p})\\
+&=&\dfrac{1}{`r p1_hat-p2_hat`^2}\times\dfrac{`r n1`+`r n2`}{`r n1`\times`r n2`}\times`r p_hat`\times`r 1-p_hat`\\
+&=&`r (1/(p1_hat-p2_hat)^2)*((n1+n2)/(n1*n2))*p_hat*(1-p_hat)`
+\end{array}
+$$
+Thus it is very unlikely to observe these two mortality rates, assuming the underlying rate is the same.
+
+# 4 Intervention: Chlorine Hand Washing
+
+```{r}
+month.data<-read.csv("AssessedProblemSheet1S2_files/month_data.csv")
+month.data<-month.data[!is.na(month.data$births),]
+
+month.data$rate<-month.data$deaths/month.data$births
+month.data$date<-as.Date(month.data$date)
+
+intervention.date<-as.Date("1847-05-15")
+
+plot(month.data$date, month.data$rate, pch=20, main="Mortality Rate by Month", xlab="Date (Red line indicates start of intervention preiod)", ylab="Rate")
+abline(v=intervention.date, col="red")
+```
+
+```{r}
+before.intervention<-month.data[month.data$date< intervention.date,]
+n1<-sum(before.intervention$births)
+y1<-sum(before.intervention$deaths)
+cat("Number of births before intervention:",prettyNum(n1,big.mark=","),"\nNumber of deaths before intervention:",prettyNum(y1,big.mark=","),"\n\n")
+
+after.intervention <-month.data[month.data$date>=intervention.date,]
+n2<-sum(after.intervention$births)
+y2<-sum(after.intervention$deaths)
+cat("Number of births after intervention:",prettyNum(n2,big.mark=","),"\nNumber of deaths after intervention:",prettyNum(y2,big.mark=","))
+```
+
+## Question 6
+```{r}
+p1_hat<-y1/n1
+p2_hat<-y2/n2
+
+cat("p1_hat:",p1_hat,"\np2_hat:",p2_hat)
+```
+Define random variable $W=\hat{p}_1(Y_1)-\hat{p}_2(Y_2)$.
+
+Suppose $p=p_1=p_2$. We have $\hat{p}=\frac{`r y1`+`r y2`}{`r n1`+`r n2`}=\frac{`r y1+y2`}{`r n1+n2`}=`r p_hat<-(y1+y2)/(n1+n2); p_hat`$.
+$$
+\begin{array}{rcl}
+\mathbb{P}(|W-\mu_W|\geq\hat{p}_1(y_1)-\hat{p}_1(y_2))&=&\mathbb{P}(|W-0|\geq`r p1_hat`-`r p2_hat`)\\
+&=&\mathbb{P}(|W|\geq`r p1_hat-p2_hat`)\\
+&\leq&\dfrac{\sigma^2_W}{`r p1_hat-p2_hat`^2}\text{ by Chebyshev's Inequality}\\
+&=&\dfrac{1}{`r p1_hat-p2_hat`^2}\times\dfrac{n_1+n_2}{n_1n_2}\hat{p}(1-\hat{p})\\
+&=&\dfrac{1}{`r p1_hat-p2_hat`^2}\times\dfrac{`r n1`+`r n2`}{`r n1`\times`r n2`}\times`r p_hat`\times`r 1-p_hat`\\
+&=&`r (1/(p1_hat-p2_hat)^2)*((n1+n2)/(n1*n2))*p_hat*(1-p_hat)`
+\end{array}
+$$
+Thus it is very unlikely to observe these two mortality rates, assuming the underlying rate is the same.
+
+# 5 A First Logistic Regression
+
+```{r}
+x1<-c(1,0)
+x2<-c(1,1)
+
+sigma<-function(z) {
+  1/(1+exp(-z))
+}
+```
+
+## Question 7

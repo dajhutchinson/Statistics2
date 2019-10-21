@@ -1,0 +1,140 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=1in, paperwidth=8.3in, paperheight=11.7in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{dsfont}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{changepage} 
+
+\begin{document}
+
+\pagestyle{fancy}
+\setlength\parindent{0pt}
+\allowdisplaybreaks
+
+\renewcommand{\headrulewidth}{0pt}
+
+% Cover page title
+\title{Statistics 2 - Problem Sheet 3}
+\author{Dom Hutchinson}
+\maketitle
+
+% Header
+\fancyhead[L]{Dom Hutchinson}
+\fancyhead[C]{Statistics 2 - Problem Sheet 3}
+\fancyhead[R]{\today}
+
+% Counters
+\newcounter{qpart}[section]
+
+% commands
+\newcommand{\dotprod}[0]{\boldsymbol{\cdot}}
+\newcommand{\cosech}[0]{\mathrm{cosech}\ }
+\newcommand{\cosec}[0]{\mathrm{cosec}\ }
+\newcommand{\sech}[0]{\mathrm{sech}\ }
+\newcommand{\prob}[0]{\mathbb{P}}
+\newcommand{\nats}[0]{\mathbb{N}}
+\newcommand{\cov}[0]{\mathrm{cov}}
+\newcommand{\var}[0]{\mathrm{var}}
+\newcommand{\expect}[0]{\mathbb{E}}
+\newcommand{\reals}[0]{\mathbb{R}}
+\newcommand{\integers}[0]{\mathbb{Z}}
+\newcommand{\indicator}[0]{\mathds{1}}
+\newcommand{\nb}[0]{\textit{N.B.} }
+\newcommand{\ie}[0]{\textit{i.e.} }
+\newcommand{\eg}[0]{\textit{e.g.} }
+\newcommand{\iid}[0]{\overset{\text{iid}}{\sim} }
+
+\newcommand{\qpart}[0]{\stepcounter{qpart} \textbf{Question \arabic{section}.\arabic{qpart}\\}}
+\newcommand{\qpartnb}[0]{\stepcounter{qpart} \textbf{Question \arabic{section}.\arabic{qpart}} - }
+\newcommand{\ans}[0]{ \textbf{Answer \arabic{section}\\}}
+\newcommand{\apart}[0]{ \textbf{Answer \arabic{section}.\arabic{qpart}\\}}
+\newcommand{\apartnb}[0]{\stepcounter{qpart} \textbf{Answer \arabic{section}.\arabic{qpart}} - }
+\newcommand{\question}[0]{\stepcounter{section}\section*{Question - \arabic{section}.}}
+
+\question
+This question is about maximum likelihood estimates of transformations of the parameter.\\
+
+\qpart
+Suppose $\textbf{X}\iid\text{Exponential}(\lambda)$ where $\lambda\in\Theta=\reals^{>0}$.\\
+Consider the transformed parameter $\tau=\frac{1}{1+\lambda}$.\\
+Write the likelihood function in terms of $\tau$, then maximise it to find $\hat{\tau}_{ml}$.\\
+Confirm that $\hat{\tau}_{mle}=\frac{1}{1+\hat{\lambda}_{ml}}$.\\
+
+\apart
+We have $f_{X_i}(x_i;\lambda)=\lambda e^{-\lambda x_i}\ \forall\ i\in[1,n]$ since $\lambda>0$.
+\[\begin{array}{rrcl}
+&\tau&=&\frac{1}{1+\lambda}\\
+\implies&1+\lambda&=&\frac{1}{\tau}\\
+\implies&\lambda&=&\frac{1}{\tau}-1=\frac{1-\tau}{\tau}\\
+&L(\lambda;\textbf{x})&=&\prod\limits_{i=1}^nf_{X_i}(x_i;\lambda)\\
+&&=&\prod\limits_{i=1}^n\lambda e^{-\lambda x_i}\\
+&&=&\lambda^ne^{-\lambda\sum_{i=1}^nx_i}\\
+\implies&L(\tau;\textbf{x})&=&\left(\frac{1-\tau}{\tau}\right)^ne^{\frac{\tau-1}{\tau}\sum_{i=1}^nx_i}\\
+\implies&\ell(\tau;\textbf{x})&=&n\ln(1-\tau)-n\ln\tau+\frac{\tau-1}{\tau}\sum\limits_{i=1}^nx_i\\
+\implies&\frac{\partial}{\partial\tau}\ell(\tau;\textbf{x})&=&-\frac{n}{1-\tau}-\frac{n}{\tau}+\frac{\tau-(\tau-1)}{\tau^2}\sum\limits_{i=1}^nx_i\\
+&&=&-\frac{n}{1-\tau}-\frac{n}{\tau}+\frac{1}{\tau^2}\sum\limits_{i=1}^nx_i\\
+\text{Setting}&0&=&\frac{\partial}{\partial\tau}\ell(\hat{\tau};\textbf{x})\\
+\implies&0&=&-\frac{n}{1-\hat{\tau}}-\frac{n}{\hat{\tau}}+\frac{1}{\hat{\tau}^2}\sum\limits_{i=1}^nx_i\\
+\implies&0&=&-n\hat{\tau}^2-n\hat{\tau}(1-\hat{\tau})+(1-\hat{\tau})\sum\limits_{i=1}^nx_i\\
+&&=&-n\hat{\tau}^2-n\hat{\tau}+n\hat{\tau}^2+\sum\limits_{i=1}^nx_i-\hat{\tau}\sum\limits_{i=1}^nx_i\\
+\implies&\sum\limits_{i=1}^nx_i&=&\hat{\tau}\left(n+\sum\limits_{i=1}^nx_i\right)\\
+\implies&\hat{\tau}&=&\dfrac{\sum_{i=1}^nx_i}{n+\sum_{i=1}^nx_i}\\
+&&=&\dfrac{1}{1+\frac{n}{\sum_{i=1}^nx_i}}\\
+\text{We have}&L(\lambda;\textbf{x})&=&\lambda^ne^{-\lambda\sum_{i=1}^nx_i}\\
+\implies&\ell(\lambda;\textbf{x})&=&n\ln\lambda-\lambda\sum\limits_{i=1}^nx_i\\
+\implies&\frac{\partial}{\partial\lambda}\ell(\lambda;\textbf{x})&=&\frac{n}{\lambda}-\sum\limits_{i=1}^nx_i\\
+\text{Setting}&0&=&\frac{\partial}{\partial\hat{\lambda}}\ell(\lambda;\textbf{x})\\
+&&=&\dfrac{n}{\hat{\lambda}}-\sum\limits_{i=1}^nx_i\\
+\implies&\hat{\lambda}&=&\dfrac{n}{\sum_{i=1}^nx_i}\\
+\implies&\hat{\tau}&=&\dfrac{1}{1+\hat{\lambda}}
+\end{array}\]
+
+\qpart
+If $X\sim\text{Poisson}(\lambda)$ where $\lambda\in\Theta=\reals^{>0}$ then $\prob(X=0;\lambda)=e^{-\lambda}$.\\
+Explain why the maximum likelihood estimate of this probability is $e^{-\hat{\lambda}_{ml}}$.\\
+
+\apart
+%TODO fluff this up
+Define $\tau(\lambda)=e^{-\lambda}$. Then $\hat{\tau}(\lambda)=e^{-\hat{\lambda}}$.
+
+\question
+Let $X_1,X_2,\dots\iid\text{Uniform}[0,1]$ each with probability density function $f(x)=\mathds{1}\{0\leq x\leq1\}$.\\
+
+\qpartnb Calculate the mean and variance of $\ln(X_1)$.\\
+
+\apart
+%TODO expand on how I have done integration by parts
+\[\begin{array}{rcl}
+\expect(\ln(X_1))&=&{\displaystyle\int f(x)\ln(x)dx}\\
+&=&{\displaystyle\int\mathds{1}\{0\leq x\leq1\}ln(x)dx}\\
+&=&{\displaystyle\int_0^1\ln(x)dx}\\
+&=&[x\ln(x)-x]_0^1\\
+&=&(1\ln(1)-1)-(0\ln(0)-0)\\
+&=&(-1)-(0)\\
+&=&-1\\
+\var(\ln(X_1))&=&\expect(\ln(X_1)^2)-\expect(\ln(X_1))^2\\
+&=&{\displaystyle\int f(x)\ln(x)^2dx-1}\\
+&=&{\displaystyle\int \mathds{1}\{0\leq x\leq1\}\ln(x)^2dx-1}\\
+&=&{\displaystyle\int_0^1\ln(x)^2dx-1}\\
+&=&{[x\ln(x)^2]_0^1-\displaystyle\int_0^12\ln(x)dx-1}\\
+&=&[x\ln(x)^2-2(x\ln(x)-x)]_0^1-1\\
+&=&(\ln(1)^2-2\ln(1)+2)-0-1\\
+&=&2-1\\
+&=&1
+\end{array}\]
+
+
+\qpartnb By taking logs, find a random variable $X$ such that as $n\to\infty$
+$$(X_1,\dots,X_n)^{\frac{1}{\sqrt{n}}}e^{\sqrt{n}}\to_\mathcal{D}X$$
+
+\apart
+%TODO
+
+\end{document}
