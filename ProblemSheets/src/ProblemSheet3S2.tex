@@ -87,6 +87,8 @@ We have $f_{X_i}(x_i;\lambda)=\lambda e^{-\lambda x_i}\ \forall\ i\in[1,n]$ sinc
 \implies&\sum\limits_{i=1}^nx_i&=&\hat{\tau}\left(n+\sum\limits_{i=1}^nx_i\right)\\
 \implies&\hat{\tau}&=&\dfrac{\sum_{i=1}^nx_i}{n+\sum_{i=1}^nx_i}\\
 &&=&\dfrac{1}{1+\frac{n}{\sum_{i=1}^nx_i}}\\
+\end{array}\]
+\[\begin{array}{rrcl}
 \text{We have}&L(\lambda;\textbf{x})&=&\lambda^ne^{-\lambda\sum_{i=1}^nx_i}\\
 \implies&\ell(\lambda;\textbf{x})&=&n\ln\lambda-\lambda\sum\limits_{i=1}^nx_i\\
 \implies&\frac{\partial}{\partial\lambda}\ell(\lambda;\textbf{x})&=&\frac{n}{\lambda}-\sum\limits_{i=1}^nx_i\\
@@ -135,6 +137,14 @@ Let $X_1,X_2,\dots\iid\text{Uniform}[0,1]$ each with probability density functio
 $$(X_1,\dots,X_n)^{\frac{1}{\sqrt{n}}}e^{\sqrt{n}}\to_\mathcal{D}X$$
 
 \apart
-%TODO
+Let $X_1,X_2,\dots$ be iid random variables and define $Y_n=(X_1\times\dots\times X_n)^{1/\sqrt{n}}e^{\sqrt{n}}$.Then
+\[\begin{array}{rrcl}
+&ln Y_n&=&\frac{1}{\sqrt{n}}\left(\sum\limits_{i=1}^n\ln(X_i)\right)+\sqrt{n}\\
+\implies&\prob(\ln Y_n\leq y)&=&\prob\bigg(\frac{1}{\sqrt{n}}\left(\sum\limits_{i=1}^n\ln(X_i)\right)+\sqrt{n}\leq y\bigg)\\
+&&=&\prob\bigg(\sqrt{n}\ln(X_1)+\sqrt{n}\leq y\bigg)
+\end{array}\]
+Want to find $X$ st $\lim_{n\to\infty}\prob(\sqrt{n}(\ln(X_1)+1)\leq y)=\prob(X\leq y)$ (I think?)\\
+$\dots$
+
 
 \end{document}

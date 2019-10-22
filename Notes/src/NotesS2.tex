@@ -47,7 +47,7 @@
 \newcommand{\sech}[0]{\mathrm{sech}\ }
 \newcommand{\prob}[0]{\mathbb{P}}
 \newcommand{\nats}[0]{\mathbb{N}}
-\newcommand{\cov}[0]{\mathrm{cov}}
+\newcommand{\cov}[0]{\mathrm{Cov}}
 \newcommand{\var}[0]{\mathrm{Var}}
 \newcommand{\expect}[0]{\mathbb{E}}
 \newcommand{\reals}[0]{\mathbb{R}}
@@ -59,6 +59,7 @@
 \newcommand{\X}[0]{\textbf{X}}
 \newcommand{\x}[0]{\textbf{x}}
 \newcommand{\iid}[0]{\overset{\text{iid}}{\sim}}
+\newcommand{\proved}[0]{$\hfill\square$\\}
 
 \newcommand{\definition}[1]{\stepcounter{definition} \textbf{Definition \arabic{section}.\arabic{definition}\ - }\textit{#1}\\}
 \newcommand{\definitionn}[1]{\stepcounter{definition} \textbf{Definition \arabic{section}.\arabic{definition}\ - }\textit{#1}}
@@ -194,6 +195,7 @@ Let $g:\reals^n\to\reals^n$ be a bijective transformation which is independent o
 	Since $J_{g^{-1}}$ does not depend on $\theta$ this case is solved.
 \end{enumerate}
 Thus in botoh cases $L_\textbf{Y}(\theta;y)=f_\textbf{Y}(y;\theta)\propto f_\X(g^{-1}(\textbf{y});\theta)=L_\X(\theta;\x)$.
+\proved
 
 \section{Maximum Likelihood Estimates}
 
@@ -241,6 +243,7 @@ f(x;g^{-1}(\tau^*))&=&\tilde{f}(x;\tau^*)\\
 &=&f(x;\hat{\theta})
 \end{array}\]
 This contradicts the assumption that $\hat{\theta}$ is an maximum likelihood estimate of $\theta$.\\
+\proved
 
 \remark{Not all Reparameterisations are Bijective}
 When reparameterisations $g:\reals\to\reals$ is not bijective it is helpful to consider the \textit{induced likelihood}
@@ -405,7 +408,7 @@ Consider continuous $X$. We have
 \implies&a\prob(X\geq a)&=&\expect(X)\\
 \implies&\prob(X\geq a)&\leq&\dfrac{\expect(X)}{a}
 \end{array}\]
-$\hfill\square$
+\proved
 % TODO discrete case
 
 \theorem{Chebyshev's Inequality}
@@ -419,7 +422,7 @@ We have
 &\leq&\dfrac{\expect\left((X-\mu)^2\right)}{a^2}\ \text{By Markov's Inequality}\\
 &=&\dfrac{\sigma^2}{a^2}
 \end{array}\]
-$\hfill\square$
+\proved
 
 \definition{Convergence in Probability}
 We say the sequence of random variables $\{Z_n\}_{n\in\nats}$ converges in probability to the random variable $Z$ if
@@ -498,7 +501,7 @@ Fix any $\varepsilon>0$. We have
 &\leq&\frac{1}{\varepsilon^2}\expect\left[(Z_n-Z)^2\right]\text{ by Markov's Inequality}\\
 &\to&0\text{ since $Z_n\to_{qm}Z$.}
 \end{array}\]
-Hence $Z_n\to_\prob Z$.
+Hence $Z_n\to_\prob Z$.\proved
 
 \subsection{Probabilistic Convergence \& Estimators}
 
@@ -644,17 +647,19 @@ By the \textit{Quotient Rule}
 Consequently
 \[\begin{array}{rrcl}
 &\expect\left(\frac{d^2}{d\theta^2}\ell(\theta;X);\theta\right)&=&{\displaystyle\int_S\frac{\frac{d^2}{d\theta^2}f(x;\theta)}{f(x;\theta}f(x;\theta)dx-\int_S\left(\frac{\frac{d}{d\theta}f(x;\theta)}{f(x;\theta)}\right)^2f(x;\theta)dx}\\
-&&=&{\displaystyle\int_S\frac{d^2}{d\theta^2}f(x;\theta)dx-\int_S\left(\frac{d}{d\theta}\ell'(\theta;x)\right)^2f(x;\theta)dx}\\
+&&=&{\displaystyle\int_S\frac{d^2}{d\theta^2}f(x;\theta)dx-\int_S\ell'(\theta;x)^2f(x;\theta)dx}\\
 &&=&0-\expect(\ell'(\theta;X)^2;\theta)\\
 &&=&-I(\theta)\\
 \implies&I(\theta)&=&-\expect\left(\frac{d^2}{d\theta^2}\ell(\theta;X);\theta\right)
 \end{array}\]
+\proved
 
 \section{Efficiency and The Cramer-Rao Bound}
 
 \definition{IID Score Function}
 Let $\X{\iid}f(\cdot;\theta)$ for some $\theta\in\Theta$. Then the \textit{Score Function} is
 $$\ell'_n(\theta;\x):=\frac{d}{d\theta}\ell_n(\theta;\x)\text{ where }l_n(\theta;\x):=\ln f_n(\x;\theta)=\sum_{i=1}^n\ell(\theta;x_i)$$
+\nb $\frac{d}{d\theta}l_n(\theta;\x)=\frac{d}{d\theta}\sum\ell(\theta;x_i)=\sum\ell'(\theta;x_i)$.\\
 
 \definition{IID Fisher Information}
 Let $\X{\iid}f(\cdot;\theta)$ for some $\theta\in\Theta$. Then the \textit{Fisher Information} is
@@ -672,6 +677,75 @@ Let $\X\overset{iid}{\sim}f(\cdot;\theta)$. Then
 &&=&n\var\left(\sum\limits_{i=1}^n\ell'(\theta;X_1);\theta\right)\\
 \implies&I_n(\theta)&=&nI(\theta)
 \end{array}\]
+\proved
+
+\theorem{Cauchy-Schwarz Inequality for Expectation}
+Let $X\ \&\ Y$ be real-valued random variables in the same probability space. Then
+$$\expect(XY)^2\leq\expect(X^2)\expect(Y^2)$$
+
+\proof{Theorem 7.2}
+If $\expect(Y^2)=0$ then $\prob(Y=0)=1$ so $\expect(XY)=0$ and the statement holds.\\
+Thus, assume $\expect(Y^2)>0$ and define $\lambda:=\dfrac{\expect(XY)}{\expect(Y^2)}$. Then
+\[\begin{array}{rrcl}
+&0&\leq&\expect(X-\lambda Y)^2)\\
+&&=&\expect(X^2)-2\lambda\expect(XY)+\lambda^2\expect(Y^2)\\
+&&=&\expect(X^2)-2\dfrac{\expect(XY)^2}{\expect(Y^2)}+\dfrac{\expect(XY)^2}{\expect(Y^2)}\\
+&&=&\expect(X^2)-\dfrac{\expect(XY)^2}{\expect(Y^2)}\\
+\implies&\expect(XY)^2&\leq&\expect(X^2)\expect(Y^2)
+\end{array}\]
+\proved
+
+\theorem{Covaraince Inequality}
+Let $X$ and $Y$ be real-valued random variables in the same probability space. Then
+$$\cov(X,Y)^2\leq\var(X)\var(Y)$$
+
+\proof{Theorem 7.3}
+Let $W=X-\expect(X)$ and $Z=Y-\expect(Y)$ giving $\expect(WZ)=\cov(X,Y),\ \expect(W^2)=\var(X)$ and $\expect(Z^2)=\var(Y)$.\\
+By applying the \textit{Cauchy-Schwarz inequality} we get
+$$\cov(X,Y)^2=\expect(WZ)^2\leq\expect(W^2)\expect(Z^2)=\var(X)\var(Y)\Longleftrightarrow\cov(X,Y)^2\leq\var(X)\var(Y)$$
+
+\remark{Correlation value}
+The result in \textbf{Theorem 7.3} is the reason why correlation is valued in $[-1,1]$.
+$$\text{Corr}(X,Y)=\dfrac{\cov(X,Y)}{\sqrt{\var(X)\var(Y)}}$$
+
+\theorem{Cramer-Rao Inequality - Scalar Parameter}
+Let $\X_n\iid f(\cdot;\theta)$ and assume the \textit{Fisher Information Regularity Conditions} hold.\\
+Let $\hat{\theta}_n(\cdot)$ be an estimator of $\theta$ with expectation $m(\theta):=\expect(\hat{\theta}_n(\X_n);\theta)$ which statisfies
+$$\forall\ \theta\in\Theta,\ \underbrace{\frac{d}{d\theta}\int\hat{\theta}_n(\x)f_n(\x;\theta)d\x}_{\expect(\hat{\theta}_n)}=\int\hat{\theta}_n(\x)\frac{d}{d\theta}f_n(\x;\theta)d\x$$
+Then
+$$\forall\ \theta\in\Theta,\quad\var(\hat{\theta}_n(\X);\theta)\geq\frac{m'(\theta)^2}{nI(\theta)}$$
+
+\proof{Theorem 7.4}
+We notice that
+\[\begin{array}{rcl}
+m'(\theta)&=&\frac{d}{d\theta}\expect(\hat{\theta}_n(\X_n);\theta)\\
+&=&\frac{d}{d\theta}\int_{S^n}\hat{\theta}_n(\x_n)f_n(\x_n;\theta)d\x_n
+\end{array}\]
+The clever part of this proof is to observe that
+\[\begin{array}{rcl}
+\var(\hat{\theta}_n(\X_n);\theta)nI(\theta)&=&\var(\hat{\theta}_n(\X_n);\theta)\var(\ell_n(\theta;\X_n);\theta)\\
+&\geq&\cov(\hat{\theta}_n(X_n),\ell'_n(\theta;\X_n);\theta)^2\text{ by Covariance Inequality}
+\end{array}\]
+Thus
+\[\begin{array}{rrcl}
+&\cov(\hat{\theta}_n(X_n),\ell'_n(\theta;\X_n);\theta)^2&=&\expect(\hat{\theta}_n(X_n)\ell_n'(\theta;\X_n);\theta)-\expect(\hat{\theta}_n(\X_n);\theta)\expect(\ell'_n(\theta;\X_n);\theta)\\
+&&=&\expect(\hat{\theta}_n(X_n)\ell_n'(\theta;\X_n);\theta)-\expect(\hat{\theta}_n(\X_n);\theta)\times0\\
+&&=&\expect(\hat{\theta}_n(X_n)\ell_n'(\theta;\X_n);\theta)\\
+&&=&{\displaystyle\int_{S^n}\hat{\theta}_n(\x_n)\ell'_n(\theta;\x_n)f_n(\x_n;\theta)d\x_n}\\
+&&=&{\displaystyle\int_{S^n}\hat{\theta}_n(\x_n)\frac{\frac{d}{d\theta}f_n(\x_n;\theta)}{f_n(\x_n;\theta)}f_n(\x_n;\theta)d\x_n}\\
+&&=&{\displaystyle\int_{S^n}}\hat{\theta}_n(\x_n)\frac{d}{d\theta}f_n(\x_n;\theta)\\
+&&=&\frac{d}{d\theta}{\displaystyle\int_{S^n}\hat{\theta}_n(\x_n)f_n(\x_n;\theta)d\x_n}\text{ by regularity assumption}\\
+&&=&m'(\theta)\\
+\implies&\var(\hat{\theta}_n(X_n);\theta)nI(\theta)&\geq&m'(\theta)^2
+\end{array}\]
+
+\proposition{Useful result from Cramer-Rao Inequality}
+If $\hat{\theta}_n(\X_n)$ is an unbiased estimator (\ie $m(\theta)=\theta$) then
+$$\var(\hat{\theta}_n(\X_n);\theta)=MSE(\hat{\theta}_n(\X_n);\theta)\geq\frac{1}{nI(\theta)}$$
+This shows there is a lower bound on the possible performance of an estimator.\\
+
+\definition{Efficient Estimator}
+An \textit{Estimator} is said to be \textit{Efficient} when its variance is equal to the \textit{Cramer-Rao lower bound} $\forall\ \theta^*$.\\
 
 \newpage
 \setcounter{section}{-1}

@@ -20,7 +20,8 @@ The maximum likelihood estimate for $p$ is $\hat{p}(Y)=\frac{Y}{n}$. $\hat{p}$ i
 Let $X_1,\dots,X_n\overset{\text{iid}}{\sim}\text{Bernoulli}(p)$. Then
 $$
 \begin{array}{rcl}
-\text{Var}(\hat{p})&=&\text{Var}\left(\frac{1}{n}\sum\limits_{i=1}^nX_i\right)\\
+\text{Var}(\hat{p})&=&\text{Var}\left(\dfrac{Y}{n}\right)\\
+&=&\text{Var}\left(\dfrac{1}{n}\sum\limits_{i=1}^nX_i\right)\\
 &=&\dfrac{1}{n^2}\text{Var}\left(\sum\limits_{i=1}^nX_i\right)\\
 &=&\dfrac{1}{n^2}.n\text{Var}\left(X_1\right)\\
 &=&\dfrac{1}{n}p(1-p)
@@ -30,9 +31,10 @@ $$
 ## Question 2
 
 ```{r}
-n<-13; p<-.31; sample_size<-25; trials<-1000
+n<-13; p<-.31
+sample_size<-100; trials=1000
 var_hat=(1/n)*p*(1-p)
-var_hat
+cat("var_hat:",var_hat,"\n")
 
 phat<-function(Y) {
   Y/n
@@ -42,14 +44,16 @@ x_values<-rbinom(n=sample_size*trials,size=n,prob=p)
 x_samples<-matrix(x_values,nrow=sample_size)
 p_hat.samples<-apply(x_samples,1,phat)
 p_hat.sigma2=apply(p_hat.samples,1,var)
-hist(p_hat.sigma2,breaks=20)
+cat("observered_var:",mean(p_hat.sigma2))
+hist(p_hat.sigma2,breaks=10,xlab="Variance (Red line=var_hat)")
 abline(v=var_hat,col="red")
+
 ```
 
 # 3 Clinic Data
 
 ```{r}
-year.data<-read.csv("AssessedProblemSheet1S2_files/year_data.csv")
+year.data<-read.csv("year_data.csv")
 knitr::kable(year.data)
 ```
 
@@ -82,7 +86,7 @@ $$
 &=&\mathbb{E}(\hat{p}_1(Y_1))-\mathbb{E}(\hat{p}_2(Y_2))\\
 &=&p_1-p_2\\
 &=&p-p\\
-&=&0\\
+&=& 0\\
 \text{Var}(W)&=&\text{Var}(\hat{p}_1(Y_1)-\hat{p}_2(Y_2))\\
 &=&\text{Var}(\hat{p}_1(Y_1))+\text{Var}(\hat{p}_2(Y_2))\\
 &=&\frac{1}{n_1}p_1(1-p_1)+\frac{1}{n_2}p_2(1-p_2)\\
@@ -95,7 +99,7 @@ $$
 Suppose $p=p_1=p_2$. We have $\hat{p}=\frac{`r y1`+`r y2`}{`r n1`+`r n2`}=\frac{`r y1+y2`}{`r n1+n2`}=`r p_hat<-(y1+y2)/(n1+n2); p_hat`$.
 $$
 \begin{array}{rcl}
-\mathbb{P}(|W-\mu_W|\geq\hat{p}_1(y_1)-\hat{p}_1(y_2))&=&\mathbb{P}(|W-0|\geq`r p1_hat`-`r p2_hat`)\\
+\mathbb{P}(|W-\mu_W|\geq\hat{p}_1(y_1)-\hat{p}_1(y_2))&=&\mathbb{P}(|W- |\geq`r p1_hat`-`r p2_hat`)\\
 &=&\mathbb{P}(|W|\geq`r p1_hat-p2_hat`)\\
 &\leq&\dfrac{\sigma^2_W}{`r p1_hat-p2_hat`^2}\text{ by Chebyshev's Inequality}\\
 &=&\dfrac{1}{`r p1_hat-p2_hat`^2}\times\dfrac{n_1+n_2}{n_1n_2}\hat{p}(1-\hat{p})\\
@@ -108,15 +112,16 @@ Thus it is very unlikely to observe these two mortality rates, assuming the unde
 # 4 Intervention: Chlorine Hand Washing
 
 ```{r}
-month.data<-read.csv("AssessedProblemSheet1S2_files/month_data.csv")
+month.data<-read.csv("month_data.csv")
 month.data<-month.data[!is.na(month.data$births),]
 
 month.data$rate<-month.data$deaths/month.data$births
 month.data$date<-as.Date(month.data$date)
 
-intervention.date<-as.Date("1847-05-15")
+intervention.date<-as.Date("1847- 5-15")
 
-plot(month.data$date, month.data$rate, pch=20, main="Mortality Rate by Month", xlab="Date (Red line indicates start of intervention preiod)", ylab="Rate")
+plot(month.data$date, month.data$rate, pch=20, main="Mortality Rate by Month",
+     xlab="Date (Red line indicates start of intervention preiod)", ylab="Rate")
 abline(v=intervention.date, col="red")
 ```
 
@@ -124,12 +129,14 @@ abline(v=intervention.date, col="red")
 before.intervention<-month.data[month.data$date< intervention.date,]
 n1<-sum(before.intervention$births)
 y1<-sum(before.intervention$deaths)
-cat("Number of births before intervention:",prettyNum(n1,big.mark=","),"\nNumber of deaths before intervention:",prettyNum(y1,big.mark=","),"\n\n")
+cat("Number of births before intervention:",prettyNum(n1,big.mark=","),
+    "\nNumber of deaths before intervention:",prettyNum(y1,big.mark=","),"\n\n")
 
 after.intervention <-month.data[month.data$date>=intervention.date,]
 n2<-sum(after.intervention$births)
 y2<-sum(after.intervention$deaths)
-cat("Number of births after intervention:",prettyNum(n2,big.mark=","),"\nNumber of deaths after intervention:",prettyNum(y2,big.mark=","))
+cat("Number of births after intervention: ",prettyNum(n2,big.mark=","),
+    "\nNumber of deaths after intervention: ",prettyNum(y2,big.mark=","))
 ```
 
 ## Question 6
@@ -141,7 +148,7 @@ cat("p1_hat:",p1_hat,"\np2_hat:",p2_hat)
 ```
 Define random variable $W=\hat{p}_1(Y_1)-\hat{p}_2(Y_2)$.
 
-Suppose $p=p_1=p_2$. We have $\hat{p}=\frac{`r y1`+`r y2`}{`r n1`+`r n2`}=\frac{`r y1+y2`}{`r n1+n2`}=`r p_hat<-(y1+y2)/(n1+n2); p_hat`$.
+Suppose $p=p_1=p_2$. We have $\hat{p}=\frac{y_1+y_2}{n_1+n_2}-\frac{`r y1`+`r y2`}{`r n1`+`r n2`}=\frac{`r y1+y2`}{`r n1+n2`}=`r p_hat<-(y1+y2)/(n1+n2); p_hat`$.
 $$
 \begin{array}{rcl}
 \mathbb{P}(|W-\mu_W|\geq\hat{p}_1(y_1)-\hat{p}_1(y_2))&=&\mathbb{P}(|W-0|\geq`r p1_hat`-`r p2_hat`)\\
@@ -152,7 +159,7 @@ $$
 &=&`r (1/(p1_hat-p2_hat)^2)*((n1+n2)/(n1*n2))*p_hat*(1-p_hat)`
 \end{array}
 $$
-Thus it is very unlikely to observe these two mortality rates, assuming the underlying rate is the same.
+Thus. it is very unlikely to observe these two mortality rates, assuming the underlying rate is the same.
 
 # 5 A First Logistic Regression
 
@@ -166,3 +173,38 @@ sigma<-function(z) {
 ```
 
 ## Question 7
+$$
+\begin{array}{rrcl}
+&L(\theta)&\propto&\prod_{i=1}^2f_{Y_i}(y_i;n_i,x_i,\theta)\\
+&&=&f(y_1;n_1,x_1,\theta)f(y_2;n_2,x_2,\theta)\\
+&&=&{n_1\choose y_1}g(x_1,\theta)^{y_1}(1-g(x_1,\theta))^{n_1-y_1}{n_2\choose y_2}g(x_2,\theta)^{y_2}(1-g(x_2,\theta))^{n_2-y_2}\\
+&&=&{n_1\choose y_1}\sigma(\theta_1)^{y_1}(1-\sigma(\theta_1))^{n_1-y_1}{n_2\choose y_2}\sigma(\theta_1+\theta_2)^{y_2}(1-\sigma(\theta_1+\theta_2))^{n_2-y_2}\\
+&&\propto&\sigma(\theta_1)^{y_1}(1-\sigma(\theta_1))^{n_1-y_1}\sigma(\theta_1+\theta_2)^{y_2}(1-\sigma(\theta_1+\theta_2))^{n_2-y_2}\\
+\implies&\ell(\theta)&=&c+y_1\ln(\sigma(\theta_1))+(n_1-y_1)\ln(1-\sigma(\theta_1))\\
+&&+&y_2\ln(\sigma(\theta_1+\theta_2))+(n_2-y_2)\ln(1-\sigma(\theta_1+\theta_2))\\\\
+&\sigma(\theta_1)&=&\dfrac{1}{1+e^{-\theta_1}}\\
+\implies&\ln(\sigma(\theta_1))&=&-\ln(1+e^{-\theta_1})\\
+\&&\ln(1-\sigma(\theta_1))&=&\ln\left(\frac{e^{-\theta_1}}{1+e^{-\theta_1}}\right)\\
+&&=&-\theta_1-\ln(1+e^{-\theta_1})\\\\
+&\sigma(\theta_1+\theta_2)&=&\dfrac{1}{1+e^{-(\theta_1+\theta_2)}}\\
+\implies&\ln(\sigma(\theta_1+\theta_2))&=&-\ln(1+e^{-(\theta_1+\theta_2)})\\
+\&&\ln(1-\sigma(\theta_1+\theta_2))&=&\ln\left(\frac{e^{-(\theta_1+\theta_2)}}{1+e^{-(\theta_1+\theta_2)}}\right)\\
+&&=&-(\theta_1+\theta_2)-\ln(1+e^{-(\theta_1+\theta_2)})\\\\
+\implies&\ell(\theta)&=&c-y_1\ln(1+e^{\theta_1})-(n_1-y_1)(\theta_1+\ln(1+e^{-\theta_1}))\\
+&&-&y_2\ln(1+e^{-(\theta_1+\theta_2)})-(n_2-y_2)(\theta_1+\theta_2+\ln(1+e^{-(\theta_1+\theta_2)}))\\
+&&=&c-n_1\ln(1+e^{-\theta_1})-n_2\ln(1+e^{-(\theta_1+\theta_2)})-\theta_1(n_1-y_1)-(\theta_1+\theta_2)(n_2-y_2)\\
+&&=&c-`r n1`\ln(1+e^{-\theta_1})-`r n2`\ln(1+e^{-(\theta_1+\theta_2)})-\theta_1(`r n1`-`r y1`)-(\theta_1+\theta_2)(`r n2`-`r y1`)\\
+&&=&c-`r n1`\ln(1+e^{-\theta_1})-`r n2`\ln(1+e^{-(\theta_1+\theta_2)})-`r n1-y1`\theta_1-`r n2-y1`(\theta_1+\theta_2)\\
+&&=&c-`r n1`\ln(1+e^{-\theta_1})-`r n2`\ln(1+e^{-(\theta_1+\theta_2)})-`r n1-y1+(n2-y1)`\theta_1-`r n2-y1`\theta_2
+\end{array}\\
+$$
+```{r}
+ell<-function(theta) {
+  l<--19571*log(1+exp(-theta[1]))-6595*log(1+exp(-theta[2]))-22046*theta[1]-4535*theta[2]
+  -l # In order to find maximum
+}
+
+result<-optim(c(.5,.5), ell)
+cat("theta_hat:(",result$par[1],",",result$par[2],")")
+```
+This value of $\hat{\theta}_1$ shows that the probability of mortality before intervention was very low, which is corroborated by $\hat{p}_1$ being low. This value of $\hat{\theta}_2$ shows that the probability of mortality decreased after intervention, this is corroborated by $\hat{p}_2<\hat{p}_1$.
