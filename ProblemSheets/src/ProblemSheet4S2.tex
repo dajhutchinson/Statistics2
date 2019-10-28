@@ -1,0 +1,222 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=1in, paperwidth=8.3in, paperheight=11.7in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{dsfont}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{changepage} 
+
+\begin{document}
+
+\pagestyle{fancy}
+\setlength\parindent{0pt}
+\allowdisplaybreaks
+
+\renewcommand{\headrulewidth}{0pt}
+
+% Cover page title
+\title{Statistics 2 - Problem Sheet 4}
+\author{Dom Hutchinson}
+\maketitle
+
+% Header
+\fancyhead[L]{Dom Hutchinson}
+\fancyhead[C]{Statistics 2 - Problem Sheet 4}
+\fancyhead[R]{\today}
+
+% Counters
+\newcounter{qpart}[section]
+
+% commands
+\newcommand{\dotprod}[0]{\boldsymbol{\cdot}}
+\newcommand{\cosech}[0]{\mathrm{cosech}\ }
+\newcommand{\cosec}[0]{\mathrm{cosec}\ }
+\newcommand{\sech}[0]{\mathrm{sech}\ }
+\newcommand{\prob}[0]{\mathbb{P}}
+\newcommand{\nats}[0]{\mathbb{N}}
+\newcommand{\cov}[0]{\mathrm{Cov}}
+\newcommand{\var}[0]{\mathrm{Var}}
+\newcommand{\expect}[0]{\mathbb{E}}
+\newcommand{\reals}[0]{\mathbb{R}}
+\newcommand{\integers}[0]{\mathbb{Z}}
+\newcommand{\indicator}[0]{\mathds{1}}
+\newcommand{\nb}[0]{\textit{N.B.} }
+\newcommand{\ie}[0]{\textit{i.e.} }
+\newcommand{\eg}[0]{\textit{e.g.} }
+\newcommand{\iid}[0]{\overset{\text{iid}}{\sim} }
+
+\newcommand{\qpart}[0]{\stepcounter{qpart} \textbf{Question \arabic{section}.\arabic{qpart}\\}}
+\newcommand{\qpartt}[0]{\stepcounter{qpart} \textbf{Question \arabic{section}.\arabic{qpart}} - }
+\newcommand{\ans}[0]{ \textbf{Answer \arabic{section}\\}}
+\newcommand{\apart}[0]{ \textbf{Answer \arabic{section}.\arabic{qpart}\\}}
+\newcommand{\apartt}[0]{\textbf{Answer \arabic{section}.\arabic{qpart}} - }
+\newcommand{\question}[0]{\stepcounter{section}\section*{Question - \arabic{section}.}}
+
+\question
+For the following statistical models derive the score function, $\ell'(\theta;x)$, and the Fisher Information, $I(\theta)$. Assume each model to be regular.\\
+
+\qpartt
+$X\sim\text{Geometric}(p)$\\
+
+\apart
+Let $X\sim\text{Geometric}(p)$ with $p$ unknown. Then
+\[\begin{array}{rrcl}
+\text{We have}&L(p;x)&\propto&f(x;p)\\
+&&=&(1-p)^{x-1}p\\
+\implies&\ell(p;x)&=&\ln f(x;p)\\
+&&=&(x-1)\ln(1-p)+\ln p+c\\
+\text{By definition}&\ell'(p;x)&=&\frac{d}{dp}\ell(p;x)\\
+&&=&-\frac{x-1}{1-p}+\frac{1}{p}\\
+&&=&\frac{1-x}{1-p}+\frac{1}{p}\\
+\text{By definition}&I(p)&=&\expect(\ell'(p;X)^2;p)\\
+&&=&\var(\ell'(p;X);p)\text{ by regularity conditions}\\
+&&=&\var\left(\frac{1-X}{1-p}+\frac{1}{p};p\right)\\
+&&=&\var\left(\frac{1-X}{1-p};p\right)\\
+&&=&\frac{1}{(1-p)^2}\var\left(1-X;p\right)\\
+&&=&\frac{1}{(1-p)^2}\var\left(X;p\right)\\
+&&=&\frac{1}{(1-p)^2}\times\frac{1-p}{p^2}\\
+&&=&\frac{1}{p^2(1-p)}
+\end{array}\]
+
+\qpartt
+$X\sim\text{Binomial}(n,p)$ where $n$ is known.\\
+
+\apart
+Let $X\sim\text{Binomial}(n,p)$ with $n$ known \& $p$ unknown. Then
+\[\begin{array}{rrcl}
+\text{We have}&L(p;x,n)&\propto&f(x;p,n)\\
+&&=&p^x(1-p)^{n-x}\\
+\implies&\ell(p;x,n)&=&x\ln p+(n-x)\ln(1-p)\\
+\implies&\ell'(p;x,n)&=&\frac{x}{p}-\frac{n-x}{1-p}+c\\
+&&=&\frac{x}{p}+\frac{x-n}{1-p}
+\end{array}\]
+\[\begin{array}{rcl}
+I(p)&=&\var(\ell'(p;X,n);p)\\
+&=&\var\left(\frac{X}{p}+\frac{X-n}{1-p};p\right)\\
+&=&\frac{1}{p^2(1-p)^2}\var(X(1-p)+(X-n)p;p)\\
+&=&\frac{1}{p^2(1-p)^2}\var(X-np;p)\\
+&=&\frac{1}{p^2(1-p)^2}\var(X;p)\\
+&=&\frac{1}{p^2(1-p)^2}np(1-p)\\
+&=&\frac{n}{p(1-p)}
+\end{array}\]
+
+\qpartt
+$X\sim\text{Normal}(\mu,\sigma^2)$ where $\sigma^2$ is known.\\
+
+\apart
+Let $X\sim\text{Normal}(\mu,\sigma^2)$ with $\sigma^2$ known \& $\mu$ unknown. Then
+\[\begin{array}{rrcl}
+\text{We have}&\ell(\mu;x,\sigma^2)&=&n\ln\sigma^2+\frac{1}{\sigma^2}(x-\mu)^2+c\\
+\implies&\ell'(\mu;x,\sigma^2)&=&\frac{\partial}{\partial\mu}\ell(\mu;x,\sigma^2)\\
+&&=&-\frac{1}{\sigma^2}2(x-\mu)\\
+&I(\mu)&=&\var(\ell'(\mu;X,\sigma^2);\mu)\\
+&&=&\var\left(-\frac{2}{\sigma^2}(X-\mu);\mu\right)\\
+&&=&\left(\frac{2}{\sigma^2}\right)^2\var(X-\mu;\mu)\\
+&&=&\frac{4}{\sigma^4}\var(X;\mu)\\
+&&=&\frac{4}{\sigma^4}\sigma^2\\
+&&=&\frac{4}{\sigma^2}
+\end{array}\]
+
+\qpartt
+$X\sim\text{Pareto}(x_0,\theta)$ where $x_0$ is known.\\
+
+\apart
+Let $X\sim\text{Pareto}(x_0,\theta)$ with $x_0$ known \& $\theta$ unknown. Then
+\[\begin{array}{rrcl}
+\text{We have}&L(\theta;x,x_0)&\propto&\frac{\theta x_0^\theta}{x^{\theta+1}}\mathds{1}\{x\geq x_0\}\\
+\implies&\ell(\theta;x,x_0)&=&\ln\theta+\theta\ln x_0-(\theta+1)\ln x+c\\
+\implies&\ell'(\theta;x,x_0)&=&\frac{1}{\theta}+\ln x_0-\ln x\\
+\implies&\ell''(\theta;x,x_0)&=&-\frac{1}{\theta^2}\\
+&I(\theta)&=&-\expect(\ell''(\theta;X,x_0);\theta)\\
+&&=&-\left(-\frac{1}{\theta^2}\right)\\
+&&=&\frac{1}{\theta^2}
+\end{array}\]
+
+\newpage
+\question
+For each of the following verify that $\expect(\ell'(\theta;X);\theta)=0$.\\
+
+\qpartt
+$X\sim\text{Geometric}(p)$\\
+
+\apart
+Let $X\sim\text{Geometric}(p)$
+\[\begin{array}{rrrl}
+&\ell'(p;x)&=&\frac{1-x}{1-p}+\frac{1}{p}\\
+\implies&\expect(\ell'(p;X);p)&=&\expect\left(\frac{1-X}{1-p}+\frac{1}{p};p\right)\\
+&&=&\frac{1}{1-p}\expect(1-X)+\frac{1}{p}\\
+&&=&\frac{1}{1-p}\left(1-\frac{1}{p}\right)+\frac{1}{p}\\
+&&=&\frac{p-1}{p(1-p)}+\frac{1}{p}\\
+&&=&\frac{p-1+(1-p)}{p(1-p)}\\
+&&=&0
+\end{array}\]
+
+\qpartt
+$X\sim\text{Binomial}(n,p)$ where $n$ is known.\\
+
+\apart
+Let $X\sim\text{Binomial}(n,p)$ with $n$ known.\\
+\[\begin{array}{rrrl}
+&\ell'(p;x,n)&=&\frac{x}{p}+\frac{x-n}{1-p}\\
+\implies&\expect(\ell'(p;X,n);p)&=&\expect\left(\frac{X}{p}+\frac{X-n}{1-p};x,n\right)\\
+&&=&\frac{1}{p}\expect(X)+\frac{1}{1-p}\expect(X-n)\\
+&&=&\frac{1}{p}(np)+\frac{1}{1-p}(np-n)\\
+&&=&n+n\frac{p-1}{1-p}\\
+&&=&n-n\\
+&&=&0
+\end{array}\]
+
+\qpartt
+$X\sim\text{Normal}(\mu,\sigma^2)$ where $\sigma^2$ is known.\\
+
+\apart
+Let $X\sim\text{Normal}(\mu,\sigma^2)$ with $\sigma^2$ known and $\mu$ unknown.\\
+\[\begin{array}{rrrl}
+&\ell'(\mu;x,\sigma^2)&=&-\frac{2}{\sigma^2}(x-\mu)\\
+\implies&\expect(\ell'(\mu;X,\sigma^2);\mu)&=&\expect\left(-\frac{2}{\sigma^2}(X-\mu);\mu\right)\\
+&&=&-\frac{2}{\sigma^2}\expect(X-\mu;\mu)\\
+&&=&-\frac{2}{\sigma^2}(\mu-\mu)\\
+&&=&0
+\end{array}\]
+
+\qpartt
+$X\sim\text{Pareto}(x_0,\theta)$ where $x_0$ is known.\\
+
+\apart
+Let $X\sim\text{Pareto}(x_0,\theta)$ with $x_0$ is known \& $\theta$ unknown.\\
+\[\begin{array}{rrrl}
+&\ell'(\theta;x,x_0)&=&\frac{1}{\theta}+\ln x_0-\ln x\\
+\implies&\expect(\ell'(\theta;X,x_0);\theta)&=&\expect\left(\frac{1}{\theta}+\ln x_0-\ln X;\theta\right)\\
+&&=&\frac{1}{\theta}+\ln x_0-\expect(\ln X;\theta)\\
+&&=&\frac{1}{\theta}+\ln x_0-(\ln x_0+\frac{1}{\theta})\\
+&&=&0
+\end{array}\]
+%TODO
+
+\question
+In the case of $X\sim\text{Pareto}(x_0,\theta)$ where both $x_0$ \& $\theta$ are unknown, explain why the Fisher Information Regularity Conditions are not met.\\
+
+\ans
+Let $X\sim\text{Pareto}(x_0,\theta)$ with both $x_0\ \&\ \theta$ unknown.\\
+The Fisher Information Regularity Conditions require $L'(\theta,x_0;x)$ to exist $\forall\ x\in\mathcal{X}$.\\
+We notice that
+\[\begin{array}{rcl}
+L'(\theta,x_0;x)&=&\begin{pmatrix}
+\frac{\partial}{\partial \theta}L(\theta,x_0;x)&\frac{\partial}{\partial x_0}L(\theta,x_0;x)
+\end{pmatrix}\\
+&\propto&\begin{pmatrix}
+\frac{\partial}{\partial \theta}\frac{\theta x_0^\theta}{x^{\theta+1}}\mathds{1}\{x\geq x_0\}&\frac{\partial}{\partial x_0}\frac{\theta x_0^\theta}{x^{\theta+1}}\mathds{1}\{x\geq x_0\}
+\end{pmatrix}
+\end{array}\]
+Consider the derivative wrt $x_0$.\\
+This contains an indicator function, $\mathds{1}\{x\geq x_0\}$, which depends upon the variable we are deriving wrt.\\
+Since the indicator function is discontinuous at $x_0$ it is not differentiable.\\
+Thus $L'(\theta,x_0;x)$ does not exist in this case, further the Fisher Information Regularity Conditions are not met in the case of $X\sim\text{Pareto}(x_0,\theta)$ with $x_0\ \&\ \theta$ unknown.$\hfill\square$
+
+\end{document}

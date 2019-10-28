@@ -1,0 +1,35 @@
+---
+title: "Problems Sheet 4"
+subtitle: "Statistics 2"
+author: "Dom Hutchinson"
+output:
+  pdf_document: 
+     fig_width: 6
+     fig_height: 4
+  html_notebook: default
+  html_document: default
+  word_document: default
+---
+
+# Question 4
+```{r}
+cdf.poisson.mle<-function(v,lambda,n) {
+  ppois(n*v, lambda=n*lambda)
+}
+
+cdf.poisson.np<-function(v,lambda,n,N) {
+  poisson.mles <- sapply(1:100, function(i) mean(rpois(n, lambda = lambda)))
+  # Count number of samples less than each value in v, normalise
+  counts <- sapply(v, function(i) sum(poisson.mles<i)/N)
+  counts
+}
+
+n <- 12; lambda <- 3.2; N <- 100
+v <- seq(from = 1, to = 5, length = 1001)
+plot(v, cdf.poisson.mle(v, lambda = lambda, n = n), type = "l", main = "CDF of the ML estimator for lambda", xlab = "lambda", ylab = "CDF")
+abline(v = lambda, col = "darkgreen")
+text(lambda, 0, labels = "True value of lambda", pos = 4, col = "darkgreen")
+
+lines(v, cdf.poisson.np(v,lambda=lambda,n=n,N=N), type = "l",col="red",lty=6)
+legend(x=1,y=1,legend=c("CDF of the ML estimator","Non-Parametric Estimator of CDF"),col=c("black","red"),lty=1:6,cex=.5)
+```

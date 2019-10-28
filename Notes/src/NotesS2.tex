@@ -572,7 +572,7 @@ We measure the performance of an estimator $\hat{\theta}$ in terms of variance, 
 \definition{The Score Function}
 Let $\ell(\theta;x):=\ln f(x;\theta)$.\\
 The \textit{Score Function} is a measure of the sensitivity of the likelihood function wrt $\theta$
-$$\ell'(\theta;x):=\frac{d}{d\theta}\ell(\theta,;x)=\frac{\frac{d}{d\theta}f(x;\theta)}{f(x;\theta)}=\frac{L'(\theta;x)}{L(\theta;x)}$$
+$$\ell'(\theta;x):=\frac{d}{d\theta}\ell(\theta,;x)=\frac{\frac{d}{d\theta}\ln f(x;\theta)}{\ln f(x;\theta)}=\frac{\ln L'(\theta;x)}{\ln L(\theta;x)}$$
 
 \remark{$\theta^*$ is a turning point of $\ell(\theta;x)$}
 Note that under the \textit{Fisher Information Regularity Conitions} we have that $\forall\ \theta\in\Theta$
@@ -746,6 +746,154 @@ This shows there is a lower bound on the possible performance of an estimator.\\
 
 \definition{Efficient Estimator}
 An \textit{Estimator} is said to be \textit{Efficient} when its variance is equal to the \textit{Cramer-Rao lower bound} $\forall\ \theta^*$.\\
+
+\example{Efficient Coin Flipping}
+Let $\X\iid\text{Bernoulli}(\theta)$ with $\theta\in[0,1]$, this corresponds to flipping a coin $n$ times and considering each flip the random variable $X:\{H,T\}\to\{0,1\}$ such that $X(H)=1$ and $X(T)=0$ with probability distribution such that $\prob(X=1;\theta)=\theta$ and $\prob(X=0;\theta)=1-\theta$. We consider the intuitive estimator of $\theta$
+$$\hat{\theta}_n:=\hat{\theta}_n(\X_n):=\frac{1}{n}\sum_{i=1}^nX_i$$
+The estimator is unbiased $\forall\ n\in\nats$ and its variance is
+$$\var(\hat{\theta}_n;\theta)=\frac{\var(X_1;\theta)}{n}=\frac{\expect(X_1^2;\theta)-\expect(X_1;\theta)^2}{n}=\frac{\theta-\theta}{n}=\frac{\theta(1-\theta)}{n}$$
+Now we consider the \textit{Cramer-Rao bound}
+\[\begin{array}{rrcl}
+\text{We find}&L(\theta;x)&=&\theta^x(1-\theta)^{1-x}\\
+\implies&\ell(\theta;x)&=&x\ln\theta+(1-x)\ln(1-\theta)\\
+\implies&\ell'(\theta;x)&=&\frac{x}{\theta}-\frac{1-x}{1-\theta}\\
+\implies&\ell''(\theta;x)&=&-\frac{x}{\theta^2}-\frac{1-x}{(1-\theta)^2}\\
+\end{array}\]
+Thus we can use $I(\theta)=-\expect(\ell''(\theta;X);\theta)$
+\[\begin{array}{rrcl}
+\implies&I(\theta)&=&-\expect\left(-\frac{X}{\theta^2}-\frac{1-X}{(1-\theta)^2};\theta\right)\\
+&&=&\expect\left(\frac{X}{\theta^2}+\frac{1-X}{(1-\theta)^2};\theta\right)\\
+&&=&\frac{\theta}{\theta^2}+\frac{1-\theta}{(1-\theta)^2}\\
+&&=&\frac{1}{\theta}+\frac{1}{1-\theta}\\
+&&=&\frac{1}{\theta(1-\theta)}\\
+&I_n(\theta)&=&nI(\theta)\text{ Since $X_1,X_2,\dots$ are iid}\\
+\end{array}\]
+The \textit{Cramer-Rao bound} for the variance is
+$$\frac{1}{nI(\theta}=\frac{\theta(1-\theta)}{n}$$
+Thus our estimator is efficient.
+
+\section{Asymptotic Distribution of the Maximum Likelihood Estimator}
+
+\theorem{}
+Suppose that $\X_n\iid f(\cdot;\theta^*)$ for some $\theta^*\in\Theta$ and assume that
+\begin{enumerate}[label=\roman*)]
+	\item The sequence of maximum likelihood estiamtors $\{\hat{\theta}_n(\X_n)\}$ is consistent;
+	\item The \textit{Fisher Information Regularity Conditions} (\textbf{Definition 6.2}) hold and $I(\theta^*)=-\expect[\ell''(\theta;X);\theta]>0$.
+	\item $\exists\ C(\cdot):\mathcal{X}\to[0,\infty)$ such that $\expect(C(X_1);\theta^*)<\infty,\ \Xi\subset\Theta$ an open set containing $\theta^*$ and $\Delta(\cdot):\Xi\to[0,\infty)$ continuous at 0 st $\Delta(0)==0$, st $\forall\ \theta,\theta',x\in\Xi^2\times\mathcal{X}$.
+	$$|\ell''(\theta;x)-\ell(\theta';x)|\leq C(x)\Delta(\theta-\theta')$$
+\end{enumerate}
+Then $\forall\ \theta^*\in\Theta$
+$$\sqrt{nI(\theta^*)}(\hat{\theta}n(\X_n)-\theta^*)\to_{\mathcal{D}(\dot;\theta^*)}Z\sim\text{Normal}(0,1)$$
+
+\theorem{}
+Under the conditions of \textbf{Theorem 8.1}, with $\hat{\theta}_n:=\hat{\theta}_n(\X)$ the maximum likelihood etimator
+$$\ell'_n(\hat{\theta}_n;\X)=\ell'_n(\theta^*;\X)+(\hat{\theta}_n-\theta^8)\{\ell''_n(\theta^*;\X)+R_n\}$$
+where $\frac{1}{n}R_n\to_{\prob(\cdot;\theta^*)}0$.\\
+
+\proof{Theorem 8.1}
+By \textbf{Theorem 8.2} $\ell'_n(\hat{\theta}_n;\X)=\ell'_n(\theta^*;\X)+(\hat{\theta}_n-\theta^8)\{\ell''_n(\theta^*;\X)+R_n\}$ where $\frac{1}{n}R_n\to_{\prob(\cdot;\theta^*)}0$.\\
+Since $\hat{\theta}_n$ is the maximum likelihood estimator \& the \textit{Fisher Information Regularity Conditions} hold, the score at $\ell'(\hat{\theta}_n;X)=0$.\\
+Hence, $0=\ell''(\hat{\theta}_n;X)=\ell'_n(\theta;X)+(\hat{\theta}_n-\theta^*)\{\ell''(\theta;X)+R_n\}$.\\
+Rearranging \& rescalling by $\sqrt{n}$ gives
+$$\sqrt{n}(\hat{\theta}_n-\theta^*)=\frac{\frac{1}{\sqrt{n}}\ell'(\theta^*;X)}{-\frac{1}{\sqrt{n}}\{\ell''(\theta^*;X)+R_n}=:\frac{U_n}{V_n-\frac{R_n}{n}}$$
+Recall that $\ell'_n(\theta^*;X)=\sum\limits_{i=1}^n\ell'(\theta;X_i)$ and $\ell''_n(\theta^*;X)=\sum\limits_{i=1}^n\ell''(\theta^*;X_i)$.\\
+Since $\expect(\ell'(\theta^*;X_i);\theta^*)=0$ and $\var(\ell'(\theta^*;X_i);\theta^*)=I(\theta^*)$\\$\implies U_n\to_{\mathcal{D}(\cdot;\theta^*)}U\sim\text{Normal}(0,I(\theta^*))$ by the \textit{Central Limit Theorem}.\\
+We observed that $V_n\to_{\prob(\cdot;\theta^*)}I(\theta^*)$ by the \textit{Weak Law of Large Numbers} since ${\expect(-\ell''(\theta^*;X_i);\theta^*)=I(\theta^*)}$.\\
+It follows that $V_n-\frac{1}{n}R_n\to_{\prob(\cdot;\theta^*)}I(\theta^*)$ by \textit{Slutsky's Theorem}.\\
+Using \textit{Slutsky's Theorem} again
+$$\sqrt{n}(\hat{\theta}_n-\theta^*)=\frac{U_n}{V_n-\frac{1}{n}R_n}\to_{\mathcal{D}(\cdot;\theta^*)}\frac{\sqrt{I(\theta^*)}}{I(\theta^*)}Z\text{ where }Z\sim\text{Normal}(0,1)$$
+We can rewrite this as
+$$\sqrt{nI(\theta^*)}(\hat{\theta}_n-\theta^*)\to_{\mathcal{D}(\cdot;\theta^*)}Z\sim\text{Normal}(0,1)$$
+
+\proof{Theorem 8.2}
+\textit{This is an non-examinable, sketch proof of \textbf{Theorem 8.2}}.\\
+By the regularity conditions and the mean alue theorem
+$$\frac{\ell_n'(\theta;\x)-\ell'_n(\theta^*;\x)}{\theta-\theta^*}=\ell''_n(\tilde{\theta};\x)$$
+for some $\tilde{\theta}\in(\theta,\theta^*)$. Hence, we deduce that
+\[\begin{array}{rcl}
+\ell'_n(\theta;\x)-\ell_n'(\theta^*;\x)&=&(\theta-\theta^*)\ell''_n(\tilde{\theta};\x)\\
+&=&(\theta-\theta^*)\{\ell''_n(\theta^*;\x)+[\ell''_n(\tilde{\theta};\x)-\ell_n(\theta^*;\x)]\}\\
+&=&(\theta-\theta^*)\{\ell''_n(\theta;\x)+R_n(\theta,\theta^*,\x)\}
+\end{array}\]
+Now we replace $\theta$ with the maximum likelihood estimator $\hat{\theta}_n:=\hat{\theta}_n(\X)$. We find
+$$\ell'(\hat{\theta}_n;\X)=\ell'_n(\theta^*;\X)+(\hat{\theta}_n-\theta^*)\{\ell''_n(\theta^*;\X)+R_n(\hat{\theta}_n,\theta^*,\x\}$$
+and we need to analyse $R_n$.\\
+Since $\hat{\theta}_n\to_{\prob(\cdot;\theta^*)}\theta^*$ we can take $n$ large enough that $\prob(\hat{\theta}_n\in\Xi;\theta^*)$ with arbitrarily high probability.\\
+On the event $\{\hat{\theta}\in\Xi\}$ and we have $\{\tilde{\theta}_n\in\Xi\}$ since $\tilde{\theta}_n\in(\hat{\theta}_n,\theta^*)$ and
+\[\begin{array}{rcl}
+|\frac{1}{n}R_n|&=&\frac{1}{n}|\ell''_n(\tilde{\theta}_n;\X)-\ell_n''(\theta^*;\X)|\\
+&=&\dfrac{1}{n}\left|\sum\limits_{i=1}^n\ell''(\tilde{\theta}_n;X_i)-\ell''(\theta^*;X_i)\right|\\
+&\leq&\dfrac{1}{n}\sum\limits_{i=1}^n\left|\ell''(\tilde{\theta}_n;X_i)-\ell''(\theta^*;X_i)\right|\\
+&\leq&\Delta(\tilde{\theta}_n-\theta^*)\left\{\dfrac{1}{n}\sum\limits_{i=1}^nC(X_i)\right\}
+\end{array}\]
+from the smoothness condition on $\ell''$.\\
+From the \textit{Weak Law of Large Numbers}
+$$\frac{1}{n}\sum_{i=1}^nC(X_i)\to_{\prob(\cdot;\theta^*)}\expect(C(X_1);\theta^*)<\infty$$
+and from the consistency of $\{\hat{\theta}_n\}$ and $\{\tilde{\theta}_n\}$ and continuity of $\Delta(\cdot)$ we have by the \textit{Continuous Mapping Theorem}
+$$\Delta(\tilde{\theta}_n-\theta^*)\to_{\prob(\cdot;\theta^*)}0$$
+Hence, $\frac{1}{n}R_n\to_{\prob(\cdot;\theta^*)}0$\proved
+
+\definition{Asyptically Efficient}
+A sequence of estimators $\{\hat{\theta}_n(\X)\}$ is \textit{Asymptotically Efficient} if either its mean-squared error converges to the \textit{Cramer-Rao Lower Bound}
+$$\forall\theta\in\Theta,\ n\text{MSE}(\hat{\theta}_n(\X_n);\theta)\underset{n\to\infty}{\longrightarrow}\frac{1}{I)\theta)}$$
+or $\hat{\theta}_n$ is \textit{Asumptotically Normally Distributed} in the sense of \textbf{Theorem 8.1}
+$$\forall\ \theta\in\Theta,\ \sqrt{nI(\theta)}(\hat{\theta}-\theta)\to_{\mathcal{D}(\cdot;\theta)}Z$$
+\nb The variance of $\frac{Z}{\sqrt{(nI(theta^*)}}$ is exactly $\frac{1}{nI(\theta)}$.\\
+
+\theorem{}
+Under the conditions of \textbf{Theorem 8.1} the maximum likelihood estimator is \textit{asymptotically efficient}.\\
+
+\definition{Regular Statistical Model}
+Any \textit{Statistical Model} which satisfies the condition of \textbf{Theorem 8.1} is a \textit{Regular Statistical Model}.\\
+
+\remark{Why use MLE over others}
+Due to the \textit{Asymptotic Efficieny} of maximum likelihood estimators it is beter to use them in \textit{Regular Statistical Models}.\\
+
+\section{Confidence Sets Around the Maximum Likelihood Estimator}
+
+\definition{Coverage of an Interval}
+Let $\X\sim f_n(\cdot;\theta),\ \theta\in\Theta=\reals,\ L(\cdot):\mathcal{X}^n\to\Theta$ and $U(\cdot):\mathcal{X}^n\to\Theta$ where $\forall\ \x\in\mathcal{X}^n,\ L(\x)<U(\x)$. Then, $\forall\theta\in\Theta$ the coverage $C_\mathcal{I}(\theta)$ of the random interval $\mathcal{I}(\X):=[L(\X),U(\X)]$ at $\theta$ is
+$$C_\mathcal{I}(\theta):=\prob(\theta\in[L(\X),U(\X)];\theta)=\prob(L(\X)\leq\theta\leq U(\X);\theta)$$
+
+\remark{Coverage of an Interval in Words}
+$C_\mathcal{I}(\theta)$ is the probabiltiy that the deterministic quantity $\theta$ falls into the random interval $\mathcal{I}(\X)$ under the probability distribution $\prob(\cdot;\theta)$ wher $\X\sim f_n(\cdot;\theta)$.\\
+
+\remark{Multi-Dimensional Coverage}
+We can extend \textit{Coverage of an Interval} to the multi-dimensional case by considering confidence sets and then considering the probability $\prob(\theta\in\mathcal{I}(\X);\theta)$.\\
+
+\definition{Confidence Interval}
+$\forall\ \alpha\in[0,1]$ we say that an inerval $\mathcal{I}(\X):=[L(\X),U(\X)]$ is a $1-\alpha$ confidence interval if $\forall\ \theta\in\Theta$ its coverage is at least $1-\alpha$ or more formally $\inf_{\theta\in\Theta}C_\mathcal{I}(\theta)\geq1-\alpha$.\\
+
+\remark{Exact Confidence Interval}
+If $C_\mathcal{I}(\theta)=1-\alpha\ \forall\ \theta\in\Theta$ then $\mathcal{I}$ is an exact $1-\alpha$ confidence interval.\\
+
+\definition{Observed Confidence Interval}
+For an interval $\mathcal{I}(\cdot)=[L(\cdot),U(\cdot)]$ with $L:\mathcal{X}^n\to\Theta$ and $U:\mathcal{X}^n\to\Theta$, and a realisation $\x$, the corresponding \textit{Observed Confidence Interval} is $\mathcal{I}(\x)$.\\
+\nb Nothing interesting can be said about the probability that $\theta\in\mathcal{I}(\x)$ since $\theta$ and $\mathcal{I}(\x)$ are deterministic.\\
+
+\notation{Quantile of $\text{Normal}(0,1)$}
+For any $\beta\in(0,1)$ let $z_\beta\in\reals$ be such that for $Z\sim\text{Normal}(0,1)$, $1-\Phi(z_\beta)=\prob(Z>z_\beta)=\beta$.\\
+
+\example{Confidence interval for the mean of a Normal Distribution}
+Let $\X\iid\text{Normal}(\mu,\sigma^2)$ for $\theta=(\mu,\sigma^2)\in\reals\times\reals^{\geq0}$ and wher $\sigma^2$ is known.\\
+Consider the estimator $\hat{\mu}_n=\hat{\mu}_n(\X)=\frac{1}{n}\sum_{i=1}^nX_i$ of $\mu$. Then we know that the following non-asymptotic result holds.\\
+We have $\frac{1}{n}\sum_{i=1}^nX_i\sim\text{Normal}(\mu,\frac{\sigma^2}{n}$. Thus
+$$\dfrac{\frac{1}{n}\sum_{i=1}^nX_i-\mu}{\sqrt{\sigma^2/n}}\sim\text{Normal}(0,1)$$
+Then
+\[\begin{array}{rcl}
+\forall\ \alpha\in(0,1)&,&\prob\left(z_{1-\alpha/2}\leq\dfrac{\hat{\mu}_n(\X)-\mu}{\sqrt{\sigma^2/n}}\leq z_{\alpha/2};\mu\right)\\
+&=&\prob\left(\dfrac{\hat{\mu}_n(\X)-\mu}{\sqrt{\sigma^2/n}}\leq z_{\alpha/2}\right)-\prob\left(\dfrac{\hat{\mu}_n(\X)-\mu}{\sqrt{\sigma^2/n}}\leq z_{1-\alpha/2}\right)\\
+&=&\left(1-\frac{\alpha}{2}\right)-\left(1-\left(1-\frac{\alpha}{2}\right)\right)\\
+&=&1-\alpha
+\end{array}\]
+By symmetry we notice that $z_{1-\frac{\alpha}{2}}=-z_{\alpha}{2}$.\\
+By rearranging we have the equivalence of events
+$$\left\{-z_{\alpha/2}\leq\frac{\hat{\mu}_n(\X)-\mu}{\sqrt{\sigma^2/n}}\leq z_{\alpha/2}\right\}=\left\{\hat{\mu}_n(\X)-z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\leq\mu\leq\hat{\mu}_n(\X)+z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\right\}$$
+To rearrange we separate into two events \& treat then seperately
+\[\begin{array}{rcl}
+\left\{\dfrac{\hat{\mu}_n(\X)-\mu}{\sigma/\sqrt{n}}\leq z_{\alpha/2}\right\}&=&\left\{\dfrac{\hat{\mu}_n(\X)}{\sigma/\sqrt{n}}-z_{\alpha/2}\leq\dfrac{\mu}{\sigma/sqrt{n}}\right\}\\
+&=&\left\{\mu\geq\hat{\mu}_n(\X)-\frac{\sigma}{\sqrt{n}}z_{\alpha/2}\right\}
+\end{array}\]
 
 \newpage
 \setcounter{section}{-1}
