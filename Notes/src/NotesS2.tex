@@ -894,6 +894,54 @@ To rearrange we separate into two events \& treat then seperately
 \left\{\dfrac{\hat{\mu}_n(\X)-\mu}{\sigma/\sqrt{n}}\leq z_{\alpha/2}\right\}&=&\left\{\dfrac{\hat{\mu}_n(\X)}{\sigma/\sqrt{n}}-z_{\alpha/2}\leq\dfrac{\mu}{\sigma/sqrt{n}}\right\}\\
 &=&\left\{\mu\geq\hat{\mu}_n(\X)-\frac{\sigma}{\sqrt{n}}z_{\alpha/2}\right\}
 \end{array}\]
+Similarly
+\[\begin{array}{rcl}
+\left\{-z_{\alpha/2}\leq\dfrac{\hat{\mu}_n(X)-\mu}{\sqrt{\sigma^2/n}}\right\}&=&\left\{\dfrac{\mu}{\sigma/\sqrt{n}}\leq\dfrac{\hat{\mu}_n(X)}{\sigma/\sqrt{n}}+z_{\alpha/2}\right\}\\
+&=&\left\{\mu\leq\hat{\mu}_n(X)+z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\right\}
+\end{array}\]
+So the interval $\mathcal{I}(X)=[L(X),U(X)]$ where $L(\x)=\bar{x}-z_{\alpha/2}\frac{\sigma}{\sqrt{n}}$ and $U(\x)=\bar{x}+z_{\alpha/2}\frac{\sigma}{\sqrt{n}}$ is an $1-\alpha$ exact confidence interval.\\
+
+\remark{Confidence Intervals with unknown $\sigma^2$}
+When $\sigma^2$ is unknown we can defined $\{\hat{\sigma}^2_n\}_{n\in\nats}$ to be a consistent sequence of estimators of $\sigma^2$ (\eg the sample variance)
+$$\hat{\sigma}^2_n:=\frac{1}{n-1}\sum_{i=1}^n(X_i-\hat{\mu}_n(\X))^2$$
+
+\section{Asymptotic Approximation of Confidence Intervals}
+
+\theorem{}
+Assume $\X\sim f(\cdot;\theta^*)$. Let $\{\hat{\theta}_n\}_{n\in\nats}$ be a consistent sequence of estimators of $\theta^*$ and assume that $\{\hat{\theta}_n\}$ is asymptotically normal in the sense that
+$$\exists\ \sigma^2>0\text{ st }\frac{\hat{\theta}_n(\X)-\theta^*}{\sqrt{\sigma^2/n}}\to_{\mathcal{D}(\cdot;\theta^*)}Z\sim\text{Normal}(0,1)$$
+Then $\forall\ \alpha\in(0,1),\ \mathcal{I}_n(\X)-[L_n(\X),U_n(\X)]$ is an asymptotically exact $1-\alpha$ condifence interval, where $L_n(\x):=\hat{\theta}_n(\x)-z_{\alpha/2}\frac{\sigma}{\sqrt{n}}$ and $U_n(\x):=\hat{\theta}(\x)+z_{\alpha/2}\frac{\sigma}{\sqrt{n}}$.\\
+
+\proof{Theorem 10.1}
+Let $\{W_n\}_{n\in\nats}$ be defined by $W_n:=\frac{\hat{\theta}_n(X)-\theta^*}{\sqrt{\sigma^2/n}}$.\\
+Since $W_n\to_{\mathcal{D}(\cdot;\theta^*)}Z\sim\text{Normal}(0,1)$ we have
+\[\begin{array}{rcl}
+\prob(-z_{\alpha/2}\leq W_n\leq z_{\alpha/2})&=&F_{W_n}(z_{\alpha/2})-F_{W_n}(-z_{\alpha/2})\\
+&\underset{n\to\infty}{\longrightarrow}&\Phi(z_{\alpha/2})-\Phi(-z_{\alpha/2})\\
+&=&1-\alpha
+\end{array}\]
+Similary to before we have the equivalence of events
+$$\{-z_{\alpha/2}\leq W_n\leq z_{\alpha/2}\}=\left\{\hat{\theta}_n-z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\leq\theta^*\leq\hat{\theta}_n+z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\right\}$$
+So $\lim_{n\to\infty}\prob\left(\hat{\theta}_n(X)-z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\leq\theta^*\leq\hat{\theta}_n(X)+z_{\alpha/2}\frac{\sigma}{\sqrt{n}};\theta^*\right)=1-\alpha$
+
+\remark{Theorem 10.1}
+The confidence interval is only asymptotically exact. For finite $n$, the overage of the confidence interval will be different from $1-\alpha$ but the difference will converge to 0 as $n$ increases. In practice $\sigma^2$ may be unknown, in these cases substitute for a consistent sequence of estimators of $\sigma^2$.
+
+\theorem{}
+Assum $\X\sim f(\cdot;\theta^*)$ let $\{\hat{\theta}_n\}_{n\in\nats}$ be a consistent sequence of estimators of $\theta^*$ and assume that $\{\hat{\theta}_n\}$ is asymptotically normal in the sense that
+$$\exists\ \sigma^2>0\text{ st }\frac{\hat{\theta}_n(\X)-\theta^*}{\sqrt{\sigma^2/n}}\to_{mathcal{D}(\cdot;\theta^*)}Z\sim\text{Normal}(0,1)$$
+Assume also that $\{\hat{\sigma}^2_n\}_{n\in\nats}$ is a consistent sequence of estimators of $\sigma^2$. Then $\forall\ \alpha\in(0,1),\ \mathcal{I}_n(\X)=[L_n(\X),U_n(\X)]$ is an asymptotically exact $1-\alpha$ confidence interval, where $L_n(\x):=\hat{\theta}_n(\x)-z_{\alpha/2}\sqrt{\hat{\sigma}_n^2(\x)/n}$ and $U_n(\x):=\hat{\theta}_n(\x)+z_{\alpha/2}\sqrt{\hat{\sigma}_n^2(\x)/n}$.\\
+
+\proof{Theorem 10.2}
+Define $W_n:=\frac{\hat{\theta}_n-\theta^*}{\sqrt{\hat{\sigma}^2_n(X)/n}}=\frac{\hat{\theta}_n(X)-\theta^*}{\sqrt{\sigma^2/n}}-\sqrt{\frac{\sigma^2}{\hat{\sigma}^2_n(X)}}$.\\
+By consistency of $\{\hat{\sigma}^2_n\}_{n\in\nats}$ and the \textit{Continuous Mapping Theorem}
+$$\sqrt{\frac{\sigma^2}{\hat{\sigma}^2_n(X)}}\to_{\prob(\cdot;\theta^*)}1$$
+By \textit{Slutsky's Theorem}
+$$W_n\to_{\mathcal{D}(\cdot;\theta^*)}Z\sim\text{Normal}(0,1)$$
+The rest of the proof is the same as for \textbf{Theorem 10.1}.\\
+
+\remark{Theorem 10.2}
+For a given $n$ the quality of the normal approximatioin will be affected by this additional approximation. One may find that for less accurate estimators of $\sigma^2$, the $n$ required for the confidence interval to have almost the right coverage will be higher.
 
 \newpage
 \setcounter{section}{-1}
