@@ -943,6 +943,111 @@ The rest of the proof is the same as for \textbf{Theorem 10.1}.\\
 \remark{Theorem 10.2}
 For a given $n$ the quality of the normal approximatioin will be affected by this additional approximation. One may find that for less accurate estimators of $\sigma^2$, the $n$ required for the confidence interval to have almost the right coverage will be higher.
 
+\section{Estimating the Information for Maximum Likelihood Estimates}
+
+\remark{Applying Theorem 10.2 to sequences of MLEs for regular statistical models}
+When dealing with \textit{Maximum Likeihood Estimators} for regular statistical models we have that $\sigma^2=1/I(\theta^*)$ thus
+$$\sqrt{nI(\theta^*)}(\hat{\theta}_n-\theta^*)\to_{\mathcal{D}(\cdot;\theta^*)}Z\sim\text{Normal}(0,1)$$
+However the \textit{Fisher Information} is unknown so we consider two cases
+\begin{enumerate}[label=\roman*)]
+	\item When the expectation, $I(\theta^*)=-\expect(\ell''(\theta^*;X_1);\theta^*)$, can be calculated. In this case we replace $\theta^*$ with $\hat{\theta}_n$ in the equation.
+	\item When the expectation \textbf{cannot} be calcualted we invoke the \textit{Weak Law of Large Numbers} and onsider the sequence of estimators, $J_n(\hat{\theta}_n):=-\frac{1}{n}\sum_{i=1}^n\ell''(\hat{\theta}_n;X_i)$.
+\end{enumerate}
+
+\theorem{Case i)}
+Assume $\{\hat{\theta}_n\}$ is a sequence of \textit{Maximum Likelihood Estimators} st $\hat{\theta}_n\to_{\prob(\cdot;\theta^*)}\theta^*$ and $I$ is a continuous function of $\theta$. Then $I(\hat{\theta}_n)\to_{\prob(\cdot;\theta^*)}I(\theta^*)$.\\
+\nb The proof of this follows directly from the \textit{Continous Mapping Function}.\\
+
+\remark{Theorem 11.1}
+It is only necessary for $I$ to be continuous in the neighbourhood of $\theta^*$. This is due to an extension of the \textit{Continuous Mapping Theorem} that states
+\begin{center}
+If $X_n\to_\prob X$ and $g$ is a function with discontinuity set $D$ then $\prob(X\in D)=0\implies (X_n)\to_\prob g(X)$.
+\end{center}
+
+\theorem{Case ii)}
+Assume that $\{\hat{\theta}_n\}$ is a sequence of \textit{Maximum Likelihood Estimators} st
+\begin{enumerate}[label=\roman*)]
+	\item $\hat{\theta}_n\to_{\prob(\cdot;\theta^*)}\theta^*$;
+	\item $I(\theta)=-\expect(\ell''(\theta;X);\theta)\ \forall\ \theta\in\Theta$
+	\item $\exists\ C:\mathcal{X}\to[0,\infty)$ st $\expect(C(X_1);\theta^*)<\infty,\ \Xi\subset\Theta$ is an open set containing $\theta^*$ and $\Delta(\cdot):\Xi\to[0,\infty)$ is continuous at 0 st $\Delta(0)=0$, and st ${\forall\ \theta,\theta^*,x\in \Xi^2\times\mathcal{X}\ |\ell''(\theta;x)-\ell''(\theta';x)|\leq C(x)\Delta(\theta-\theta')}$
+\end{enumerate}
+Then
+$$J_n(\hat{\theta}_n)\to_{\prob(\cdot;\theta^*)}I(\theta^*)$$
+
+\proof{Theorem 11.2}
+Consider the following decomposition
+\[\begin{array}{rcl}
+J_n(\hat{\theta})-I(\theta^*)&=&-\frac{1}{n}\sum\limits_{i=1}^n\ell''(\hat{\theta}_n;X_i)-I(\theta^*)\\
+&=&T_1+T_2\\
+\text{Where }T_1&=&-\frac{1}{n}\sum\limits_{i=1}^n\ell''(\hat{\theta}_n;X_i)+\frac{1}{n}\sum\limits_{i=1}^n\ell''(\theta^*;X_i)\\
+\text{and }T_2&=&-\left\{\frac{1}{n}\sum\limits_{i=1}^n\ell''(\theta^*;X_i\right\}-I(\theta^*)
+\end{array}\]
+Now the first term can be upper bounded as follows (for sufficiently large $n$, with arbitrary large probabiltiy the second inequality holds)
+\[\begin{array}{rrl}
+|T_1|&=&\left|-\frac{1}{n}\sum\limits_{i=1}^n\ell''(\hat{\theta});X_i)+\frac{1}{n}\sum\limits_{i=1}^n\ell''(\theta^*;X_i)\right|\\
+&\leq&\frac{1}{n}\sum\limits_{i=1}^n\left|\ell''(\hat{\theta}_n;X_i)-\ell''(\theta^*;X_i)\right|\\
+&\leq&\Delta(\theta{\theta}_n-\theta^*)\frac{1}{n}\sum\limits_{i=1}^nC(X_i)
+\end{array}\]
+By the \textit{Weak Law of Large Numbers}
+$$\frac{1}{n}\sum_{i=1}^nC(X_i)\to_{\prob(\cdot;\theta^*)}\expect(C(X_1);\theta^*)$$
+by the assumed consistency of $\{\hat{\theta}_n\}_{n\in\nats}$ and continuity of $\Delta$ we have that
+$$\Delta(\hat{\theta}_n-\theta^*)\to_{\prob(\cdot;\theta^*)}0$$
+Consequently $T_1\overset{n\to\infty}{\longrightarrow}_{\prob(\cdot;\theta^*)}0$.\\
+By the \textit{Weak Law of Large Numbers} we have
+\[\begin{array}{rrrl}
+&-\frac{1}{n}\sum\limits_{i=1}^n\ell''(\theta^*;X_i)&\to_{\prob(\cdot;\theta^*)}&I(\theta^*)\\
+\implies&T_2=-\frac{1}{n}\sum\limits_{i=1}^n\ell''(\theta^*;X_i)-I(\theta^*)&\to_{\prob(\cdot;\theta^*)}&0
+\end{array}\]
+Since $T_1\overset{n\to\infty}{\longrightarrow}_{\prob(\cdot;\theta^*)}0$ and $T_2\overset{n\to\infty}{\longrightarrow}_{\prob(\cdot;\theta^*)}0$ we deduce from the earlier decomposition that
+$$J_n(\hat{\theta}_n)\to_{\prob(\cdot;\theta^*)}I(\theta^*)$$
+\proved
+
+\remark{Summary}
+Whenever \textbf{Theorem 8.1} holds for a sequence of \textit{Maximum Likelihood Estimators}
+$$\ie\ \sqrt{nI(\theta^*)}(\hat{\theta}_n-\theta^*)\to_{\mathcal{D}(\cdot;\theta^*)}Z\sim\text{Normal}(0,1)$$
+we can replace $I(\theta^*)$ with one of two options
+\begin{enumerate}[label=\roman*)]
+	\item $I(\hat{\theta}_n)$ whenever
+	\begin{enumerate}
+		\item $I(\theta)$ is continuous in a neighbourhood of $\theta^*$; and,
+		\item The interval $[L(\X),U(\X)]$ with $L(\x):=\hat{\theta}_n-z_{\alpha/2}\sqrt{nI(\hat{\theta})n)}$ and $U(\x):=\hat{\theta}_n+z_{\alpha/2}\sqrt{nI(\hat{\theta})n)}$ is an asymptotically exact $1-\alpha$ confidence interval for $\theta*$.
+	\end{enumerate}
+	\item $J_n(\hat{\theta}_n):=-\frac{1}{n}\sum\limits_{i=1}^n\ell''(\hat{\theta}_n;X_i)$ whenever
+	\begin{enumerate}
+		\item The assumptions of \textbf{Theorem 11.2} hold; and,
+		\item The interval $[L(\X),U(\X)]$ with $L(\x):=\hat{\theta}_n-z_{\alpha/2}\sqrt{nJ_n(\hat{\theta}_n}$ and $U(\x):=\hat{\theta}_n+z_{\alpha/2}\sqrt{nJ_n(\hat{\theta}_n}$ is an asymptotically exact $1-\alpha$ confidence interval for $\theta^*$
+	\end{enumerate}
+\end{enumerate}
+
+\example{Coin Flipping}
+Here the new results for this chapter are applied in order to simplfy methods used in previous examples when finding confidence intervals \& upper bounds on $\theta^*$.\\
+The sequence of estimators $\hat{\theta}_n:=\frac{1}{n}\sum_{i=1}^nX_i$ is consistent by the \textit{Weak Law of Large Numbers} and the conditions for asymptotic normality hold $\forall\ \theta\in\Theta$. Hence
+$$\sqrt{nI(\theta^*)}(\hat{\theta}_n-\theta^*)\to_{\mathcal{D}(\cdot;\theta^*)}Z\sim\text{Normal}(0,1)$$
+We can compute the \textit{Fisher Information} $\forall\ \theta\in\Theta$. We have
+\[\begin{array}{rrcl}
+&\ell'(\theta(x)&=&\frac{x}{\theta}-\frac{1-x}{1-\theta}\\
+\text{and }&\ell''(\theta;x)&=&-\frac{x}{\theta^2}-\frac{1-x}{(1-\theta)^2}\\
+\implies&I(\theta)&=&\frac{1}{\theta}+\frac{1}{1-\theta}\\
+&&=&\frac{1}{\theta(1-\theta)}
+\end{array}\]
+In practice $\theta^*$ is unknown so we replace $I(\theta^*)$ with $I(\hat{\theta}_n)$ to give the asymptotically exact confidence interval, $[L(\X),U(\X)]$ where
+$$L(\X)=\hat{\theta}_n-z_{\alpha/2}\sqrt{\frac{\hat{\theta}_n(1-\hat{\theta}_n)}{n}}\text{ and }U(\X)=\hat{\theta}_n+z_{\alpha/2}\sqrt{\frac{\hat{\theta}_n(1-\hat{\theta}_n)}{n}}$$
+If we did not know how to computer $I(\theta)$ we could instead compute
+\[\begin{array}{rcl}
+J_n(\hat{\theta}_n)&=&-\frac{1}{n}\sum\limits_{i=1}^n\ell''(\hat\theta_n;X_i)\\
+&=&-\frac{1}{n}\sum\limits_{i=1}^n\left\{-\dfrac{X_i}{\hat\theta_n^2}-\dfrac{1-X_i}{(1-\hat\theta_n)^2}\right\}\\
+&=&\frac{1}{\hat\theta_n^2}\left(\frac{1}{n}\sum\limits_{i=1}^nX_i\right)+\frac{1}{(1-\hat\theta_n)^2}\left(1-\frac{1}{n}\sum\limits_{i=1}^nX_i\right)\\
+&=&\frac{\hat\theta_n}{\hat\theta_n^2}+\frac{1-\hat\theta_n}{(1-\hat\theta_n)^2}\\
+&=&\frac{1}{\hat\theta_n(1-\hat\theta_n)}
+\end{array}\]
+In this case $J_n(\hat\theta_n)=I(\hat\theta_n)$, this is not always true.\\
+
+\definition{Observed Fisher Information}
+Let $\X\iid f(\cdot;\theta^*)$ be a vector of $n$ random variables.\\
+The \textit{Observed FIsher Information} at $\theta$ is
+$$nJ_n(\theta)=-\ell''(\theta;\X)=-\sum\limits_{i=1}^n\ell''(\theta;X_i)$$
+\nb $\expect(J_n(\theta^*);\theta^*)=I(\theta^*)$ and that it differs from the \textit{Fisher Information} (under the \textit{Fisher Information Regularity Conditions} by not being an expectation.
+
 \newpage
 \setcounter{section}{-1}
 \section{Appendix}
