@@ -1048,6 +1048,129 @@ The \textit{Observed FIsher Information} at $\theta$ is
 $$nJ_n(\theta)=-\ell''(\theta;\X)=-\sum\limits_{i=1}^n\ell''(\theta;X_i)$$
 \nb $\expect(J_n(\theta^*);\theta^*)=I(\theta^*)$ and that it differs from the \textit{Fisher Information} (under the \textit{Fisher Information Regularity Conditions} by not being an expectation.
 
+\section{Transformations and Confidence Intervals}
+
+\definition{Wald Approach}
+The confidence intevals seen so far fit the \textit{Wald Approach}.\\
+If $\X\iid f(\cdot;\theta^*)$ where $\theta^*\in\Theta\subset\reals$ then one can define a confidence interval for $\theta^*$ using the asymptotic distribution of the \textit{Maximum Likelihood Estimator}
+$$L(\x)=\hat\theta_n-z_{\alpha/2}\sqrt{nI(\theta^*)}\text{ and }U(\x)=\hat\theta_n+z_{\alpha/2}\sqrt{nI(\theta^*)}$$
+which ensures that as $n\to\infty,\ \prob(\theta^*\in[L(\X),U(\X)]\to1-\alpha$.\\
+
+\proposition{Transfomed Confidence Interval - Increasing}
+Let $\tau:=g(\theta)$ be a bijective, continously differentiable \& increasing function.\\
+This gives a direct transformation of $[L(\x),U(\x)]$ to $[g(L(\x)),g(U(\x))]$.
+$$\ie\ \{\x\in\mathcal{X}^n:L(\x)\leq\theta^*\leq U(\x)\}=\{\x\in\mathcal{X}^n:g(L(\x))\leq\tau^*\leq g(U(\x))\}$$
+Consequently
+\[\begin{array}{rcl}
+\prob(\theta^*\in[L(\X),U(\X)];\theta^*)&=&\prob(\tau^*\in[g(L(\X)),g(U(\X))]\\
+&\to&1-\alpha\text{ as }n\to\infty
+\end{array}\]
+\ie $[g(L(\X)),g(U(\X))]$ is an asymptotically exact $1-\alpha$ for $\tau^*$.\\
+
+\proposition{Trasformed Confidence Interval - Decreasing}
+Let $\tau:=g(\theta)$ be a bijective, continously differentiable \& decreasing function.\\
+This gives a direct transformation of $[L(\X),U(\X)]$ to $[g(U(\X)),g(L(\X))]$ which is an asymptotically exact $1-\alpha$ confidence interval for $\tau^*$.\\
+
+\remark{Deriving Reparametised Confidence Intervals}
+We can obtain a reparametised \textit{Confidence Interval} by working with the reparameterised likelihood, $\tilde{f}(\x;\tau):=f(\x;g^{-1}(\tau))$. Now we can find $\tilde{L}(\x)$ and $\tilde{U}(\x)$ directly.\\
+
+\theorem{}
+Assume $X\in f(\cdot;\theta)$ for $\theta\in\Theta\subseteq\reals$ and let $\tau:=g(\theta)$ where $g$ is bijective \& continuosly diferentiable.\\
+The \textit{Fisher Infromatoin} for the parameterisation $\tilde{f}(x;\tau):=f(x;g^{-1}(\tau))$ is
+$$\tilde{I}(\tau)=\frac{I(\theta)}{g'(\theta)^2}$$
+
+\proof{Theorem 12.1}
+Since $\tilde{f}(x;\tau)=f(x;g^{-1}(\tau))$ the log-likelihood for $tau$ is
+$$\tilde\ell(\tau;x)=\ln\tilde{f}(x;\tau)=\ln f(x;g^{-1}(\tau))$$
+The score is therefore
+\[\begin{array}{rcl}
+\tilde\ell'(\tau;x)&=&\frac{d}{d\tau}\ln f(x;g^{-1}(\tau))\\
+&=&\frac{d}{d\theta}\ln f(x;g^{-1}(\tau))\times\frac{d}{d\tau}g^{-1}(\tau)\\
+&=&\ell'(g^{-1}(\tau);x)\times\dfrac{1}{g'(g^{-1}(\tau))}\\
+&=&\dfrac{\ell'(\theta;x)}{g'(\theta)}
+\end{array}\]
+No we use the definition of \textit{Fisher Information}
+\[\begin{array}{rcl}
+\tilde{I}(\tau)&=&\expect(\tilde\ell'(\tau;X)^2;\tau)\\
+&=&\expect\left(\dfrac{\ell'(\theta;X)^2}{g'(\theta)^2};\theta\right)\\
+&=&\dfrac{1}{g'(\theta)^2}\expect\left(\ell'(\theta;X)^2;\theta\right)\\
+&=&\dfrac{I(\theta)}{g'(\theta)^2}
+\end{array}\]
+
+\remark{}
+As a consequence, for regular statistical models
+$$\sqrt{n\tilde{I}(\tau^*)}(\hat\tau_n-\tau^*)\to_{\mathcal{D}(\cdot;\tau^*)}Z\sim\text{Normal}(0,1)$$
+is equivalent to
+$$\sqrt{\dfrac{nI(\theta^*)}{g'(\theta^*)^2}}(\hat\tau_n-\tau^*)\to_{\mathcal{D}(\cdot;\theta^*)}Z\sim\text{Normal}(0,1)$$
+which leads to 
+\[\begin{array}{rcl}
+\tilde{L}(\x)&=&\hat\tau_n-z_{\alpha/2}\sqrt{\dfrac{g'(\theta^*)^2}{nI(\theta^*)}}\\
+\tilde{U}(\x)&=&\hat\tau_n+z_{\alpha/2}\sqrt{\dfrac{g'(\theta^*)^2}{nI(\theta^*)}}
+\end{array}\]
+\nb This is not necessarily the same \textit{Confidence Interval} as obtained by transforming $[L(\x),U(\x)]$ directly.\\
+
+\example{}
+Consider $\X\iid\text{Normal}(\mu,1)$.\\
+We know that the \textit{Maximum Likelihood Estiamtor} of $\mu$ is $\bar{X}\sim\text{Normal}\left(\mu,\frac{1}{n}\right)$.\\
+A $1-\alpha$ \textit{Confidence Interval} for $\mu$ is
+$$\left[\bar{X}-\dfrac{z_{\alpha/2}}{\sqrt{n}},\bar{X}+\dfrac{z_{\alpha/2}}{\sqrt{n}}\right]$$
+Consider the parameterisation $\tau=\frac{1}{\mu}$. This corresponds to $g(x)=\frac{1}{x}$ which is bijective \& continuously differentiable except at 0, and is decreasing.\\
+Hence, a $1-\alpha$ exact \textit{Confidence Interval} for $\tau$ is
+$$\left[\frac{1}{\bar{X}+z_{\alpha/2}/\sqrt{n}},\frac{1}{\bar{X}-z_{\alpha/2}/\sqrt{n}}\right]$$
+Consider the two ways to find an asymptotically $1-\alpha$ \textit{Exact Confidence Interval} for $\tau$. After direct calculations we find that
+$$\tilde\ell''(\tau;x)=-\frac{3}{\tau^4}+\frac{2x}{\tau^3}$$
+So
+$$\tilde{I}(\tau):=i\expect(\tilde\ell''(\tau;X);\tau)=\frac{3}{\tau^3}-\frac{2}{\tau^4}=\frac{1}{\tau^4}$$
+Noting that the \textit{Maximum Likelihood Estimator} for $\tau$ is $1/\bar{X}$ we find that
+$$\sqrt{\frac{n}{\tau^4}}\left(\frac{1}{\bar{X}}-\tau\right)\to_{\mathcal{D}(\cdot;\tau)}Z\sim\text{Normal}(0,1)$$
+so an asumptotically exact $1-\alpha$ \textit{Confidence Interval} is
+$$\left[\frac{1}{\bar{X}}-z_{\alpha/2}\frac{\tau^2}{\sqrt{n}},\frac{1}{\bar{X}}+z_{\alpha/2}\frac{\tau^2}{\sqrt{n}}\right]$$
+Alternatively, instead of working out $\tilde{I}(\tau)$ as above, we could use \textbf{Theorem 12.1} to find that
+$$\tilde{I}(\tau)=\frac{I(\theta)}{g'(\theta)^2},\quad\theta=g^{-1}(\tau)=\frac{1}{\tau}$$
+Since $I(\theta)=1$ and $g(\theta)=1/\theta\implies g'(\theta)=-1/\theta^2=-\tau^2$, we have
+$$\tilde{I}(\tau)=\frac{1}{(-1/\theta^2)^2}=\frac{1}{(-\tau^2)^2}=\frac{1}{\tau^4}$$
+
+\remarkk{Example 12.1}
+\begin{enumerate}[label=\roman*)]
+	\item The transformed \textit{Confidence Interval} is exact, which the second \textit{Confidence Interval} is not since $\sqrt{n/\tau^4}\left(\frac{1}{\bar{X}}-\tau\right)$ is not exactly normally distributed, but only asymptotically so.
+	\item The transformed \textit{Confidence Interval} is not generally centred at $\hat\tau$.
+	\item This serves as an example that convergence in distribution says nothing about convergence of moments. In particular, you can derive that $\frac{1}{\bar{X}}$ does not have a mean for any $\mu\in\reals$.
+\end{enumerate}
+
+\section{Likelihood Ratio Confidence Sets - Wilk's Approach}
+
+\remark{Motivation}
+Consider a \textit{Wald Confidence Interval} $\mathcal{I}(\theta^*)$.\\
+It is possible for some $\theta\not\in\mathcal{I}(\theta^*)$ to have a greater likelihood interval than some $\theta'\in\mathcal{I}(\theta^*)$. It is possible $\exists\ \theta\in\mathcal{I}(\theta^*)$ st $L(\theta;\x)=0$.\\
+\textit{Wald Confidence Intervals} are not invariant under reparameterisation.\\
+These features of \textit{Wald Confidence Intervals} motivate why we may wish to consider a different type of \textit{Confidence Interval}.\\
+
+\definition{Likelihood Ratio}
+Define $\X\iid f(\cdot;\theta^*)$ for some $\theta^*\in\Theta$, let $\{\hat\theta_i\}$ be a sequence of consitent \textit{Maximum Likelihood Estimators} of $\theta^*\in\Theta$.\\
+Define $\forall\ \x\in\mathcal{X}^n$ the \textit{Likelihood Ratio}
+$$\Lambda_n(\x):=\frac{L(\theta^*;\x)}{L(\hat\theta_n;\x)}\in[0,1]$$
+
+\theorem{}
+Define $\X\iid f(\cdot;\theta^*)$ for some $\theta^*\in\Theta$, let $\{\hat\theta_i\}$ be a sequence of consitent \textit{Maximum Likelihood Estimators} of $\theta^*\in\Theta$ and assume that the conditions of \textbf{Theorem 8.1} hold (implying asymptotic normality). Then
+$$-2\ln\Lambda_n(\X_n)\to_{\mathcal{D}(\cdot;\theta^*)}Z^2\sim\chi^2_1$$
+
+\remark{}
+We observe that
+$$-2\ln\Lambda_n(\x)=-2\left(\ell(\theta^*;\x)-\ell(\hat\theta_n;\x)\right)=2\left(\ell(\hat\theta_n;\x)-\ell(\theta^*;\x)\right)$$
+\ie This is twie the difference of the log-likelihoods for $\hat\theta_n$ and $\theta^*$.\\
+
+\definition{Confidence Sets}
+Define $\mathcal{X}^2_{1,\alpha}$ to be the number st $\prob(W\leq\chi^2_{1,\alpha})=1-\alpha$ for $W\sim\chi^2_1$. The \textit{Confidence Sets}
+$$C(\X_n):=\left\{\theta\in\Theta:2\left[\ell(\hat\theta_n;\X_n)-\ell(\theta;\X_n)\right]\leq\chi^2_{1,\alpha}\right\}\subseteq\Theta$$
+are asymptotically exact $1-\alpha$ \textit{Confidence Sets} for $\theta^*$ since
+$$\prob(\theta^*\in C(\X_n;\theta^*)=\prob(-2\ln\Lambda_n(\X_n)\leq\chi^2_{1,\alpha};\theta^*)\underset{n\to\infty}{\longrightarrow}1-\alpha$$
+
+\remark{Interpretting Confidence Sets}
+$C(\x_n)$ cntains the values $\theta$ st $\ell(\theta;\x_n)$ is not too muuch less than $\ell(\hat\theta_n;\x_n)$. Hence, these confidence intervals contain those values of $\theta$ with the greatest likelihood values.\\
+
+\remark{}
+The cobserved confidence set $C(\x)$ is defined implicitly, and finding an explicit representaiton of such sets might not be easy This difficulty explains why \textit{Wald's Approach} has been historically populat, despite its shortcomings. However, with the help of a computer, it is often easy to determine $C(\x)$ numerically.
+
 \newpage
 \setcounter{section}{-1}
 \section{Appendix}
