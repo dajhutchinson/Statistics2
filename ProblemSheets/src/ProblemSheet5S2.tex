@@ -1,0 +1,134 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=1in, paperwidth=8.3in, paperheight=11.7in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{dsfont}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{changepage} 
+
+\begin{document}
+
+\pagestyle{fancy}
+\setlength\parindent{0pt}
+\allowdisplaybreaks
+
+\renewcommand{\headrulewidth}{0pt}
+
+% Cover page title
+\title{Statistics 2 - Problem Sheet 5}
+\author{Dom Hutchinson}
+\maketitle
+
+% Header
+\fancyhead[L]{Dom Hutchinson}
+\fancyhead[C]{Statistics 2 - Problem Sheet 5}
+\fancyhead[R]{\today}
+
+% Counters
+\newcounter{qpart}[section]
+
+% commands
+\newcommand{\dotprod}[0]{\boldsymbol{\cdot}}
+\newcommand{\cosech}[0]{\mathrm{cosech}\ }
+\newcommand{\cosec}[0]{\mathrm{cosec}\ }
+\newcommand{\sech}[0]{\mathrm{sech}\ }
+\newcommand{\prob}[0]{\mathbb{P}}
+\newcommand{\nats}[0]{\mathbb{N}}
+\newcommand{\cov}[0]{\mathrm{Cov}}
+\newcommand{\var}[0]{\mathrm{Var}}
+\newcommand{\expect}[0]{\mathbb{E}}
+\newcommand{\reals}[0]{\mathbb{R}}
+\newcommand{\integers}[0]{\mathbb{Z}}
+\newcommand{\indicator}[0]{\mathds{1}}
+\newcommand{\nb}[0]{\textit{N.B.} }
+\newcommand{\ie}[0]{\textit{i.e.} }
+\newcommand{\eg}[0]{\textit{e.g.} }
+\newcommand{\iid}[0]{\overset{\text{iid}}{\sim} }
+\newcommand{\X}[0]{\textbf{X}}
+\newcommand{\x}[0]{\textbf{x}}
+
+\newcommand{\qpart}[0]{\stepcounter{qpart} \textbf{Question \arabic{section}.\arabic{qpart}\\}}
+\newcommand{\qpartt}[0]{\stepcounter{qpart} \textbf{Question \arabic{section}.\arabic{qpart}} - }
+\newcommand{\ans}[0]{ \textbf{Answer \arabic{section}\\}}
+\newcommand{\apart}[0]{ \textbf{Answer \arabic{section}.\arabic{qpart}\\}}
+\newcommand{\apartt}[0]{\textbf{Answer \arabic{section}.\arabic{qpart}} - }
+\newcommand{\question}[0]{\stepcounter{section}\section*{Question - \arabic{section}.}}
+
+\question
+Suppose that $\X\iid\text{Poisson}(\theta^*)$. Consider the observed Fisher Infromation evaluated at $\hat\theta_n$ and show that $J_n(\hat\theta_n)=1/\bar{x}$. Find an asymptotically exact $1-\alpha$ confidence interval for $\theta^*$.\\
+
+\ans
+Let $\X\iid\text{Poisson}(\theta^*)$ and consider $\hat\theta_n=\hat\theta_n(\X):=\frac{1}{n}\sum_{i=1}^nX_i$. Then
+\[\begin{array}{rrrl}
+&\ell'(\theta;\x)&=&-n+\frac{1}{\theta}\sum\limits_{i=1}^nx_i\\
+\implies&ell''(\theta;\x)&=&-\frac{1}{\theta^2}\sum\limits_{i=1}^nx_i\\
+\text{We have}&I(\theta)&=&-\expect(\ell''(\hat\theta;X);\hat\theta)\\
+&&=&-\expect\left(-\frac{1}{\hat\theta^2}\sum\limits_{i=1}^nX_i;\hat\theta\right)\\
+&&=&\dfrac{1}{\hat\theta^2}\sum\limits_{i=1}^n\expect(X_i;\hat\theta)\\
+&&=&\dfrac{1}{\hat\theta^2}n\hat\theta\\
+&&=&\dfrac{n}{\hat\theta}\\
+&&=&\dfrac{n}{\bar{x}}\\
+\text{ and }&J_n(\hat\theta_n)&:=&-\dfrac{1}{n}\sum\limits_{i=1}^n\ell''(\hat\theta_n;X_i)\\
+&&=&-\dfrac{1}{n}\sum\limits_{i=1}^n\left(-\frac{1}{\hat\theta_n^2};X_i\right)\\
+&&=&\dfrac{1}{n\hat\theta^2}\sum\limits_{i=1}^nX_i\\
+&&=&\dfrac{\bar x}{\hat\theta^2}\\
+&&=&\dfrac{1}{\bar x}
+\end{array}\]
+From Theorem 12.2 in notes we have that $[L(\X),U(\X)]$ is an asymptotically exact $1-\alpha$ confidence interval of $\theta^*$ where
+$$L(\x):=\hat\theta_n-\dfrac{z_{\alpha/2}}{\sqrt{nJ_n(\hat\theta_n)}}=\bar{x}-z_{\alpha/2}\sqrt{\frac{\bar{x}}{n}}\text{ and }U(\x):=\hat\theta_n+\dfrac{z_{\alpha/2}}{\sqrt{nJ_n(\hat\theta_n)}}=\bar{x}+z_{\alpha/2}\sqrt{\frac{\bar{x}}{n}}$$
+\question
+Suppose you are given the observations
+$$\x=(11,23,20,11,15,29,20,16,15,14)$$
+presumed to come from some independent, identically distributed random sample $\X$.\\
+
+\qpart
+Compute an approximate $95\%$ observed confidence interval for the expectation of $\mu$ of $X$, assumed to be such that $|\expect(X)|<\infty$ and $\sigma^2=\var(X)<\infty$, explaining all of your reasoning carfully. Note that we are not assuming any model for the observations, except for the independence, and that neither $\mu$ nor $\sigma^2$ are known.\\
+\textit{Hint} - Start with the cetnral limit theorem for $\bar{X}_n=\frac{1}{n}\sum_{i=1}^nX_i$.\\
+
+\apart
+Let $\X$ be an independent, indentically distributed sample of an unknown model with its mean \& variance unknown but finite.\\
+Consider the maximum likelihood estimate $\hat\mu:=\bar{X}_n=\frac{1}{n}\sum_{i=1}^nX_i$.\\
+By the Central Limit Theorem we have
+$$\frac{\hat\mu-\mu^*}{\sqrt{n/\sigma^2}}\to_{\mathcal{D}}Z\sim\text{Normal}(0,1)$$
+Thus
+\[\begin{array}{rrcl}
+&\prob\left(z_{-\alpha/2}\leq\dfrac{\hat\mu_n-\mu^*}{\sqrt{n/\sigma^2}}\leq z_{\alpha/2};\mu\right)&=&1-\alpha\\
+\implies&\prob\left(\hat\mu_n-z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\leq\mu^*\leq\hat\mu_n+z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\right)&=&1-\alpha\text{ by rearrangement}
+\end{array}\]
+Since $\sigma^2$ is unknown we consider a consistent sequence of estimators $\{\hat\sigma^2_n\}_{n\in\nats}$ where
+$$\sigma^2_n=\frac{1}{n-1}\sum\limits_{i=1}^n(X_i-\hat\mu_n)^2$$
+From the data we have $n=10,\ \hat\mu_{10}=\frac{174}{10}$ \& $\hat\sigma^2_{10}=\frac{1}{9}\times\frac{1432}{5}=\frac{1432}{45}$.\\
+Since we want a $95\%$ confidence interval we set $1-\alpha=0.95\implies\alpha=0.05$.\\
+Thus $z_{0.975}=1.960$ we have
+\[\begin{array}{rrcl}
+&\prob\left(\frac{174}{10}-1.96\sqrt{\frac{1432/45}{10}}\leq\mu^*\leq\dfrac{174}{10}+1.960\sqrt{\dfrac{1432/45}{10}}\right)&=&0.95\\
+\equiv&\prob\left(\mu^*\in[13.9,20.9]\right)&=&0.95
+\end{array}\]
+
+\qpart
+Now suppose you are also told that $\X\iid\text{Poisson}(\theta)$. Compute another approximate $95\%$ confidence interval for the expectaiton of $X$, using the Wald approach.\\
+
+\apart
+Suppose $\X\iid\text{Poisson}(\theta)$.\\
+By Wald's Approach we have that $\mathcal{I}(\mu^*):=[L(\X),U(\X)]$ is a $1-\alpha$ confidence interval of $\mu$ where
+$$L(\x):=\hat\mu_n-\frac{z_{\alpha/2}}{\sqrt{nI(\mu^*)}}\text{ and }U(\x):=\hat\mu_n+\dfrac{z_{\alpha/2}}{\sqrt{nI(\mu^*)}}$$
+From question 1 we have $I(\mu^*)=n/\bar{x}$ for a poisson iid random sample. Thus, using data from previous part, we have
+\[\begin{array}{rcl}
+\mathcal{I}(\mu^*)&=&\left[\hat\mu_n-z_{\alpha/2}\sqrt{\frac{\bar{x}}{n^2}},\hat\mu_n+z_{\alpha/2}\sqrt{\frac{\bar{x}}{n^2}}\right]\\
+&=&\left[\frac{174}{10}-1.96\sqrt{\frac{174/10}{100}},\frac{174}{10}+1.96\sqrt{\frac{174/10}{100}}\right]\\
+&=&[16.6,18.2]
+\end{array}\]
+
+\qpartt Which of the two confidence intervals do you prefer?\\
+
+\apartt
+The second since it is a tighter bound on $\mu^*$ and encodes information about the possible model of the data, rather than just the data.
+
+
+\end{document}

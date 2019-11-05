@@ -1,0 +1,44 @@
+---
+title: "Problems Sheet 5"
+subtitle: "Statistics 2"
+author: "Dom Hutchinson"
+output:
+  pdf_document: 
+     fig_width: 6
+     fig_height: 5
+  html_notebook: default
+  html_document: default
+  word_document: default
+---
+
+# Question 3
+## a)
+Suppose $\textbf{X}\overset{\text{iid}}{\sim}\text{Poisson}(\theta)$
+```{r}
+options(width=100,height=100)
+par(mfrow=c(2,2))
+N<-1000; theta<-1.7; ns=c(2,4,8,16)
+
+for (n in ns) {
+  theta_hat<-sapply(1:N, function(i) mean(rpois(n=n,lambda=theta)))
+  plot(density(theta_hat, from=0), xlim=c(0,5),ylim=c(0,1.2), main=paste("theta=",theta,",n=",n)
+       ,xlab="Sampling Distirbution", ylab="", col="darkblue", lwd=2)
+  abline(v=theta,col="darkgreen",lwd=2,lty=2)
+}
+```
+
+## b)
+```{r}
+par(mfrow=c(2,2))
+
+N<-1000;theta<-1.7;ns=c(2,4,8,16)
+x<-seq(-4,4,length=100)
+for (n in ns) {
+  theta_hat<-sapply(1:N, function(i) mean(rnorm(n=n)))
+  I=1/theta
+  plot(density(theta_hat, from=-4,to=4), xlim=c(-4,4),ylim=c(0,1.7), main=paste("theta=",theta,",n=",n)
+       ,xlab="Sampling Distirbution", ylab="", col="darkblue", lwd=2)
+  lines(x,dnorm(x,sd=sqrt(1/(n*I))),type="l",col="darkred")
+  abline(v=0,col="darkgreen")
+}
+```
