@@ -53,7 +53,7 @@ abline(v=var_hat,col="red")
 # 3 Clinic Data
 
 ```{r}
-year.data<-read.csv("year_data.csv")
+year.data<-read.csv("data/year_data.csv")
 knitr::kable(year.data)
 ```
 
@@ -112,7 +112,7 @@ Thus it is very unlikely to observe these two mortality rates, assuming the unde
 # 4 Intervention: Chlorine Hand Washing
 
 ```{r}
-month.data<-read.csv("month_data.csv")
+month.data<-read.csv("data/month_data.csv")
 month.data<-month.data[!is.na(month.data$births),]
 
 month.data$rate<-month.data$deaths/month.data$births

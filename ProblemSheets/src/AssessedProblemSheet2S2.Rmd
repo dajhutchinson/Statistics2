@@ -1,0 +1,52 @@
+---
+title: "Computer Practical 2"
+subtitle: "Statistics 2"
+author: "Dom Hutchinson"
+output:
+  pdf_document: 
+     fig_width: 6
+     fig_height: 4
+  html_notebook: default
+  html_document: default
+  word_document: default
+---
+
+Consider the random variables $Y_i\overset{\text{ind}}{\sim}\text{Bernoulli}(\sigma(\theta^Tx_i))$ for $i\in[1,n]$ where $x_i$ are observed $d$-dimensional real vectors of explanatory variables and $\sigma$ is the standard logistic function.
+
+# Question 1
+By definition we have ${\displaystyle L(\theta;\textbf{y})\propto\prod_{i=1}^nf_{Y_i}(y_i;\theta)}$.\
+Thus, in this case ${\displaystyle L(\theta;\textbf{y})\propto\prod_{i=1}^n\sigma(\theta^Tx_i)^{y_i}(1-\sigma(\theta^Tx_i))^{1-y_i}}$
+We have
+\[\begin{array}{rrl}
+\ell(\theta;\textbf{y})&:=&\ln L(\theta;\textbf{y})\\
+&=&\ln\left[{\displaystyle L(\theta;\textbf{y})\propto\prod_{i=1}^n\sigma(\theta^Tx_i)^{y_i}(1-\sigma(\theta^Tx_i))^{1-y_i}}\right]\\
+&=&{\displaystyle\sum_{i=1}^n\ln\sigma(\theta^Tx_i)^{y_i}+\ln[1-\sigma(\theta^Tx_i)]^{1-y_i}}\\
+&=&{\displaystyle\sum_{i=1}^ny_i\ln\sigma(\theta^Tx_i)+(1-y_i)\ln[1-\sigma(\theta^Tx_i)]}
+\end{array}\]
+
+# Question 2
+Consider $\frac{\partial}{\partial\theta_j}\sigma(\theta^Tx_i)$ we have
+\[\begin{array}{rcl}
+\frac{\partial}{\partial\theta_j}&=&\left[\frac{\partial}{\partial\theta_j}\sigma(\theta^Tx_i)\right].\left[\frac{\partial}{\partial\theta_j}\theta^Tx_i\right]\text{ by chain rule}\\
+&=&\sigma(\theta^Tx_i)(1-\sigma(\theta^Tx_i))x_{ij}\\
+\end{array}\]
+Note that $\frac{\partial}{\partial\theta_j}\theta_T=(\delta_{ij}:i\in[1,n])$, the vectors of all zeros except at position $j$ where it is 1.\
+Thus $\frac{\partial}{\partial\theta_j}\theta_Tx_i=x_{ij}$.\
+Now consider $\frac{\partial}{\partial\theta_j}\ell(\theta;\textbf{y})$. Then
+\[\begin{array}{rcl}
+\frac{\partial}{\partial\theta_j}\ell(\theta;\textbf{y})&=&{\displaystyle\sum_{i=1}^ny_i\frac{\partial}{\partial\theta_j}\ln\sigma(\theta^Tx_i)+(1-y_i)\frac{\partial}{\partial\theta_j}\ln[1-\sigma(\theta^Tx_i)]}\\
+&=&{\displaystyle\sum_{i=1}^ny_i\frac{x_{ij}\sigma(\theta^Tx_i)[1-\sigma(\theta^Tx_i)]}{\sigma(\theta^Tx_i)}+(1-y_i)\frac{-x_{ij}\sigma(\theta^Tx_i)[1-\sigma(\theta^Tx_i)]}{1-\sigma(\theta^Tx_i)}{}}\\
+&=&{\displaystyle\sum_{i=1}^n}y_ix_{ij}[1-\sigma(\theta^Tx_i)]-(1-y_i)x_{ij}\sigma(\theta^Tx_i)\\
+&=&{\displaystyle\sum_{i=1}^n}y_ix_{ij}-y_ix_{ij}\sigma(\theta^Tx_i)-x_{ij}\sigma(\theta^Tx_i)+y_ix_{ij}\sigma(\theta^Tx_i)\\
+&=&{\displaystyle\sum_{i=1}^n}[y_i-\sigma(\theta^Tx_i)]x_{ij}
+\end{array}\]
+
+# Question 3
+Consider $\frac{\partial^2}{\partial\theta_j\partial\theta_k}\ell(\theta;\textbf{y})$. Then
+\[\begin{array}{rcl}
+{\displaystyle\frac{\partial^2}{\partial\theta_j\partial\theta_k}\ell(\theta;\textbf{y})}&=&{\displaystyle\frac{\partial}{\partial\theta_k}\left[\frac{\partial}{\partial\theta_j}\ell(\theta;\textbf{y})\right]}\\
+&=&{\displaystyle\frac{\partial}{\partial\theta_k}\left[\sum_{i=1}^n[y_i-\sigma(\theta^Tx_i)]x_{ij}\right]}\\
+&=&{\displaystyle\sum_{i=1}^n0-x_{ij}\frac{\partial}{\partial\theta_k}\sigma(\theta^Tx_i)}\\
+&=&{\displaystyle-\sum_{i=1}^nx_{ij}\sigma(\theta^Tx_i)[1-\sigma(\theta^Tx_i)]x_{ik}\text{ by result in Question 2}}\\
+&=&{\displaystyle-\sum_{i=1}^n\sigma(\theta^Tx_i)[1-\sigma(\theta^Tx_i)]x_{ij}x_{ik}}
+\end{array}\]

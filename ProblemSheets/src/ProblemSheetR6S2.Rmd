@@ -1,0 +1,183 @@
+---
+title: "Problems Sheet 6"
+subtitle: "Statistics 2"
+author: "Dom Hutchinson"
+header-includes:
+   - \usepackage{dsfont}
+output:
+  pdf_document: 
+     fig_width: 4
+     fig_height: 4
+  html_notebook: default
+  html_document: default
+  word_document: default
+---
+
+# Question 1
+Let $\textbf{X}\sim\text{Exponential}(\lambda)$ with $\lambda>0$ unknown.
+Let $m$ denote the median of $X\sim\text{Exponential}(\lambda)$ from a realisation $\textbf{x}$ of $\textbf{X}$.
+
+## a)
+By the definition of $m$ as the median, we have
+\[\begin{array}{rrcl}
+&\mathbb{P}(X\leq m)&=&\frac{1}{2}\\
+\implies&1-e^{-\lambda m}&=&\frac{1}{2}\\
+\implies&e^{-\lambda m}&=&\frac{1}{2}\\
+\implies&-\lambda m&=&\ln\frac{1}{2}\\
+\implies&m&=&-\frac{\ln\frac{1}{2}}{\lambda}
+\end{array}\]
+Define $\hat{m}(\textbf{x})$ to be the maximum likelihood estimate of $m$.\\
+Then $-\frac{\ln\frac{1}{2}}{\hat\lambda}$ is a maximum likelihood estimate of $m$ by formulation of $m$.\\
+Since, $\hat\lambda=\frac{1}{\bar{x}}\implies-\frac{\ln\frac{1}{2}}{1/\bar{x}}=-\bar{x}\ln\frac{1}{2}$ is the maximum likelihood estiamte of $m$, the median.
+
+## b)
+```{r}
+n<-7; lambda<-3.3; N<-10000
+# Takes 7 samples from Exp(3.3) and records median (10_000 times)
+t_estimates<-sapply(1:N,function(i) median(rexp(n,rate=lambda)))
+
+t_star=-log(.5)/lambda
+cat("t_star=",t_star,"\n",sep="")
+
+# Bias
+t_bias=mean(t_estimates)-t_star
+
+# Mean Square Error
+t_mse=var(t_estimates)+t_bias^2
+
+# Print values
+cat("Bias=",t_bias,"\n",sep="")
+cat("MSE=",t_mse,"\n",sep="")
+```
+
+## c)
+```{r}
+# Calculates maxmimum likelihood estimate for median
+m_hat<-function(x) {
+  -log(.5)*mean(x)
+}
+
+mle_estimates<-sapply(1:N,function(i) m_hat(rexp(n,rate=lambda)))
+
+# Bias
+mle_bias=mean(mle_estimates)-t_star
+
+# Mean Square Error
+mle_mse=var(mle_estimates)+mle_bias^2
+
+# Print values
+cat("Bias=",mle_bias,"\n",sep="")
+cat("MSE=",mle_mse,"\n",sep="")
+```
+
+## d)
+```{r}
+# Plot sample densities
+plot(density(mle_estimates),lty=2,main="Estimators of the median, n=7",xlab="Values of Median")
+abline(v=t_star,col="darkgreen")
+text(t_star, 0, labels = "True Value", pos = 4, col = "darkgreen")
+lines(density(t_estimates),type="l",lty=3)
+legend("topright",legend=c("Using ML Estimator","Using sample median"),lty=c(2,3),cex=.5)
+```
+
+Both estimators are biased. Since the distribution of the Maximum Likelihood estimator is much more concentrated around the true value of the median, it is the better estimator in the case when $n=7$.
+
+## e)
+```{r}
+n<-100; lambda<-3.3; N<-10000
+
+t_estimates<-sapply(1:N,function(i) median(rexp(n,rate=lambda)))
+mle_estimates<-sapply(1:N,function(i) m_hat(rexp(n,rate=lambda)))
+
+# Bias
+t_bias=mean(t_estimates)-t_star
+mle_bias=mean(mle_estimates)-t_star
+
+# Mean Square Error
+t_mse=var(t_estimates)+t_bias^2
+mle_mse=var(mle_estimates)+mle_bias^2
+
+# Print values
+cat("Bias of Sample Median=",t_bias,"\n",sep="")
+cat("Bias of MLE=",mle_bias,"\n",sep="")
+cat("MSE of Sample Median=",t_mse,"\n",sep="")
+cat("MSE of MLE=",mle_mse,"\n",sep="")
+
+# Plot sample densities
+plot(density(mle_estimates),lty=2,main="Estimators of the median, n=7",xlab="Values of Median")
+abline(v=t_star,col="darkgreen")
+text(t_star, 0, labels = "True Value", pos = 4, col = "darkgreen")
+lines(density(t_estimates),type="l",lty=3)
+legend("topright",legend=c("Using ML Estimator","Using sample median"),lty=c(2,3),cex=.5)
+```
+
+Both distributions appear less biased. Again the Maximum Likelihood estimate is the better estimator since more of its mass is concentrated around the true value of the median.
+
+# Question 2
+Let $X_1,\dots,X_n\overset{\text{iid}}{\sim}\text{Cauchy}(\theta)$ with $\theta\in\mathbb{R}$ an unknown location parameter.
+
+## a)
+Define $Y_i:=\mathds{1}$ for $i\in[1,n]$.
+Since $X_i\sim\text{Cauchy}(\theta)$ and the Cauchy distribution is symmetric around $\theta$ then
+$$\mathbb{P}(X_i\geq\theta)=\frac{1}{2}$$
+Thus
+$$f_{Y_i}=\begin{cases}0,&\frac{1}{2}\\1,&\frac{1}{2}\end{cases}$$
+This is equivalent to the definition of a $\text{Bernoulli}\left(\frac{1}{2}\right)$ random variable.
+Since $X_i$ are iid and $Y_i$ depends on only one, unique variable then $Y_i$ are iid.
+We recognise $B:=\sum_{i=1}^nY_i$ as the sum of $n$ $\text{Bernoulli}\left(\frac{1}{2}\right)$ random variables, which is the definition of a $\text{Binomial}\left(n,\frac{1}{2}\right)$ random variable.
+
+## b)
+### i)
+Suppose $Y_{(i)}=0$.\
+Then $Y_{(j)}=0\ \forall\ j\in[1,i]$ by definition of an order statistic.\
+Since $|[1,i]|=i$ then $B\leq n-i$.\
+Thus $Y_{(i)}=0\implies B\leq n-i$.
+
+Suppose $B\leq n-i$.\
+Then $\sum_{j=1}^nY_{j}\leq n-i$.\
+Therefore, there exists at least $i$ elements, $j\in[1,n]$, where $Y_{j}=0$.\
+By the definition of an order statistic $Y_{(i)}=0$.\
+Thus $B\leq n-i\implies Y_{(i)}=0$.\
+Thus $Y_{(i)}=0\Longleftrightarrow B\leq n-i$.$\hfill\square$
+
+### ii)
+Suppose $Y_{(i)}=1$.\
+Then $Y_{(j)}=1\ \forall\ j\in[i,n]$ by definition of an order statistic.\
+Since $|[i,n]|=n-i+1$ then $B\geq n-i+1$.\
+Thus $Y_{(i)}=1\implies B\geq n-i+1$.
+
+Suppose $B\geq n-i+1$.\
+Then $\sum_{j=1}^nY_j\geq n-i+1$.
+Therefore, there exists at least $n-i+1$ elements, $j\in[1,n]$, where $Y_j=1$.\
+This means that at most $n-(n-i+1)=i-1$ elements, $j\in[1,n]$, where $Y_j=0$.\
+By the definition of an order statistic $Y_{(i)}=1$.\
+Thus $B\geq n-i+1\implies Y_{(i)}=1$.\
+Thus $B\geq n-i+1\Longleftrightarrow Y_{(i)}=1$
+
+## c)
+Consider $\mathbb{P}(X_{(k+1)}<\theta\leq X_{(n-k)};\theta)$. We have
+\[\begin{array}{rcl}
+\mathbb{P}(X_{(k+1)}<\theta\leq X_{(n-k)};\theta)&\equiv&\mathbb{P}(X_{(k+1)}<\theta,\theta\leq X_{(n-k)};\theta)\\
+&\equiv&\mathbb{P}(Y_{(k+1)}-0,Y_{(n-k)}=1)\\
+&\equiv&\mathbb{P}(B\leq n-(k+1),B\geq n-(n-k)+1)\\
+&\equiv&\mathbb{P}(B\leq n-k+1,B\geq k+1)\\
+&\equiv&\mathbb{P}(k+1\leq B\leq n-k+1)\\
+&\equiv&\mathbb{P}(k<B<n-k)\text{ since }B\text{ is discrete}
+\end{array}\]
+
+## d)
+Let $\alpha=0.05$ and $n=25$.\
+Want to find $k$ st $\mathbb{P}(X_{(k+1)}<\theta\leq X_{(25-k)};\theta)\geq0.95$.\
+This is equivalent to finding $k$ st $\mathbb{P}(k<B<25-k)\geq0.95$
+We know that $B\sim\text{Binomial}\left(25,\frac{1}{2}\right)$. Thus
+\[\begin{array}{rcl}
+0.95&\leq&\mathbb{P}(k<B<25-k)\\
+&=&\mathbb{P}(k+1\leq B\leq24-k)\\
+&=&\sum_{i=k+1}^{24-k}\mathbb{P}(B=i)\\
+&=&\sum_{i=k+1}^{24-k}{25\choose i}\left(\frac{1}{2}\right)^i\left(\frac{1}{2}\right)^{25-i}\\
+&=&\frac{1}{2^{25}}\sum_{i=k+1}^{24-k}{25\choose i}\\
+&=&\frac{2}{2^{25}}\sum_{i=k+1}^{12}{25\choose i}
+\end{array}\]
+By performing calculations we find that
+$$\frac{1}{2^{24}}\sum_{i=8}^{12}{25\choose i}\geq0.95$$
+Thus $k+1=8\implies k=7$ produces the tightest $1-\alpha$ confidence interval for the true value of $\theta$ when $n=25$ and $\alpha=0.05$.
