@@ -152,7 +152,7 @@ $$\prob(X_1\leq a_1,\dots,X_n\leq a_n)=\prod_{i=1}^n\prob(X_i\leq a_i)\ \forall\
 
 %TODO frequentist v Bayesian
 
-\section{The Likelihood Function}
+\subsection{The Likelihood Function}
 
 \definition{Likelihood Function}
 Define $\X\sim f_n(\cdot;\theta^*)$ for some unknown $\theta^*\in\Theta$ and let $\x$ be an observation of $\X$.\\
@@ -197,7 +197,7 @@ Let $g:\reals^n\to\reals^n$ be a bijective transformation which is independent o
 Thus in botoh cases $L_\textbf{Y}(\theta;y)=f_\textbf{Y}(y;\theta)\propto f_\X(g^{-1}(\textbf{y});\theta)=L_\X(\theta;\x)$.
 \proved
 
-\section{Maximum Likelihood Estimates}
+\subsection{Maximum Likelihood Estimates}
 
 \definition{Maximum Likelihood Estimate}
 Let $\X\sim f_n(\cdot;\theta)$; and $\x$ be a realisation of $\X$.\\
@@ -314,7 +314,7 @@ Consider $n-1\geq\min\{t,c\}\implies L(n-1;x)>0$
 So $L(n;x)$ is increasing for $n\leq\left\lfloor\frac{ct}{x}\right\rfloor$ \& decreasing for $n>\left\lfloor\frac{ct}{x}\right\rfloor$.\\
 Consequently $\hat{n}_{\text{MLE}}(x)=\left\lfloor\frac{tc}{x}\right\rfloor$
 
-\section{Statistics and Estimators}
+\subsection{Statistics and Estimators}
 
 \definition{Statistic}
 Given some data $\x$ a statistic is a fucntion of the data $T(\x)$.\\
@@ -389,7 +389,7 @@ MSE(\hat{\lambda};\lambda)&=&\text{Var}(\hat{\lambda};\lambda)\\
 \end{array}\]
 This shows that as the sample size increases the MSE of $\hat{\lambda}$ converges to $0$.
 
-\section{Probabilistic Convergence}
+\subsection{Probabilistic Convergence}
 
 \remark{Motivation}
 Here we consider the properties of a maximum likelihood estimators as the sample size increases.\\
@@ -557,7 +557,7 @@ $$\left(\hat{\theta}_n-z_{\alpha/2}\sqrt{\frac{\hat{\theta}_n(1-\hat{\theta}_n)}
 This interval captures $\theta^*$ asymptotically (in $n$) with probability $1-\alpha$.\\
 \nb $z_\alpha=\Phi^{-1}(1-\alpha)$ where $\Phi$ is the cumulative denisty function of a $\text{Normal}(0,1)$.
 
-\section{The Fisher Information}
+\subsection{The Fisher Information}
 
 \remark{Motivation}
 In the next part of the content we shall show that given $\X_n{\iid}f(\cdot;\theta^*)$ then for sufficiently regular models
@@ -654,7 +654,7 @@ Consequently
 \end{array}\]
 \proved
 
-\section{Efficiency and The Cramer-Rao Bound}
+\subsection{Efficiency and The Cramer-Rao Bound}
 
 \definition{IID Score Function}
 Let $\X{\iid}f(\cdot;\theta)$ for some $\theta\in\Theta$. Then the \textit{Score Function} is
@@ -772,7 +772,7 @@ The \textit{Cramer-Rao bound} for the variance is
 $$\frac{1}{nI(\theta}=\frac{\theta(1-\theta)}{n}$$
 Thus our estimator is efficient.
 
-\section{Asymptotic Distribution of the Maximum Likelihood Estimator}
+\subsection{Asymptotic Distribution of the Maximum Likelihood Estimator}
 
 \theorem{}
 Suppose that $\X_n\iid f(\cdot;\theta^*)$ for some $\theta^*\in\Theta$ and assume that
@@ -849,7 +849,7 @@ Any \textit{Statistical Model} which satisfies the condition of \textbf{Theorem 
 \remark{Why use MLE over others}
 Due to the \textit{Asymptotic Efficieny} of maximum likelihood estimators it is beter to use them in \textit{Regular Statistical Models}.\\
 
-\section{Confidence Sets Around the Maximum Likelihood Estimator}
+\subsection{Confidence Sets Around the Maximum Likelihood Estimator}
 
 \definition{Coverage of an Interval}
 Let $\X\sim f_n(\cdot;\theta),\ \theta\in\Theta=\reals,\ L(\cdot):\mathcal{X}^n\to\Theta$ and $U(\cdot):\mathcal{X}^n\to\Theta$ where $\forall\ \x\in\mathcal{X}^n,\ L(\x)<U(\x)$. Then, $\forall\theta\in\Theta$ the coverage $C_\mathcal{I}(\theta)$ of the random interval $\mathcal{I}(\X):=[L(\X),U(\X)]$ at $\theta$ is
@@ -905,7 +905,7 @@ So the interval $\mathcal{I}(X)=[L(X),U(X)]$ where $L(\x)=\bar{x}-z_{\alpha/2}\f
 When $\sigma^2$ is unknown we can defined $\{\hat{\sigma}^2_n\}_{n\in\nats}$ to be a consistent sequence of estimators of $\sigma^2$ (\eg the sample variance)
 $$\hat{\sigma}^2_n:=\frac{1}{n-1}\sum_{i=1}^n(X_i-\hat{\mu}_n(\X))^2$$
 
-\section{Asymptotic Approximation of Confidence Intervals}
+\subsection{Asymptotic Approximation of Confidence Intervals}
 
 \theorem{}
 Assume $\X\sim f(\cdot;\theta^*)$. Let $\{\hat{\theta}_n\}_{n\in\nats}$ be a consistent sequence of estimators of $\theta^*$ and assume that $\{\hat{\theta}_n\}$ is asymptotically normal in the sense that
@@ -943,7 +943,7 @@ The rest of the proof is the same as for \textbf{Theorem 10.1}.\\
 \remark{Theorem 10.2}
 For a given $n$ the quality of the normal approximatioin will be affected by this additional approximation. One may find that for less accurate estimators of $\sigma^2$, the $n$ required for the confidence interval to have almost the right coverage will be higher.
 
-\section{Estimating the Information for Maximum Likelihood Estimates}
+\subsection{Estimating the Information for Maximum Likelihood Estimates}
 
 \remark{Applying Theorem 10.2 to sequences of MLEs for regular statistical models}
 When dealing with \textit{Maximum Likeihood Estimators} for regular statistical models we have that $\sigma^2=1/I(\theta^*)$ thus
@@ -1048,7 +1048,7 @@ The \textit{Observed FIsher Information} at $\theta$ is
 $$nJ_n(\theta)=-\ell''(\theta;\X)=-\sum\limits_{i=1}^n\ell''(\theta;X_i)$$
 \nb $\expect(J_n(\theta^*);\theta^*)=I(\theta^*)$ and that it differs from the \textit{Fisher Information} (under the \textit{Fisher Information Regularity Conditions} by not being an expectation.
 
-\section{Transformations and Confidence Intervals}
+\subsection{Transformations and Confidence Intervals}
 
 \definition{Wald Approach}
 The confidence intevals seen so far fit the \textit{Wald Approach}.\\
@@ -1137,7 +1137,7 @@ $$\tilde{I}(\tau)=\frac{1}{(-1/\theta^2)^2}=\frac{1}{(-\tau^2)^2}=\frac{1}{\tau^
 	\item This serves as an example that convergence in distribution says nothing about convergence of moments. In particular, you can derive that $\frac{1}{\bar{X}}$ does not have a mean for any $\mu\in\reals$.
 \end{enumerate}
 
-\section{Likelihood Ratio Confidence Sets - Wilk's Approach}
+\subsection{Likelihood Ratio Confidence Sets - Wilk's Approach}
 
 \remark{Motivation}
 Consider a \textit{Wald Confidence Interval} $\mathcal{I}(\theta^*)$.\\
@@ -1170,6 +1170,242 @@ $C(\x_n)$ cntains the values $\theta$ st $\ell(\theta;\x_n)$ is not too muuch le
 
 \remark{}
 The cobserved confidence set $C(\x)$ is defined implicitly, and finding an explicit representaiton of such sets might not be easy This difficulty explains why \textit{Wald's Approach} has been historically populat, despite its shortcomings. However, with the help of a computer, it is often easy to determine $C(\x)$ numerically.
+
+\proof{Theorem 13.1}
+Consider the second order \textit{Taylor Expansion} of $\ell_n(\theta;x)=\ln f_n(x;\theta)$
+$$\ell_n(\theta;x)=\ell_n(\theta_0;x)+(\theta-\theta_0)\ell_n'(\theta_0;x)+\frac{(\theta-\theta_0)^2}{2}\ell''_n(\bar\theta;x)\text{ for some }\bar\theta\in[\theta,\theta_0]$$
+Rearranging we find
+$$\ell_n(\theta;x)-\ell_n(\theta_0;x)=(\theta-\theta_0)\ell_n'(\theta_0;x)+\frac{(\theta-\theta_0)^2}{2}\ell_n''(\bar\theta;x)$$
+Take $\theta=\theta^*$ and $\theta_0=\hat\theta_n$.\\
+Since $\ell_n'(\hat\theta_n;x)-\ell_n(\hat\theta_n;x)$ then
+\[\begin{array}{rrcl}
+&\ln\Lambda_n(x)&=&\ell_n(\theta^*;x)-\ell_n(\hat\theta_n;x)\\
+&&=&\dfrac{(\theta^*-\hat\theta_n)^2}{2}\ell_n''(\bar\theta_n;x)\text{ for some }\bar\theta_n\in[\theta^*,\hat\theta_n]\\
+\implies&-2\ln\Lambda(x)&=&-(\theta^*\hat\theta_n)^2\ell_n''(\bar\theta_n;x)\\
+&&=&-\left[\sqrt{nI(\theta^*)}\right]^2(\theta^*-\hat\theta_n)^2\frac{1}{nI(\theta^*)}\ell_n''(\bar\theta_n;x)
+\end{array}\]
+Consider the random variable $-2\ln\Lambda(X)$. Then we have
+$$\sqrt{nI(\theta^*)}(\hat\theta_n(X)-\theta^*)\to_{\mathcal{D}(\cdot;\theta^*)}Z\sim\text{Normal}(0,1)$$
+By the \textit{Continuous Mapping Theorem}
+$$\left[\sqrt{nI(\theta^*)}\right]^2(\hat\theta_n-\theta^*)^2\to_{\mathcal{D}(\cdot;\theta^*)}Z^2$$
+Since $\bar\theta_n\in[\theta^*,\hat\theta_n]$
+$$-\frac{1}{n}\ell_n''(\bar\theta_n;X)\to_{\prob(\cdot;\theta^*)}I(\theta^*)$$
+By \textit{Slutsky's Theorem}
+$$-2\ln\Lambda_n(X)\to_{\mathcal{D}(\cdot;\theta^*)}Z^2\sim\chi^2_1$$
+\proved
+
+\remark{A Rule of Thumb}
+Under the assumptions of \textbf{Theorem 13.1}, the set
+$$\left\{\theta\in\Theta:\ell(\theta;\x)\geq\ell(\hat\theta_n;\x)-2\right\}$$
+is an asymptotically approximate $95\%$ confidence set for $\theta^*$.\\
+
+\proof{Remark 13.1}
+We have $\chi^2_{0.05}=3.84$.\\
+The result follows from the approximation $1.92\approx2$\proved
+
+\subsection{Transformation Invariant Confidence Sets}
+
+\remark{Motivation}
+Here we investigate whether the likelihood ratio approach to determining confidence sets is invariant to transformations, in contrast to \textit{Wald's Approach}.\\
+Consider the reparameterisation of the likelihood in terms of $\tau:=g(\theta)$ where $g:\Theta\to G$ is bijective. We have
+$$\tilde{f}(\x;\tau):=f(\x;g^{-1}(\tau))=f(\x;\theta$$
+We can now define
+$$C(\x):=\left\{\theta\in\Theta:-2\left[\ell(\theta;\x)-\ell(\hat\theta_n;\x\right]\leq\chi^2_{1,\alpha}\right\}\text{ and }\tilde{C}(\x):=\left\{\theta\in\Theta:-2\left[\tilde\ell(\theta;\x)-\tilde\ell(\hat\theta_n;\x\right]\leq\chi^2_{1,\alpha}\right\}$$
+We want to know whether $\theta\in C(\x)\Longleftrightarrow	g(\theta\in\tilde{C}(\x)\ \forall\ \x\in\chi^n$.\\
+\ie $C(\x)\ \&\ \tilde{C}(\x)$ define the same sets up to reparameterisation.\\
+
+\theorem{}
+Let $\X\sim f(\cdot;\theta^*)$, $C$ and $\tilde{C}$ defined as in \textbf{Remark 14.1}.\\
+Assume that $g:\Theta\to G$ is bijective Then
+$$\forall\ \x\in\chi^n\text{ and }\theta^*\in\Theta,\ \theta\in C(\x)\Longleftrightarrow g(\theta\in\tilde{C}(\x)$$
+Thus
+$$\prob(\theta^*\in C(\X);\theta^*)=\prob(g(\theta^*)\in\tilde{C}(\X);\tau=g(\theta^*))$$
+
+\proof{Theorem 14.1}
+Let $\x\in\chi^n$ be arbitrary.\\
+Everything rests on the observation that
+$$\forall\ \theta\in\Theta,\ \ell(\theta;\x)=\ln f(\x;\theta)=\ln f(\x;g(\theta)=\tilde\ell(g(\theta;\x)$$
+and similary
+$$\forall\ \tau\in G,\ \tilde\ell(\tau;\x)=\ln \tilde{f}(\x;\tau)=\ln f(\x;g^{-1}(\tau))=\ell(g^{-1}(\tau);\x)$$
+Note that $g(\hat\theta_n)$ is the \textit{Maximum Likelihood Estimate} of $\tau$.\\
+Assume $\theta\in C(\x)$. Then
+$$-2\left[\ell(\theta;\x)-\ell(\hat\theta_n;\x)\right]\leq\chi^2_{1,\alpha}$$
+Thus
+$$-2\left[\tilde\ell(g(\theta);\x)-\tilde\ell(g(\hat\theta_n);\x)\right]\leq\chi^2_{1,\alpha}$$
+Thus $g(\theta\in\tilde{C}(\x)$.\\
+So $\theta\in C(\x)\implies g(\theta)\in\tilde{C}(\x)$.\\
+\\
+Similarly, assume that $g(\theta)\in\tilde{C}(\x)$. Thus
+$$-2\left[\ell(\theta;\x)-\ell(\hat\theta_n;\x)\right]\leq\chi^2_{1,\alpha}$$
+Thus $\theta\in C(\x)$.\\
+So $\theta\in C(\x)\Longleftrightarrow g(\theta)\in\tilde{X}(\x)$.\\
+\\
+For the last part, this correspondence implies that
+$$\{\x\in\chi^n;\theta^*\in C(\x)\}=\{\x\in\chi^2:g(\theta^*)\in\tilde{C}(\x\}$$
+Thus, we can conclude from the equivalnce of the events
+$$\{\theta^*\in C(\X)=\{g(\theta^*)\in\tilde{C}(\X)\}$$
+
+\section{Testing}
+
+\subsection{Introduction to Hypothesis Tests}
+
+\remark{Motivation}
+Hypothesis testing allows us to make decisions about a parameter, rather than just estimating a rangle of values.\\
+
+\definition{Hypothesis Testing}
+\textit{Hypothesis Testing} is a process for deciding which of two competing hypotheses, $H_0$ or $H_1$, is more consistent with an observation $\x=(x_1,\dots,x_n)$ of $\X=(X_1,\dots,X_n)\sim f(\cdot;\theta)$.
+
+\remark{Difference to Statistics 1}
+In Statistics 1 we always had the null hypothesis be $H_0=\mu$. Now we consider a more general case where
+\begin{enumerate}[label=\roman*)]
+	\item $\X\sim f(\cdot;\theta)$ where $\theta\in\Theta$ is unknown.
+	\item We have an observation $\x$ of $\X$;
+	\item We have forumulate a null hypothesis concerning possible values of $\theta$ (\eg $H_0:\theta\in\Theta_0$)
+	\item We have an alternative hypothsis, $H_1:\theta\in\Theta_1=\Theta\backslash\Theta_0$.
+\end{enumerate}
+
+\definition{Simple Hypothesis}
+A \textit{Simple Hypothesis} is a hypothesis $H_i$ of the form $H_i:\theta=\theta_i$ where $\theta_i$ is a specified value, equivalenetly $H_i:\theta\in\Theta_i=\{\theta_i\}$.\\
+
+\definition{Composite Hypothesis}
+A \textit{Composite Hypothesis} is a hypothsis $H_i$ of the form $H_i:\theta\in\Theta_i$ where $\Theta_i$ is not a singleton. (\ie $|\Theta_i|>1$).\\
+
+\definition{One-Sided Test}
+Let $\theta$ be a scalar \& $\theta_0\in\Theta$ be a specified value.\\
+A \textit{One-Sided Test} is a hypothesis test of the form
+$$H_0:\theta\leq\theta_0\text{ and }H_1:\theta>\theta_0$$
+or
+$$H_0:\theta\geq\theta_0\text{ and }H_1:\theta<\theta_0$$
+
+\definition{Two-Sided Test}
+Let $\theta$ be a scalar \& $\theta_0\in\Theta$ be a specified value.\\
+A \textit{Two-Sided Test} is a hypothesis test of the form
+$$H_0:\theta=\theta_0\text{ and }H_1:\theta\neq\theta_0$$
+
+\definition{Test Statistic}
+A \textit{Test Statistic} is an operation on an observation which we use to determine the outcome of a hypothesis test. Using the distribution of specified \textit{Test Statistic} we can determine the likelihood of see a certain observation under the null-hypothesis \& thus the likelihood of the null-hypothesis being true.\\
+\nb A test statistic has the signature $T:\chi^n\to\reals$.\\
+
+\definition{Critical Value}
+The \textit{Critical Value}, $c\in\reals$, is an explicit value which if the value of a test statistic $T$ exceeds it (\ie $T(\x)\geq c)$ we reject the null-hypothesis.\\
+
+\definition{Critical Region}
+The \textit{Critical Region} is the sets of observations which cause us to reject the null hypothesis.
+$$R:=\{\x\in\chi^n:T(\x)\geq c\}$$
+where $T$ is a \textit{Test Statistic} \& $c$ is a \textit{Critical Value}.\\
+\nb $\chi^n=R\cup R^c$.\\
+
+\subsection{Hypothesis Testing - Significance and Power}
+
+\definition{Type I \& Type II Error}
+\textit{Type I Error} occurs when $H_0$ is rejected, when in fact it is true.\\
+\textit{Type II Error} occurs where $H_0$ is accepted, when in fact it is false.\\
+Consider the table below\\
+\begin{tabular}{|l|l|l|}
+\hline
+&\textbf{Retain $H_0$}&\textbf{Reject $H_0$}\\
+\hline
+\textbf{$H_0$ is True}&Correct&\textit{Type I Error}\\
+\textbf{$H_1$ is True}&\textit{Type II Error}&Correct\\
+\hline
+\end{tabular}\\
+
+\definition{Significance Level}
+\textit{Significance Level} is the rate at which we allow \textit{Type I Error}s to occur
+$$\alpha=\prob(\text{Type I Error})\in[0,1]$$
+Typically this is the level of inprobability at which we reject the null hypothesis.\\
+\nb Common \textit{Significance Levels} are $\alpha=0.05,0.01$.\\
+
+\example{Testing the mean of a normal sample}
+Suppose that $\X\iid\text{Normal}(\mu,\sigma^2)$ and we want ot test
+$$H_0:\mu\leq0\text{ and }H_1:\mu>0$$
+We consider the test statistic $T(\x)=\frac{1}{n}\sum_{i=1}^nx_i=\bar{x}$ with critical region
+$$R:=\{\x\in\chi^n:\bar{x}\geq c\}\text{ for }c\in\reals$$
+We want to find $c\in\reals$ st $\prob(X\in R;\mu\in\Theta_0)\leq\alpha\implies\prob(\bar{x}\geq c;\mu\in\Theta_0)\leq\alpha)$.\\
+We know that $\bar{X}\sim\text{Normal}(\mu,sigma^2/n)$.\\
+Hence $\dfrac{\bar{X}-\mu}{\sigma/\sqrt{n}}\sim\text{Normal}(0,1)$.\\
+We have
+$$\prob(\bar{X}\geq c;\mu)=\prob\left(\frac{\sqrt{n}(\bar{X}-\mu)}{\sigma}\geq\frac{(c-\mu)\sqrt{n}}{\sigma};\mu\right)=1-\Phi\left(\frac{\sqrt{n}(c-\mu)}{\sigma}\right)$$
+We want to ensure that
+\[\begin{array}{rrcl}
+&\prob(\bar{X}\geq c;\mu\in\Theta_0)&\leq&\alpha\\
+\Longleftrightarrow&1-\Phi\left(\frac{\sqrt{n}(c-\mu)}{\sigma}\right)&\leq&\alpha\\
+\Longleftrightarrow&\frac{\sqrt{n}(c-\mu)}{\sigma}&\geq&\Phi^{-1}(1-\alpha)\\
+\Longleftrightarrow&c&\geq&\mu+\frac{\sigma}{\sqrt{n}}\Phi^{-1}(1-\alpha)
+\end{array}\]
+Now observe that, for a fixed $c$< and considering $\mu\leq0$ and $\mu\in\Theta_0$
+$$\prob(\bar{X}\geq c;\mu\in\Theta_0)\leq\prob(\bar{X}\geq c;\mu=0)$$
+Thus we can esure that
+$$\sup_{\mu\in\theta_0}\prob(\bar{X}\geq c;\mu)=\alpha$$
+by taking $c=\frac{\sigma}{\sqrt{n}}\Phi^{-1}(1-\alpha)$.\\
+
+\remark{Change in Critical Value}
+\textit{Critical Value}, $c$, decreases as number of sample, $n$, increases.\\
+\textit{Critical Value}, $c$, increases as variance, $\sigma$, increases.\\
+
+\remark{}
+\textit{Significance Level}, $\alpha$, is directly related to the phrase \textit{"statistical significance"}. \textit{Statistical Significance} relates only to the \textit{Type I Error} rate.
+
+\subsubsection{Power}
+
+\definition{Power Function}
+Let $\X\sim f(\cdot;\theta^*)$, $T(\cdot)$ be a test statistic \& $c$ be the critical value of $T$.\\
+The power function, $\pi(\cdot;T,c):\Theta\to[0,1]$, is the probabiltiy of rejecting $H_0$ when th etrue value of the parameter is $\theta\in\Theta$.
+$$\pi(\theta;T,c):=\prob(\X\in R;\theta)=\prob(T(\X)\geq c;\theta)$$
+
+\remark{}
+For a given $\theta\in\Theta_1$, the probability of a \textit{Type II Error} occuring is $1-\pi(\theta;T,c)$.\\
+
+\remarkk{}
+\begin{enumerate}[label=\roman*)]
+	\item THe power is non-increasing in $c$, regardless of whether $\theta\in\Theta_0$ or $\theta\in\Theta_1$.
+	\item To make the probabiltiy of \textit{Type I Error} tend to 0 we should make $c$ very large so we rarely reject $H_0$.
+	\item If $c$ is really large, we will rarely reject $H_0$ even if $\theta\in\Theta_1$. Thus the \textit{Power} is low and the probabilitiy of \textit{Type II Error} is high.
+\end{enumerate}
+
+\notation{}
+When it is clear from context what test, $T(\cdot)$, and critical value, $c$, we are referring to then we may write $\pi(\theta)$ in place of $\pi(\theta;T,c)$.\\
+
+\example{Testing the Mean of a Normal Sample - Continued}
+Suppose that $\X\iid\text{Normal}(\mu,\sigma^2)$ and we want to test
+$$H_0:\mu\leq0\text{ and }H_1:\mu>0$$
+We consider the test statistic $T(\x)=\bar{x}$ with critical region $R=\{\x\in\mathcal{X}^n:\bar{x}\geq c\}$ for some $c\in\reals$.\\
+The \textit{Power Function} of this test is
+$$\pi(\mu;T,c)=\prob(\bar{X}\geq c;\mu)$$
+We have already derived that $\dfrac{\bar{X}-\mu}{\sigma/\sqrt{n}}\sim\text{Normal}(0,1)$. Hence
+\[\begin{array}{rcl}
+\prob(\bar{X}\geq c;\mu)&=&\prob\left(\dfrac{\bar{X}-\mu}{\sigma/\sqrt{n}}\geq\dfrac{c-\mu}{\sigma/\sqrt{n}}\right)\\
+&=&\prob\left(Z\geq\dfrac{c-\mu}{\sigma/\sqrt{n}};\mu\right)\\
+&=&1-\Phi\left(\dfrac{c-\mu}{\sigma/\sqrt{n}}\right)\\
+&=&\Phi\left(\dfrac{\mu-c}{\sigma/\sqrt{n}}\right)
+\end{array}\]
+
+\definition{Size of a Test}
+The size of a test is the greatest possible probability of making a \textit{Type I Error}
+$$\alpha=\sup_{\theta\in\Theta_0}\pi(\theta;T,c)$$
+\nb It is the maximium power under the null-hypothesis.\\
+
+\remark{}
+Generally we choose a critical value $c$ so that th etest has size $\alpha$.\\
+
+\definition{Significance Level of a Test}
+A test has level $\alpha$ if its size is less than or equal to $\alpha$. The corresponding test is called a \textit{Level $\alpha$ Test}.\\
+
+\definition{}
+When $\Theta_0=\{\theta_0\}$ (\ie simple) then $\alpha=\pi(\theta_0;T,c)$ is the significan level.\\
+
+\definition{}
+When $\Theta_1=\{\theta_1\}$ (\ie simple) then $10\pi(\theta_1;T,c)$ is the probability of \textit{Type II Error}.\\
+
+\example{Testing the mean of a normal sample - Continued}
+Suppose that $\X\iid\text{Normal}(\mu,\sigma^2)$ and that we want to test
+$$H_0;\mu\leq 0\text{ and }H_1:\mu>0$$
+We consider the test statistic $T(\x)=\bar{x}$ with critical region $R$.\\
+A test of size $\alpha$ is obtained by choosing
+$$c=\frac{\sigma}{\sqrt{n}}\Phi^{-1}(1-\alpha)=\frac{\sigma}{\sqrt{n}}z_\alpha$$
+So we consider the fact that $c=\frac{\sigma}{\sqrt{n}}z_\alpha$ and we obtain
+$$\prob\left(\bar{X}\geq\frac{\sigma}{\sqrt{n}}z_\alpha;\mu\right)=1-\Phi\left(z_\alpha-\frac{\mu\sqrt{n}}{\sigma}\right)$$
+This gives the power $\forall\ \mu\in\reals$ and we are interested in particular in it for $\mu>0$.
 
 \newpage
 \setcounter{section}{-1}
