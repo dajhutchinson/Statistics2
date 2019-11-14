@@ -32,13 +32,13 @@
 \fancyhead[R]{\today}
 
 % Counters
-\newcounter{definition}[section]
-\newcounter{example}[section]
-\newcounter{notation}[section]
-\newcounter{proposition}[section]
-\newcounter{proof}[section]
-\newcounter{remark}[section]
-\newcounter{theorem}[section]
+\newcounter{definition}[subsection]
+\newcounter{example}[subsection]
+\newcounter{notation}[subsection]
+\newcounter{proposition}[subsection]
+\newcounter{proof}[subsection]
+\newcounter{remark}[subsection]
+\newcounter{theorem}[subsection]
 
 % commands
 \newcommand{\dotprod}[0]{\boldsymbol{\cdot}}
@@ -1406,6 +1406,79 @@ $$c=\frac{\sigma}{\sqrt{n}}\Phi^{-1}(1-\alpha)=\frac{\sigma}{\sqrt{n}}z_\alpha$$
 So we consider the fact that $c=\frac{\sigma}{\sqrt{n}}z_\alpha$ and we obtain
 $$\prob\left(\bar{X}\geq\frac{\sigma}{\sqrt{n}}z_\alpha;\mu\right)=1-\Phi\left(z_\alpha-\frac{\mu\sqrt{n}}{\sigma}\right)$$
 This gives the power $\forall\ \mu\in\reals$ and we are interested in particular in it for $\mu>0$.
+
+\subsection{Designing Tests - Neyman-Peason Approach}
+
+\remarkk{Plan for Testing at Significance Level, $\alpha$}
+\begin{enumerate}[label=\roman*)]
+	\item Define a model $f(\cdot;\theta)$ for $\theta\in\Theta$
+	\item Define a null hypothesis $H_0:\theta\in\Theta_0$ and an alternative hypothesis $H_1:\theta\in\Theta_1=\Theta\backslash\Theta_1$
+	\item Define a test statistic $T(\x)$.
+	\item Choose a critical value, $c$, st $\sup_{\theta\in\Theta_0}\prob(T(\X)\geq c;\theta)\leq\alpha$.
+\end{enumerate}
+\nb The value of $c$ is determined the value of $\alpha$ (which we set).
+
+\theorem{Neyman-Pearson Lemma}
+Suppose we test $H_0:\theta=\theta_0$ against $H_1:\theta=\theta_1$ and use the \textit{Likelihodd Ratio Test Statistic}
+$$T_{NP}(\x):=\frac{f_n(\x;\theta_1}{f_n(\x;\theta_0)}=\frac{L(\theta_1;\x)}{L(\theta_0;\x)}$$
+Let hte \textit{Critical Value}, $c_{NP}\geq0$, be st the test has size $\alpha$
+$$\prob(T_{NP}\geq c_{NP};\theta_0)=\alpha$$
+Then, this test is the \underline{most poweful} level $\alpha$ test.\\
+\ie Among all tests with level $\alpha$, this test maximises the power function.\\
+
+\proof{Theorem 2.1}
+Cibsuder for an arbitrary level $\alpha$ test $(T,c)$, the linear combination of \textit{Type I Errors} and \textit{Type II Errors}.
+$$\phi(T,c):=c_{NP}\alpha(T,c)+\beta(T,c)$$
+where $\alpha(T,c)=\prob(T(\X)\geq c;\theta_0)=\prob(\text{Type I Error}$ and $\beta(T,c)=\prob(T(\X)<c;\theta_1)=1-\prob(T(\X)\geq c;\theta_1)=\prob(\text{Type II Error}$.\\
+Then
+\[\begin{array}{rcl}
+\phi(T,c)&=&c_{NP}\alpha(T,c)+\beta(T,c)\\
+&=&c_{NP}\prob(T(\X)\geq c;\theta_0)+[1-\prob(\X)\geq c;\theta_1)]\\
+&=&{\displaystyle\left[c_{NP}\int\mathds{1}\{T(\x)\geq c\}f_n(\x;\theta_0)d\x\right]+\left[1-\int\mathds{1}\{T(\x)\geq c\}f_n(\x;\theta)d\x\right]}\\
+&=&{\displaystyle1+\int\mathds{1}\{T(\x)\geq c\}\left[c_{NP}f_n(\x;\theta_0)-f_n(\x;\theta_1)\right]d\x}\\
+&=&{\displaystyle 1+\int\mathds{1}\{T(\x)\geq c\}\left[c_{NP}-\dfrac{f_n(\x;\theta_1)}{f_n(\x;\theta_0)}\right]f_n(\x;\theta_0)d\x}\\
+&=&{\displaystyle1+\int\mathds{1}\{T(\x)\geq c\}(c_{NP}-T_{NP}(\x))f_n(\x;\theta_0)d\x}
+\end{array}\]
+Now consider the difference
+$$\phi(T,c)-\phi(T_{NP},c_{NP})=\int\big(\mathds{1}\{T(\x)\geq c\}-\mathds{1}\{T_{NP}(\x)\}\geq c_{NP}\}\big)(c_{NP}-T_{NP}(\x))f_n(\x;\theta_0)d\x$$
+We observe that
+$$\mathds{1}\{T_{NP}(\x)\geq c_{NP}\}=1\Longleftrightarrow c_{NP}-T_{NP}(\x)\leq0$$
+and
+$$\mathds{1}\{T_{NP}(\x)\geq c_{NP}\}=0\Longleftrightarrow c_{NP}-T_{NP}(\x)>0$$
+Thus
+$$\forall\ \x\in\mathcal{X}^n,\quad[\mathds{1}\{T(\x)\geq c\}-\mathds{1}\{T_{NP}(\x)\geq c_{NP}\}](c_{NP}-T_{NP}(\x))\geq 0$$
+and hence as the integral of a non-negative function
+$$\phi(T,c)-\phi(T_{NP},c_{NP})\geq0$$
+We have established
+\[\begin{array}{rcl}
+0&\leq&\phi(T,c)-\phi(T_{NP},c_{NP})\\
+&=&c_{NP}\alpha(T,c)+\beta(T,c)-c_{NP}\alpha(T_{NP},c_{NP})-\beta(T_{NP},c_{NP})\\
+&=&\underbrace{c_{NP}}_{\geq0}[\alpha(T,c)-\alpha(T_{NP},c_{NP})]+\underbrace{\beta(T,c)-\beta(T_{NP},c_{NP})}_{\geq0}
+\end{array}\]
+Since $(T,c)$ specifides an $\alpha$ level test, we know $\alpha(T,c)\geq c$ while $(T_{NP},c_{NP})$ specifies a size $\alpha$ test so $\alpha(T_{NP},c_{NP})=\alpha$.\\
+It follows that
+$$\alpha(T,c)-\alpha(T_{NP},c_{NP})$$
+so we have
+$$\beta(T,c)-\beta(T_{NP},c_{NP})\geq0$$
+which means $(T_{NP},c_{NP})$'s \textit{Type II Error} rate is no higher than $(T,c)$.\\
+Since $(T,c)$ is an arbitrary $\alpha$ level test, we conclude that $(T_{NP},c_{NP})$ is the most powerful test with level $\alpha$.\proved\\
+
+\remark{Neyman-Pearson with Non-Continuous Random Variable}
+If $T(\X)$ is not a continuous random variable, then it is possible that no such $c_{NP}$ exists. In this situtation we perform an appropriate randomised test, and this will also be the most powerful size $\alpha$ test. \\
+\nb The detials of this are not covered in this course.\\
+
+\definition{Neyman-Peason Procedure}
+For \textbf{Theorem 2.1} we can deduce the \textit{Neyman-Peason Procedure} for testing two simple hypotheses
+\begin{enumerate}[label=\roman*)]
+	\item Choose the \textit{Likelihood Ratio} as the \textit{Test Statistic}
+	$$T(\x)=\frac{f_n(\x;\theta_1)}{f_n(\x;\theta_0)}=\frac{L(\theta_1;\x)}{L(\theta_0;\x)}$$
+	\item Choose a critical value $c$ in order to target a particular significance level, $\alpha$, st
+	$$\alpha=\pi(\theta_0)=\prob(T(\X)\geq c;\theta_0)$$
+	\item Compute the \textit{Power}
+	$$\pi(\theta_1,T,c)=\prob(T(\X)\geq c;\theta_1)$$
+	\item Compute $T(\x)$ and report whether $T(\x)\geq c$ as well as the power $\pi(\theta_1,T,c)$ or the \textit{Type II Error} rate $1-\pi(\theta_1,T,c)$
+\end{enumerate}
+
 
 \newpage
 \setcounter{section}{-1}
