@@ -15,30 +15,30 @@ Consider the random variables $Y_i\overset{\text{ind}}{\sim}\text{Bernoulli}(\si
 
 # Question 1
 By definition we have ${\displaystyle L(\theta;\textbf{y})\propto\prod_{i=1}^nf_{Y_i}(y_i;\theta)}$.\
-Thus, in this case ${\displaystyle L(\theta;\textbf{y})\propto\prod_{i=1}^n\sigma(\theta^Tx_i)^{y_i}(1-\sigma(\theta^Tx_i))^{1-y_i}}$
+Thus, in this case ${\displaystyle L(\theta;\textbf{y})\propto\prod_{i=1}^n\sigma(\theta^T\textbf{x}_i)^{y_i}(1-\sigma(\theta^T\textbf{x}_i))^{1-y_i}}$
 We have
 \[\begin{array}{rrl}
 \ell(\theta;\textbf{y})&:=&\ln L(\theta;\textbf{y})\\
-&=&\ln\left[{\displaystyle L(\theta;\textbf{y})\propto\prod_{i=1}^n\sigma(\theta^Tx_i)^{y_i}(1-\sigma(\theta^Tx_i))^{1-y_i}}\right]\\
-&=&{\displaystyle\sum_{i=1}^n\ln\sigma(\theta^Tx_i)^{y_i}+\ln[1-\sigma(\theta^Tx_i)]^{1-y_i}}\\
-&=&{\displaystyle\sum_{i=1}^ny_i\ln\sigma(\theta^Tx_i)+(1-y_i)\ln[1-\sigma(\theta^Tx_i)]}
+&=&\ln\left[{\displaystyle L(\theta;\textbf{y})\propto\prod_{i=1}^n\sigma(\theta^T\textbf{x}_i)^{y_i}(1-\sigma(\theta^T\textbf{x}_i))^{1-y_i}}\right]\\
+&=&{\displaystyle\sum_{i=1}^n\ln\sigma(\theta^T\textbf{x}_i)^{y_i}+\ln[1-\sigma(\theta^T\textbf{x}_i)]^{1-y_i}}\\
+&=&{\displaystyle\sum_{i=1}^ny_i\ln\sigma(\theta^T\textbf{x}_i)+(1-y_i)\ln[1-\sigma(\theta^T\textbf{x}_i)]}
 \end{array}\]
 
 # Question 2
-Consider $\frac{\partial}{\partial\theta_j}\sigma(\theta^Tx_i)$ we have
+Consider $\frac{\partial}{\partial\theta_j}\sigma(\theta^T\textbf{x}_i)$ we have
 \[\begin{array}{rcl}
-\frac{\partial}{\partial\theta_j}&=&\left[\frac{\partial}{\partial\theta_j}\sigma(\theta^Tx_i)\right].\left[\frac{\partial}{\partial\theta_j}\theta^Tx_i\right]\text{ by chain rule}\\
-&=&\sigma(\theta^Tx_i)(1-\sigma(\theta^Tx_i))x_{ij}\\
+\frac{\partial}{\partial\theta_j}&=&\left[\frac{\partial}{\partial\theta_j}\sigma(\theta^T\textbf{x}_i)\right].\left[\frac{\partial}{\partial\theta_j}\theta^T\textbf{x}_i\right]\text{ by chain rule}\\
+&=&\sigma(\theta^T\textbf{x}_i)(1-\sigma(\theta^T\textbf{x}_i))x_{ij}\\
 \end{array}\]
 Note that $\frac{\partial}{\partial\theta_j}\theta_T=(\delta_{ij}:i\in[1,n])$, the vectors of all zeros except at position $j$ where it is 1.\
-Thus $\frac{\partial}{\partial\theta_j}\theta_Tx_i=x_{ij}$.\
+Thus $\frac{\partial}{\partial\theta_j}\theta_T\textbf{x}_i=x_{ij}$.\
 Now consider $\frac{\partial}{\partial\theta_j}\ell(\theta;\textbf{y})$. Then
 \[\begin{array}{rcl}
-\frac{\partial}{\partial\theta_j}\ell(\theta;\textbf{y})&=&{\displaystyle\sum_{i=1}^ny_i\frac{\partial}{\partial\theta_j}\ln\sigma(\theta^Tx_i)+(1-y_i)\frac{\partial}{\partial\theta_j}\ln[1-\sigma(\theta^Tx_i)]}\\
-&=&{\displaystyle\sum_{i=1}^ny_i\frac{x_{ij}\sigma(\theta^Tx_i)[1-\sigma(\theta^Tx_i)]}{\sigma(\theta^Tx_i)}+(1-y_i)\frac{-x_{ij}\sigma(\theta^Tx_i)[1-\sigma(\theta^Tx_i)]}{1-\sigma(\theta^Tx_i)}{}}\\
-&=&{\displaystyle\sum_{i=1}^n}y_ix_{ij}[1-\sigma(\theta^Tx_i)]-(1-y_i)x_{ij}\sigma(\theta^Tx_i)\\
-&=&{\displaystyle\sum_{i=1}^n}y_ix_{ij}-y_ix_{ij}\sigma(\theta^Tx_i)-x_{ij}\sigma(\theta^Tx_i)+y_ix_{ij}\sigma(\theta^Tx_i)\\
-&=&{\displaystyle\sum_{i=1}^n}[y_i-\sigma(\theta^Tx_i)]x_{ij}
+\frac{\partial}{\partial\theta_j}\ell(\theta;\textbf{y})&=&{\displaystyle\sum_{i=1}^ny_i\frac{\partial}{\partial\theta_j}\ln\sigma(\theta^T\textbf{x}_i)+(1-y_i)\frac{\partial}{\partial\theta_j}\ln[1-\sigma(\theta^T\textbf{x}_i)]}\\
+&=&{\displaystyle\sum_{i=1}^ny_i\frac{x_{ij}\sigma(\theta^T\textbf{x}_i)[1-\sigma(\theta^T\textbf{x}_i)]}{\sigma(\theta^T\textbf{x}_i)}+(1-y_i)\frac{-x_{ij}\sigma(\theta^T\textbf{x}_i)[1-\sigma(\theta^T\textbf{x}_i)]}{1-\sigma(\theta^T\textbf{x}_i)}{}}\\
+&=&{\displaystyle\sum_{i=1}^n}y_ix_{ij}[1-\sigma(\theta^T\textbf{x}_i)]-(1-y_i)x_{ij}\sigma(\theta^T\textbf{x}_i)\\
+&=&{\displaystyle\sum_{i=1}^n}y_ix_{ij}-y_ix_{ij}\sigma(\theta^T\textbf{x}_i)-x_{ij}\sigma(\theta^T\textbf{x}_i)+y_ix_{ij}\sigma(\theta^T\textbf{x}_i)\\
+&=&{\displaystyle\sum_{i=1}^n}[y_i-\sigma(\theta^T\textbf{x}_i)]x_{ij}
 \end{array}\]
 
 # Question 3
@@ -50,3 +50,139 @@ Consider $\frac{\partial^2}{\partial\theta_j\partial\theta_k}\ell(\theta;\textbf
 &=&{\displaystyle-\sum_{i=1}^nx_{ij}\sigma(\theta^Tx_i)[1-\sigma(\theta^Tx_i)]x_{ik}\text{ by result in Question 2}}\\
 &=&{\displaystyle-\sum_{i=1}^n\sigma(\theta^Tx_i)[1-\sigma(\theta^Tx_i)]x_{ij}x_{ik}}
 \end{array}\]
+
+```{r}
+# Standard Logistic Function
+sigma <- function(v) {
+  1/(1+exp(-v))
+}
+
+# Log likelihood function
+ell <- function(theta, X, y) {
+  p <- as.vector(sigma(X%*%theta))
+  sum(y*log(p) + (1-y)*log(1-p))
+}
+
+# Score Function
+score <- function(theta, X, y) {
+  p <- as.vector(sigma(X%*%theta))
+  as.vector(t(X)%*%(y-p))
+}
+
+# Calculate Hessian Matrix
+hessian <- function(theta, X) {
+  p <- as.vector(sigma(X%*%theta))
+  -t(X)%*%((p*(1-p))*X)
+}
+```
+
+```{r}
+fep.eet <- read.csv("data/FEP_EET.csv") # load data
+head(fep.eet)
+
+X.raw <- as.matrix(fep.eet[,1:7]) # Explanatory variables (ie first 7 cols)
+X <- cbind(1,X.raw) # Add column of 1s at start of X
+head(X)
+
+y <- fep.eet$Y1_Emp # Response variables (ie last col)
+d <- 8 # Number dimensions of parameters
+
+# Compute Maximum Likelihood Estimate
+maximize.ell <- function(ell, score, X, y, theta_0) {
+  optim.out <- optim(theta_0, fn=ell, gr=score, X=X, y=y, method="BFGS",
+    control=list(fnscale=-1, maxit=1000, reltol=1e-16))
+  optim.out$par
+}
+
+mle <- maximize.ell(ell, score, X, y, rep(0,d))
+mle
+```
+
+# Question 4
+Let $\alpha\in(0,1)$ and $z_{\beta}:=\Phi^{-1}(1-\beta)$.\
+We have $\dfrac{\hat\theta_{n,j}-\theta_j}{\sqrt{I_n(\hat\theta_n)^{-1}_{jj}}}\to_{\mathcal{D}(\cdot;\theta)}\text{Normal}(0,1)$. Then
+\[\begin{array}{rrcl}
+&\mathbb{P}\left(-z_{\alpha/2}\leq\dfrac{\hat\theta_{n,j}-\theta_j}{\sqrt{I_n(\hat\theta_n)^{-1}_{jj}}}\leq z_{\alpha/2}\right)&=&1-\alpha\\
+\implies&\mathbb{P}\left(-\hat\theta_{n,j}-z_{\alpha/2}\sqrt{I_n(\hat\theta_n)^{-1}_{jj}}\leq-\theta_j\leq-\hat\theta_{n,j}+z_{\alpha/2}\sqrt{I_n(\hat\theta_n)^{-1}_{jj}}\right)&=&1-\alpha\\
+\implies&\mathbb{P}\left(\hat\theta_{n,j}-z_{\alpha/2}\sqrt{I_n(\hat\theta_n)^{-1}_{jj}}\leq\theta_j\leq\hat\theta_{n,j}+z_{\alpha/2}\sqrt{I_n(\hat\theta_n)^{-1}_{jj}}\right)&=&1-\alpha
+\end{array}\]
+Thus we have $\mathbb{P}\left(\theta_j\in[L(\textbf{X}\right)_j,U(\textbf{X})_j])=1-\alpha$ where $$L(\textbf{X})_j=\hat\theta_{n,j}-z_{\alpha/2}\sqrt{I_n(\hat\theta_n)^{-1}_{jj}}\quad\text{and}\quad U(\textbf{X})_j=\hat\theta_{n,j}+z_{\alpha/2}\sqrt{I_n(\hat\theta_n)^{-1}_{jj}}$$.
+```{r}
+compute.CI.endpoints <- function(X,y,alpha) {
+  mle<-maximize.ell(ell,score,X,y,rep(0,d))
+  
+  fisher_information<-(-1)*hessian(mle,X)
+  fisher_information.inverse<-solve(fisher_information)
+  diagonal=diag(fisher_information.inverse)
+  
+  z_alpha=qnorm(1-alpha/2)
+  
+  # Calculate lower & upper endpoints
+  lower=mle-z_alpha*sqrt(diagonal)
+  upper=mle+z_alpha*sqrt(diagonal)
+  
+  return(list(lower=lower,upper=upper))
+}
+
+ci<-compute.CI.endpoints(X,y,0.05)
+
+# Visualise confidence intervals
+plot.ci <- function(mle, CI.L, CI.U, components) {
+  plot(components, mle[components], pch=20, main="Observed confidence intervals",
+    xlab="component", ylab="value", ylim=c(min(CI.L[components]), max(CI.U[components])))
+  arrows(components, CI.L[components], components, CI.U[components], length=0.05, angle=90, code=3)
+  abline(h=0.0, col="red")
+  axis(side=1, at=components, labels = FALSE)
+}
+
+plot.ci(mle, ci$lower, ci$upper, 1:4)
+plot.ci(mle, ci$lower, ci$upper, 5:8)
+```
+
+# Question 5
+```{r}
+# generate data associated with the matrix X when theta is the true value of the parameter
+generate.ys<-function(X,theta) {
+  n<-dim(X)[1]
+  rbinom(n,size=1,prob=sigma(X%*%theta))
+}
+
+theta_star=c(-.7,3.5,0,0,0,0,-.08,0)
+
+prop.condition <- function(trials,X,theta,component) {
+  count.coverage<-0
+  count.exclude_zero<-0
+  
+  for (i in 1:trials) {
+    ys<-generate.ys(X,theta)
+    ci<-compute.CI.endpoints(X,ys,0.05)
+    # check whether theta*_component is in interval
+    if (ci$lower[component]<=theta[component] && ci$upper[component]>=theta[component]) count.coverage=count.coverage+1
+    # check whether 0 is excluded
+    if (ci$lower[component]>0 || ci$upper[component]<0) count.exclude_zero=count.exclude_zero+1
+  }
+  return(list(coverage=count.coverage/trials,exclude_zero=count.exclude_zero/trials))
+}
+
+seven<-prop.condition(1000,X,theta_star,7)
+eight<-prop.condition(1000,X,theta_star,8)
+
+cat("Coverage of CI for theta_7:",seven$coverage,
+    "\nProbability that 0 is excluded from CI for theta_7",seven$exclude_zero,
+    "\nCoverage of CI for theta_8:",eight$coverage,
+    "\nProbability that 0 is excluded from CI for theta_8",eight$exclude_zero)
+```
+
+# Question 6
+```{r}
+big.X<-rbind(X,X)
+
+seven<-prop.condition(1000,big.X,theta_star,7)
+eight<-prop.condition(1000,big.X,theta_star,8)
+
+cat("Coverage of CI for theta_7:",seven$coverage,
+    "\nProbability that 0 is excluded from CI for theta_7",seven$exclude_zero,
+    "\nCoverage of CI for theta_8:",eight$coverage,
+    "\nProbability that 0 is excluded from CI for theta_8",eight$exclude_zero)
+```
+The only notably difference between the results in \textbf{Question 5} \& those in \textbf{Question 6} are for \textit{"The Probability that the asymptotically exact $1-\alpha$ confidence interval for $\theta_7$ exclude 0}, we see an increase when the data set is doubled in size. As the number of data points increases the width of the confidence interval decreases but its mean value won't change. Looking at the plots produced in \textbf{Question 4} we see that the upper bound for $\theta_7$ is just below $0$, we expect this upper bound to decrease thus moving further away from $0$ meaning more samples will not include it.
