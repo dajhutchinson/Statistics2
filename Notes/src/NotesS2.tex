@@ -61,20 +61,20 @@
 \newcommand{\iid}[0]{\overset{\text{iid}}{\sim}}
 \newcommand{\proved}[0]{$\hfill\square$\\}
 
-\newcommand{\definition}[1]{\stepcounter{definition} \textbf{Definition \arabic{section}.\arabic{definition}\ - }\textit{#1}\\}
-\newcommand{\definitionn}[1]{\stepcounter{definition} \textbf{Definition \arabic{section}.\arabic{definition}\ - }\textit{#1}}
-\newcommand{\proof}[1]{\stepcounter{proof} \textbf{Proof \arabic{section}.\arabic{proof}\ - }\textit{#1}\\}
-\newcommand{\prooff}[1]{\stepcounter{proof} \textbf{Proof \arabic{section}.\arabic{proof}\ - }\textit{#1}}
-\newcommand{\example}[1]{\stepcounter{example} \textbf{Example \arabic{section}.\arabic{example}\ - }\textit{#1}\\}
-\newcommand{\examplee}[1]{\stepcounter{example} \textbf{Example \arabic{section}.\arabic{example}\ - }\textit{#1}}
-\newcommand{\notation}[1]{\stepcounter{notation} \textbf{Notation \arabic{section}.\arabic{notation}\ - }\textit{#1}\\}
-\newcommand{\notationn}[1]{\stepcounter{notation} \textbf{Notation \arabic{section}.\arabic{notation}\ - }\textit{#1}}
-\newcommand{\proposition}[1]{\stepcounter{proposition} \textbf{Proposition \arabic{section}.\arabic{proposition}\ - }\textit{#1}\\}
-\newcommand{\propositionn}[1]{\stepcounter{proposition} \textbf{Proposition \arabic{section}.\arabic{proposition}\ - }\textit{#1}}
-\newcommand{\remark}[1]{\stepcounter{remark} \textbf{Remark \arabic{section}.\arabic{remark}\ - }\textit{#1}\\}
-\newcommand{\remarkk}[1]{\stepcounter{remark} \textbf{Remark \arabic{section}.\arabic{remark}\ - }\textit{#1}}
-\newcommand{\theorem}[1]{\stepcounter{theorem} \textbf{Theorem \arabic{section}.\arabic{theorem}\ - }\textit{#1}\\}
-\newcommand{\theoremm}[1]{\stepcounter{theorem} \textbf{Theorem \arabic{section}.\arabic{theorem}\ - }\textit{#1}}
+\newcommand{\definition}[1]{\stepcounter{definition} \textbf{Definition \arabic{subsection}.\arabic{definition}\ - }\textit{#1}\\}
+\newcommand{\definitionn}[1]{\stepcounter{definition} \textbf{Definition \arabic{subsection}.\arabic{definition}\ - }\textit{#1}}
+\newcommand{\proof}[1]{\stepcounter{proof} \textbf{Proof \arabic{subsection}.\arabic{proof}\ - }\textit{#1}\\}
+\newcommand{\prooff}[1]{\stepcounter{proof} \textbf{Proof \arabic{subsection}.\arabic{proof}\ - }\textit{#1}}
+\newcommand{\example}[1]{\stepcounter{example} \textbf{Example \arabic{subsection}.\arabic{example}\ - }\textit{#1}\\}
+\newcommand{\examplee}[1]{\stepcounter{example} \textbf{Example \arabic{subsection}.\arabic{example}\ - }\textit{#1}}
+\newcommand{\notation}[1]{\stepcounter{notation} \textbf{Notation \arabic{subsection}.\arabic{notation}\ - }\textit{#1}\\}
+\newcommand{\notationn}[1]{\stepcounter{notation} \textbf{Notation \arabic{subsection}.\arabic{notation}\ - }\textit{#1}}
+\newcommand{\proposition}[1]{\stepcounter{proposition} \textbf{Proposition \arabic{subsection}.\arabic{proposition}\ - }\textit{#1}\\}
+\newcommand{\propositionn}[1]{\stepcounter{proposition} \textbf{Proposition \arabic{subsection}.\arabic{proposition}\ - }\textit{#1}}
+\newcommand{\remark}[1]{\stepcounter{remark} \textbf{Remark \arabic{subsection}.\arabic{remark}\ - }\textit{#1}\\}
+\newcommand{\remarkk}[1]{\stepcounter{remark} \textbf{Remark \arabic{subsection}.\arabic{remark}\ - }\textit{#1}}
+\newcommand{\theorem}[1]{\stepcounter{theorem} \textbf{Theorem \arabic{subsection}.\arabic{theorem}\ - }\textit{#1}\\}
+\newcommand{\theoremm}[1]{\stepcounter{theorem} \textbf{Theorem \arabic{subsection}.\arabic{theorem}\ - }\textit{#1}}
 
 \tableofcontents
 
@@ -1479,6 +1479,79 @@ For \textbf{Theorem 2.1} we can deduce the \textit{Neyman-Peason Procedure} for 
 	\item Compute $T(\x)$ and report whether $T(\x)\geq c$ as well as the power $\pi(\theta_1,T,c)$ or the \textit{Type II Error} rate $1-\pi(\theta_1,T,c)$
 \end{enumerate}
 
+\remarkk{Limitations of Neyman-Pearson Approach}
+\begin{enumerate}[label=\roman*)]
+	\item Often just rejecting $H_0$ or retaining $H_0$ is not satisfactory, we may want more information.
+	\item It is not obvious how to calibrate a likelihood ration test (\ie TO find the critical value or compute the power function).
+\end{enumerate}
+
+\subsection{Testing - p-Values, Equivalent Test Statistics and Computing the Power Function}
+
+\remark{Motivation for p-Value}
+Many studies prefer not to select in advance just one significance level $\alpha$, or they may wish to reposrt something more informative than a binary decision. IN suc cases, they can report the $p$-value associated with the observed test statistic.\\
+
+\definition{p-Value}
+Let $\X\sim f_n(\cdot;\theta^*)$ for some $\theta^*\in\Theta$.\\
+The \textit{$p$-Value} for a test with test statistic $T(\x)$ is the probability of seeing a test statistic $T(\X)$ at least as extreme as $T(\x)$.
+$$p(\x):=\sup_{\theta_0\in\Theta_0}\prob(\underbrace{T(\X)}_{\text{RV}}\geq \underbrace{T(\x)}_{\text{Observed}};\theta_0)$$
+Equivalently, $p(\x)$ is the smallest significance level at which we would reject $H_0$.\\
+
+\remark{p-Value Intuition}
+Intuitively, \textit{$p$-value} is a measure of the eveidence against $H_0$. The smaller it is, the less likely it is that $\x$ is a realisation of $\X\sim f(\cdot;\theta_0)$, resuliting in strong evidence against $H_0$.\\
+\nb A large $p$-value is not evidence in favour of $H_0$, nor is it necessarily evidence in favour of $H_1$ as $H_1$ is not involved at all when comuting the $p$-value.\\
+
+\remark{Standard Caution}
+$p(\x)$ is \textit{not} the probability that $H_0$ is true. It is the probability to observe the data we observed if $\theta_0$ is true.\\
+
+\remark{Distribution of $p$-Value}
+When using a simple null hypothesis $\Theta_0=\{\theta_0\}$ and assuming $T(\X)$ is a continuous random variable when $\X\sim f(\cdot;\theta_0)$, the distribution of $p(\X)$ is in fact uniform under the null hypothesis.\\
+
+\example{Normal}
+THe model is $\X\iid\text{Normal}(\mu,1)$ and we want to test $H_0:\mu=\mu_0<0$ against $H_1:\mu=\mu_1>0$.\\
+The $p$-value for $T(\x)=\bar{x}=\frac{1}{n}\sum x_i$ is
+$$p(\x):=\sup_{\mu\in\Theta_0}\prob\left(\frac{1}{n}\sum_{i=1}^nX_i\geq T(\x)=\bar{x};\mu\right)=\prob\left(\frac{1}{n}\sum_{i=1}^nX_i\geq T(\x)=\bar{x};\mu\right)$$
+A very large postive value of the empirical mean leads to a small $p$-value and is an indication of how unlikely it is to have observed $\x$ if it was a realisation of $\X\iid\text{Normal}(\mu_0,1)$.\\
+A large $p$-value is not an argument in favour of $H_0$, in fact it could suggest that $T(\x)$ is an unlikely realisation under $H_0$.\\
+We have already calculate this kind of expression under the null hypothesis $\bar{X}\sim\text{Normal}(\mu_0,\frac{1}{n})$ so
+\[\begin{array}{rcl}
+\prob(\bar{X}\geq c;\mu)&=&\prob(\sqrt{n}(\bar{X}-\mu_0)\geq\sqrt{n}(c-\mu_0);\mu_0)\\
+&=&\prob(Z\geq\sqrt{n}(c-\mu_0))\\
+&=&1-\Phi(\sqrt{n}(c-\mu_0))
+\end{array}\]
+It follows that
+$$p(\x)=1-\Phi(\sqrt{n}(\bar{x}-\mu_0))$$
+
+\definition{Equivalent Statistics}
+A statistic $T'(\x)$ is equivalent to $T(\x)$ if $\forall$ critical values $c\in\reals$ of $T(\cdot)$ we can find $c'\in\reals$ we can find $c'\in\reals$ st $\forall\ \x\in\mathcal{X}^n$
+$$T(\x)\geq c\Longleftrightarrow T'(\x)\geq c'$$
+Equivalently, $\forall\ c\in\reals$ there exist $c'\in\reals$ such that the corresponding critical regions of $T(\cdot)$ and $T'(\cdot)$ respectively conincide
+$$\{\x\in\mathcal{X}^n:T(\x)\geq c\}=\{\x\in\mathcal{X}^n:T'(\x)\geq c'\}$$
+
+\proposition{Proving Equivalence}
+To verify that $T'(\x)$ is an \textit{Equivalent Statistic} to $T(\x)$ it is sufficient to factorise $T(\x)$ as
+$$T(\x)=Mf(T'(\x))$$
+where $M$ is independent of $\x$ and $f$ is increasing \& bijective.\\
+
+\prooff{Proposition 4.1}
+\[\begin{array}{rcl}
+T(\x)\leq c&\Leftrightarrow&Mf(T'(\x))\geq c\\
+&\Leftrightarrow&f(T'(\x))\geq\frac{c}{M}\\
+&\Leftrightarrow&T'(\x)\leq\underbrace{f^{-1}(c/M)}_{c'}
+\end{array}\]
+
+\example{Geometric Example}
+Let that $\X\iid\text{Geometric}(p)$ so that $f(x;p)=(1-p)^{x-1}p\mathds{1}\{x\in\nats\backslash\{0\}\}$.\\
+Suppose that we want to test $H_0:p=p_0$ against $H_1:p=p_1$ with $p_0>p_1$.
+$$T_{NP}(\x)=\frac{f_n(\x;p_1)}{f_n(\x;p_0)}=\frac{\prod_{i=1}^nf(x_i;p_1)}{\prod_{i=1}^nf(x_i;p_0)}=\prod_{i=1}^n\frac{f(\x_i;p_1)}{f(\x_i;p_0)}$$
+So for $x\in X$
+$$\frac{f(x;p_1)}{f(x;p_0)}=\frac{(1-p_1)^{x-1}p_1}{(1-p_0)^{x-1}p_0}=\left(\frac{1-p_1}{1-p_0}\right)^x\left(\frac{1-p_1}{1-p_0}\right)^{-1}\left(\frac{p_1}{p_0}\right)$$
+So $$T_{NP}(\x)=\left(\frac{1-p_1}{1-p_0}\right)^{\sum x_i}\left(\frac{1-p_1}{1-p_0}\right)^{-n}\left(\frac{p_1}{p_0}\right)^n=\left(\frac{1-p_1}{1-p_0}\right)^{n\bar{x}}\underbrace{\left(\frac{1-p_1}{1-p_0}\right)^{-n}\left(\frac{p_1}{p_0}\right)^n}_{M}$$
+Note that
+$$p_0>p_1\implies 1-p_0<1-p_1\implies\frac{1-p_1}{1-p_0}>1$$
+So $\left(\frac{1-p_1}{1-p_0}\right)^{n\bar{x}}$ is increasing with $\bar{x}$.\\
+It follows that $T'(\x)=\bar{x}$ is an equivalent test statistic to $T_{NP}$.\\
+If $\X\iid\text{Geometric}(p)$ then $n\bar{x}\sim\text{Negative-Binomical}(n,p)$.\\
+Hence we can compute $c_{NP}$ or compute the power function.
 
 \newpage
 \setcounter{section}{-1}
