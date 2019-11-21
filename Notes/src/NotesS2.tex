@@ -1625,7 +1625,68 @@ $$T_{NP}(\x)=\prod_{i=1}^n\left(\dfrac{e^{-\lambda_1}\lambda_1^{x_i}(x_i!)^{-1}}
 Since $\lambda_1>\lambda_0$ we have $T_{NP}(\x)$ is an increasing function in terms of $\sum x_i$.\\
 So $S_n:=\sum x_i$ is an equivalent test statistic and does not depend on $\lambda_0$ or $\lambda_1$.\\
 Hence, $S_n$ is a \textit{Uniformly Most Powerful Test}.
+To find the $p$-value
+$$p(\x)=\prob(S_n(\X)\geq S_n(\x);\lambda_0)$$
+We use $\lambda_0$ in this scenario since it is the vlaue which is most likely to produce extreme values, in general, for $T(\X)$.\\
+We know that $S_n(\X)=\sum X_i\sim\text{Poisson}(n\lambda)$. So
+$$p(\x)=\sum_{k\geq S_n(\x)}e^{-\lambda_0n}(n\lambda_0)^k\frac{1}{k!}$$
+\textit{Alternatively}\\
+If $n$ is alrge $S_n(\X)\simeq\text{Normal}(n\lambda,n\lambda)$.\\
+So
+$$p(\x)\simeq\prob\left(Z\geq\dfrac{S_n(\x)-n\lambda_0}{\sqrt{n\lambda_0}}\right)=1-\Phi\left(\dfrac{S_n(\x)-n\lambda_0}{\sqrt{n\lambda_0}}\right)$$
+where $Z\sim\text{Normal}(0,1)$.\\
 
+\example{Geometric}
+Let $\X\iid\text{Geometric}(p)$ we have already shown that for two simple hypotheses $\bar{X}$ is equivalent to the likelihood ratio test statistic when $p_0>p_1$.\\
+It follows that $T(\x)=S_n(\x)$ is equivalent.\\
+We have noticed that $S_n(\X)\sim\text{NegBinomial}(n,p)$.\\
+We shall compute the $p$-value assocaited to hypotheses $H_0:p\leq p_0$ against $H_1:p>p_0$.\\
+From \textbf{Example 2.4.2} we have that for $H_0':p=p_0$ against $H_1':p=p_1$
+$$T_{NP}(\x)=\left(\frac{p_1}{p_0}\right)^n\left(\frac{1-p_1}{1-p_0}\right)^{-n}\left(\frac{1-p_1}{1-p_0}\right)^{n\bar{x}}$$
+For $P_1>p_0$ we see that $T_{NP}$ is a decreasing function (since the last two terms are $<0$) in terms of $\sum X_i=:S_n$.\\
+Hence it is increasing in terms of $T(\x):=-S_n(\x)$.\\
+Since $S_n$ is independent of $p_0$ \& $p_1$ we have that $-S_n$ is a \textit{Unifromly Most Powerful Test}.
+$$p\text{-value}:=p(\x)-\prob(-S_n(\X)\geq-S_n(\x);p_0)=\prob(S_n(\X)\leq S_n(\x);p_0)$$
+where $S_n(\X)\sim\text{NegativeBinomial}(n,p_0)$.\\
+
+\remark{Uniformly Most Powerful Tests need not exist}
+In general, \textit{Uniformly Most Powerful Tests} need not exist.\\
+It might be the case that $(T_1,c_1)$ is best for, say, $\theta_{1,1}\in\Theta_1$.\\
+\ie $\forall\ (T',c')$
+$$\pi(\theta_{1,1};T_1,c_1)\geq\pi(\theta_{1,1};T',c')$$
+but $\exists\ (T_2,c_2)$ st
+$$\pi(\theta_{1,2};T_2,c_2)>\pi(\theta_{1,2};T_1,c_1)\quad\theta_{1,2}\in\Theta_1$$
+\ie $(T_2,c_2)$ is better than $(T_1,c_1)$.\\
+
+\subsection{Generalised Likelihood Ratio Test}
+
+\remark{Generalised Tests}
+In the most general case we would like to test $H_0:\theta\in\Theta_0$ against $H_1:\theta\in\Theta_1$.\\
+There is no guarantee of the existence of an optimal test statistic.\\
+
+\proposition{Generalised Likelihood Ratio Test}
+We can generalie the likelihood ratio test for simple hypotheses from
+$$T_{NP}(\x)=\frac{f_n(\x;\theta_1)}{f_n(\x;\theta_0)}$$
+to
+$$T_\text{suggested}(\x):=\frac{\sup_{\theta\in\Theta_1}(f_n(\x;\theta)}{\sup_{\theta\in\Theta_0}(f_n(\x;\theta)}$$
+\nb The  generalised simple hypothese are $\Theta_i=\{\theta_i\}$ for $\theta_i\in\Theta$.\\
+
+\definition{Likelihood Ratio}
+We define a \textit{Likelihood Ratio}
+\[\begin{array}{rrl}
+\Lambda_n(\x)&:=&{\displaystyle\frac{\sup_{\theta\in\Theta_0}f_n(\x;\theta)}{\sup_{\theta\in\Theta}f_n(\x;\theta)}}\\
+&=&{\displaystyle\frac{\sup_{\theta\in\Theta_0}f_n(\x;\theta)}{f_n(\x;\underbrace{\hat\theta_n}_\text{MLE})}}\\
+&=&{\displaystyle\min\bigg\{\underbrace{1}_{\hat\theta_n\in\Theta_0},\underbrace{\frac{\sup_{\theta\in\Theta_0}f_n(\x;\theta)}{\sup_{\theta\in\Theta_1}f_n(\x;\theta)}}_{_{\hat\theta_n\not\in\Theta_0}}\bigg\}}
+\end{array}\]
+
+\remarkk{Likelihood Ratio}
+\begin{enumerate}[label=\roman*)]
+	\item The denominiator corresponds to plugging in the \textit{Maximum Likelihood Estimate} in the likelihood (assuming it exists and is unique).
+	\item The last equality follows from the fact that $\sup_{\theta\in\Theta}f_n(\x;\theta)\geq\sup_{\theta\in\Theta_0}f_n(\x;\theta)$.\\
+	if the inequality is strict then
+	$$\sup_{\theta\in\Theta}f_n(\x;\theta)=\sup_{\theta\in\Theta_1}f_n(\x;\theta)>\sup_{\theta\in\Theta_0}f_n(\x;\theta)$$
+	and if it is an equality then $\Lambda_n(\x)=1$.
+\end{enumerate}
 
 \newpage
 \setcounter{section}{-1}
