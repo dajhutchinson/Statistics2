@@ -3,7 +3,13 @@ title: "Problem Sheet 7"
 subtitle: "Statistics 2"
 author: "Dom Hutchinson"
 header-includes:
-   - \usepackage{dsfont}
+  - \usepackage{dsfont}
+  - \usepackage{fancyhdr}
+  - \pagestyle{fancy}
+  - \renewcommand{\headrulewidth}{0pt}
+  - \fancyhead[L]{Dom Hutchinson}
+  - \fancyhead[C]{Statistics 2 - Problem Sheet 7}
+  - \fancyhead[R]{\today}
 output:
   pdf_document: 
      fig_width: 6
@@ -15,9 +21,9 @@ output:
 # Question 1
 
 ## a)
-By assuming that the colour each bulb comes up is independent we can define  $X\sim\text{Binomial}(12,p)$ to represent the number of blubs which come up red.\
+By assuming that the colour each bulb comes up is independent we can define  $X\sim\text{Binomial}(12,p)$ to represent the number of bulbs which come up red.\
 Define simple hypotheses $H_0:p=0.25$ (\textit{i.e.} $ii)$ is true) and $H_1:p=0.6$ (\textit{i.e.} $i)$ is true)\
-Define test statisic $T(X)=X$.\
+Define test statisic $T(x)=x$.\
 Since the farmer decides to accept $i)$ if 8 or more bulbs come up red, we have critical value $c=8$ and critical region $R=[8,12]$.
 
 ## b)
@@ -48,18 +54,19 @@ T_{NP}(x)&=&\dfrac{L(p=0.6;x)}{L(p=0.25;x)}\\
 &=&\left(\dfrac{12}{5}\right)^x\left(\dfrac{8}{15}\right)^{12-x}\\
 &=&\dfrac{12^x8^{12-x}}{5^x15^{12-x}}\\
 &=&\dfrac{2^{2x}3^x2^{3(12-x)}}{5^x3^{12-x}5^{12-x}}\\
-&=&\dfrac{2^{36-x}3^{2x-12}}{5^{12}}
+&=&\dfrac{2^{36-x}3^{2x-12}}{5^{12}}\\
+&\propto&2^{36-x}3^{2x-12}
 \end{array}\]
 Thus $T_{NP}(x)$ is an increasing function with $x$.\
-In \textbf{a)} we defined $T(X)=X$ meaning $T(X)$ is an equivalent test statistic to $T_{NP}(X)$. Meaning the farmer's test statistic is optimal in the Neyman-Pearson sense.\
+In \textbf{a)} we defined $T(x)=x$ meaning $T(x)$ is an equivalent test statistic to $T_{NP}(X)$. Meaning the farmer's test statistic is optimal in the Neyman-Pearson sense.\
 
 ## e)
-Consider the power function of $(T,c)$ with $n$ \& $c$ not fixed. Then
+Consider the power function of $(T,c)$ with $n$ \& $c$ not fixed.
 $$\pi_n(p;X,c):=\sum_{i=c}^n{n\choose i}p^i(1-p)^{n-i}$$
-We want a test $(T,c)$ with signifiance level $\alpha=0.05$ and rate of type II error $\beta=0.1$.\
-Then we want to find $n$ \& $c$ such that both the following equalities are satisfied
+We want to find a test $(T,c)$ with signifiance level $\alpha=0.05$ and rate of type II error $\beta=0.1$.\
+Thus we want to find a comination of $n$ \& $c$ which statisifies both the following equalities
 $$\pi_n(0.25;X,c)=0.05\quad\text{and}\quad1-\pi_n(0.6;X,c)=0.1$$
-Noting that
+We note that
 $$\pi_n(0.25;X,c)=\sum_{i=c}^n{n\choose i}\left(\frac{1}{4}\right)^i\left(\frac{3}{4}\right)^{n-i}\quad\text{and}\quad\pi_n(0.6;X,c)=\sum_{i=c}^n{n\choose i}\left(\frac{3}{5}\right)^i\left(\frac{2}{5}\right)^{n-i}$$
 Using trial-and-error
 \begin{tabular}{|c|c|c|c|}
