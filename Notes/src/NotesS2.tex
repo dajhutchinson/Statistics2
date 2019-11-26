@@ -1688,6 +1688,86 @@ We define a \textit{Likelihood Ratio}
 	and if it is an equality then $\Lambda_n(\x)=1$.
 \end{enumerate}
 
+\definition{Nested Parameter Space}
+Let $\Theta\subseteq\reals^d$ and define $\phi=(\phi_1,\phi_2):\Theta\to\Phi_1\times\Phi_2$ to a \textit{continuously differentiable bijection} with $\Phi_1\subseteq\reals^r$ and $\Phi_2\subseteq\reals^{d-r}$.\\
+$\Theta_0$ is said to be \textit{Nested} within $\Theta$ if for some $c\in\Phi_1\subseteq\reals^r$
+$$\Theta_0=\{\theta\in\Theta:\phi_1(\theta)=c\}$$
+\nb $\text{dim}(\Theta_0)=d-r$.\\
+
+\example{Nested Parameter Space}
+Suppose $\X\iid\text{Normal}(\mu,\sigma^2)$ then $\pmb\Theta=\{\mu,\sigma^2\}$.\\
+Suppose $\phi_1(\mu,\sigma^2)=\mu$ \& $\phi_2(\mu,\sigma^2)=\sigma^2$ then $\Phi_1=\reals$ \& $\Phi_2=\reals^+\subseteq\reals$.\\
+Then $\Theta_0:=\{(\mu,\sigma^2):\phi_1(\mu,\sigma^2)=0\}$ is \textit{Nested} in $\Theta$.\\
+
+\theorem{Distribution of Test Statistics in Nested Parameter Spaces}
+Let $\Theta\subset\reals^d$ and $\X\iid f(\cdot;\theta)$ for $\theta\in\Theta_0$ (\ie $H_0$ is true) where $\Theta_0$ is nested in $\Theta$. Then
+$$T_n(\X)=-2\ln\Lambda_n(\X)\to_{\mathcal{D}(\cdot;\theta)}W\sim\chi^2_r$$
+with $r=\text{dim}(\Theta)-\text{dim}(\Theta_0)$.\\
+\nb The proof is not covered in this course but relies on the taulor expansion of the likelihood.\\
+
+\remark{If value of the null hypothesis is fixed, $H_0:\theta=0$, then $\text{dim}(\Theta_0)=0$}
+
+\example{}
+Let $\X\iid\text{Poisson}(\lambda^*)$ for some $\lambda^*>0$.\\
+Consider the test
+$$H_0:\lambda=\lambda_0\quad\text{against}\quad H_1:\lambda\neq\lambda_0$$
+Then
+\[\begin{array}{rcl}
+T_n(\x)&=&-2\ln\left(\dfrac{f_n(\x;\lambda_0)}{f_n(\x;\hat\lambda_n)}\right)\text{ where }\hat\lambda_n\text{ is MLE of }\lambda\\
+&=&-2\ln[\ell_n(\lambda;\x)-\ell_n(\hat\lambda_n;\x)]
+\end{array}\]
+We know
+\[\begin{array}{rrcl}
+&f_n(\x;\lambda)&=&{\displaystyle\prod_{i=1}^n\dfrac{e^{-\lambda}\lambda^{x_i}}{x_i!}}\text{ by independence}\\
+&&\propto&e^{-n\lambda}\lambda^{n\bar{x}}\\
+\implies&\ell_n(\lambda;\x)&=&c-n\lambda+n\bar{x}\ln\lambda\\
+\text{Taking}&\ell'_n(\lambda;\x)&=&0\\
+\implies&-n+\frac{\bar{x}n}{\lambda}&=&0\\
+\implies&\hat\lambda&=&\bar{x}
+\end{array}\]
+We confirm $\hat\lambda$ is a \textit{Maximum Likelihood Estimate} by showing $\ell''_n(\bar{x};x)<0$.\\
+So
+\[\begin{array}{rcl}
+T_n(\x)&=&-2\left[-n(\lambda_0-\hat\lambda_n)+n\bar{x}\ln\frac{\lambda_0}{\hat\lambda_n}\right]\\
+&=&-2\left[-n(\lambda_0-\bar{x})+n\bar{x}\ln\frac{\lambda_0}{\bar{x}}\right]
+\end{array}\]
+We know that
+$$T_n(\X)\sim\chi^2_{1-0}=\chi^2_1\text{ under }H_0$$
+since $\text{dim}(\Theta)=1$ and $\text{dim}(\Theta_0)=0$.\\
+
+\definition{Two Sided Test}
+A \textit{Two Sided Hypothesis Test} is a hypothesis test where the alternative hypothese covers two separate regions of the parameter space. The general form is
+$$H_0:\theta=\theta_0\quad\text{against}\quad H_1:\theta\neq\theta_0$$
+
+\remark{Connection to Confidence Intervals}
+Recall that a test of size approximately $\alpha$ is obtained by retain $H_0$ if
+$$T_n(\x)=-2\left[\ell_n(\theta_0;\x)-\ell_n(\hat\theta_n;\x)\right]<\chi^2_{r,\alpha}$$
+The values of $\theta_0$ which lead to the retention of $H_0$ are
+\[\begin{array}{rcl}
+C(\x)&=&\left\{\theta:-2[\ell_n(\theta;\x)-\ell_n(\hat\theta_n;\x)]<\chi^2_{r,\alpha}\right\}\\
+&=&\left\{\theta:\ell_n(\theta;\x)>\ell_n(\hat\theta_n;\x)-\frac{1}{2}\chi^2_{r,\alpha}\right\}\\
+\end{array}\]
+This is an asymptotically exact $1-\alpha$ confidence set for $\theta$.
+
+\subsection{Categorical Distributions and Pearson's Chi-Squared Test}
+
+\definition{Categorical Distribution}
+Let $Y$ be a random variable which takes one value from a finite set $\{1,\dots,m\}$.\\
+Let $\text{p}:=(p_1,\dots,p_m)$ be a vector where $p_i=\prob(Y=i)$ then
+$$Y\sim\text{Categorical}(\textbf{p})$$
+\nb $\sum_{i=1}^mp_i=1,\ p_i\in[0,1]\ \forall\ i\in[1,m]$ and $p$ is a vector of $m-1$ free parameters.\\
+
+\remark{$\text{Bernoulli}(p)\sim\text{Categorical}(1-p,p)$}
+
+\definition{Counts}
+Let $Y_1,\dots,Y_n\iid\text{Categorical}(\textbf{p})$.\\
+We define the random variable $N_k$ to model the number of times $k$ occurs in a realisation of $Y_1,\dots,Y_n$.
+$$N_k:=\sum_{i=1}^n\mathds{1}\{Y_i=k:i\in[1,n]\}$$
+This definition gives rise to the random vector
+$$\X:=(N_1,\dots,N_m)\sim\text{Multinomial}(n,\textbf{p})$$
+with
+$$\prob(N_1=n_1,\dots,N_m=n_m;\textbf{p})=\mathds{1}\left\{\sum_{i=1}^mn_i=n\right\}\left\{\dfrac{n!}{\prod_{i=1}^mn_i}\right\}\prod_{i=1}^np_i^{n_i}$$
+
 \newpage
 \setcounter{section}{-1}
 \section{Appendix}
