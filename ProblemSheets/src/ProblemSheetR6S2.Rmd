@@ -24,10 +24,11 @@ By the definition of $m$ as the median, we have
 \implies&1-e^{-\lambda m}&=&\frac{1}{2}\\
 \implies&e^{-\lambda m}&=&\frac{1}{2}\\
 \implies&-\lambda m&=&\ln\frac{1}{2}\\
-\implies&m&=&-\frac{\ln\frac{1}{2}}{\lambda}
+\implies&m&=&-\frac{\ln\frac{1}{2}}{\lambda}\\
+&&=&\frac{1}{\lambda}\ln2
 \end{array}\]
-Define $\hat{m}(\textbf{x})$ to be the maximum likelihood estimate of $m$.\\
-Then $-\frac{\ln\frac{1}{2}}{\hat\lambda}$ is a maximum likelihood estimate of $m$ by formulation of $m$.\\
+Define $\hat{m}(\textbf{x})$ to be the maximum likelihood estimate of $m$.\
+Then $-\frac{\ln\frac{1}{2}}{\hat\lambda}$ is a maximum likelihood estimate of $m$ since mapping from $\lambda$ to $m$ is bijective.\
 Since, $\hat\lambda=\frac{1}{\bar{x}}\implies-\frac{\ln\frac{1}{2}}{1/\bar{x}}=-\bar{x}\ln\frac{1}{2}$ is the maximum likelihood estiamte of $m$, the median.
 
 ## b)
@@ -121,7 +122,7 @@ Define $Y_i:=\mathds{1}$ for $i\in[1,n]$.
 Since $X_i\sim\text{Cauchy}(\theta)$ and the Cauchy distribution is symmetric around $\theta$ then
 $$\mathbb{P}(X_i\geq\theta)=\frac{1}{2}$$
 Thus
-$$f_{Y_i}=\begin{cases}0,&\frac{1}{2}\\1,&\frac{1}{2}\end{cases}$$
+$$\mathbb{P}(Y_i=y)=\begin{cases}\frac{1}{2},\quad&y=1\\\frac{1}{2},&y=0\end{cases}$$
 This is equivalent to the definition of a $\text{Bernoulli}\left(\frac{1}{2}\right)$ random variable.
 Since $X_i$ are iid and $Y_i$ depends on only one, unique variable then $Y_i$ are iid.
 We recognise $B:=\sum_{i=1}^nY_i$ as the sum of $n$ $\text{Bernoulli}\left(\frac{1}{2}\right)$ random variables, which is the definition of a $\text{Binomial}\left(n,\frac{1}{2}\right)$ random variable.
@@ -152,7 +153,7 @@ Therefore, there exists at least $n-i+1$ elements, $j\in[1,n]$, where $Y_j=1$.\
 This means that at most $n-(n-i+1)=i-1$ elements, $j\in[1,n]$, where $Y_j=0$.\
 By the definition of an order statistic $Y_{(i)}=1$.\
 Thus $B\geq n-i+1\implies Y_{(i)}=1$.\
-Thus $B\geq n-i+1\Longleftrightarrow Y_{(i)}=1$
+Thus $B\geq n-i+1\Longleftrightarrow Y_{(i)}=1$.$\hfill\square$
 
 ## c)
 Consider $\mathbb{P}(X_{(k+1)}<\theta\leq X_{(n-k)};\theta)$. We have
@@ -176,7 +177,7 @@ We know that $B\sim\text{Binomial}\left(25,\frac{1}{2}\right)$. Thus
 &=&\sum_{i=k+1}^{24-k}\mathbb{P}(B=i)\\
 &=&\sum_{i=k+1}^{24-k}{25\choose i}\left(\frac{1}{2}\right)^i\left(\frac{1}{2}\right)^{25-i}\\
 &=&\frac{1}{2^{25}}\sum_{i=k+1}^{24-k}{25\choose i}\\
-&=&\frac{2}{2^{25}}\sum_{i=k+1}^{12}{25\choose i}
+&=&\frac{2}{2^{25}}\sum_{i=k+1}^{12}{25\choose i}\text{ by symmetry}
 \end{array}\]
 By performing calculations we find that
 $$\frac{1}{2^{24}}\sum_{i=8}^{12}{25\choose i}\geq0.95$$
