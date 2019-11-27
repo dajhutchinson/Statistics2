@@ -1,0 +1,143 @@
+---
+title: "Problems Sheet 8"
+subtitle: "Statistics 2"
+author: "Dom Hutchinson"
+header-includes:
+   - \usepackage{dsfont}
+   - \usepackage{fancyhdr}
+   - \fancyhead[L]{Dom Hutchinson}
+   - \fancyhead[C]{Statistics 2 - Problem Sheet 8}
+   - \fancyhead[R]{\today}
+   - \renewcommand{\headrulewidth}{0pt}
+   - \newcommand{\dotprod}[0]{\boldsymbol{\cdot}}
+   - \newcommand{\cosech}[0]{\mathrm{cosech}\ }
+   - \newcommand{\cosec}[0]{\mathrm{cosec}\ }
+   - \newcommand{\sech}[0]{\mathrm{sech}\ }
+   - \newcommand{\prob}[0]{\mathbb{P}}
+   - \newcommand{\nats}[0]{\mathbb{N}}
+   - \newcommand{\cov}[0]{\mathrm{Cov}}
+   - \newcommand{\var}[0]{\mathrm{Var}}
+   - \newcommand{\expect}[0]{\mathbb{E}}
+   - \newcommand{\reals}[0]{\mathbb{R}}
+   - \newcommand{\integers}[0]{\mathbb{Z}}
+   - \newcommand{\indicator}[0]{\mathds{1}}
+   - \newcommand{\nb}[0]{\textit{N.B.} }
+   - \newcommand{\ie}[0]{\textit{i.e.} }
+   - \newcommand{\eg}[0]{\textit{e.g.} }
+   - \newcommand{\X}[0]{\textbf{X}}
+   - \newcommand{\x}[0]{\textbf{x}}
+   - \newcommand{\iid}[0]{\overset{\text{iid}}{\sim}}
+   - \newcommand{\proved}[0]{$\hfill\square$\\}
+output:
+  pdf_document: 
+     fig_width: 4
+     fig_height: 4
+  html_notebook: default
+  html_document: default
+  word_document: default
+---
+```{r}
+xtab<-c(109,65,22,3,1,0)
+xobs<-rep(0:5,xtab)
+n<-length(xobs)
+xobs.bar<-mean(xobs)
+```
+
+# Question 1
+Let $\X:=(X_1,\dots,X_{200})\overset{\text{iid}}{\sim}\text{Poisson}(\lambda)$ be a random vector representing the number of deaths each year \& $\x:=(x_1,\dots,x_{200})$ be a realisation of $\X$.\
+Here we shall test $H_0:\lambda\leq0.5$ against $H_1:\lambda>0.5$.\
+Define test statistic $T(\textbf{X})=\frac{1}{n}\sum_{i=1}^nX_i$, from the data we have
+$$T(\x)=-\frac{1}{`r n`}\sum_{i=1}^{`r n`}x_i=\frac{`r sum(xobs)`}{`r n`}=-`r sum(xobs)/n`$$
+Since $\sum_{i=1}^nX_i$ is an equivalent test statistic to the Neyamn-Pearson Test statistic then $T(\textbf{X})$ is an equivalent test statistic too.\
+Thus $T(\textbf{X})$ is the uniformly most powerful test statistic for $H_0\ \&\ H_1$ and has associated $p$-value
+\[\begin{array}{rcl}
+p(\X)&=&\prob(T(\X)\geq T(\x);0.5)\\
+&=&\prob\left(\frac{1}{200}\sum_{i=1}^{200}X_i\geq`r sum(xobs)/n`;0.5\right)\\
+&=&\prob\left(\sum_{i=1}^{200}X_i\geq`r sum(xobs)`;0.5\right)\\
+&=&\prob\left(\sum_{i=1}^{200}X_i\geq`r sum(xobs)`;0.5\right)\\
+&=&\prob(Y\geq`r sum(xobs)`)\text{ by independence where } Y\sim\text{Poisson}(200\times0.5)=\text{Poisson}(100)\\
+&=&1-\prob(Y<`r sum(xobs)`)\\
+&=&`r 1-ppois(sum(xobs)-1,100)`
+\end{array}\]
+
+# Question 2
+## a)
+We can approximate $Y\sim\text{Poisson}(100)$ as $\tilde{Y}\approx\text{Normal}(100,100)$.
+Then
+$$p(\X)=1-\prob(Y<`r sum(xobs)`)\approx1-\prob(\tilde{Y}<`r sum(xobs)`)=`r 1-pnorm(sum(xobs),mean=100,sd=100)`$$
+
+## b)
+```{r}
+lambda<-.5
+trials<-1000
+
+samples.raw<-sapply(1:trials, function(i) sum(rpois(200,lambda)))
+count<-sum(samples.raw<=122)
+p<-1-count/trials
+p
+```
+
+# Question 3
+Let $\X:=(X_1,\dots,X_{200})\overset{\text{iid}}{\sim}\text{Poisson}(\lambda)$ be a random vector representing the number of deaths each year \& $\x:=(x_1,\dots,x_{200})$ be a realisation of $\X$.\
+I shall test $H_0:\lambda=0.55$ against $H_1:\lambda\neq0.55$ at a significance level of $5\%$ where $\Theta:=\reals^{>0}$.\
+Thus $\Theta_0:=\{0.55\}$ and is nested in $\Theta$. Note that $\text{dim}(\Theta)=1$ and $\text{dim}(\Theta_0)=0$.\
+Since $\Theta_0$ is nested within $\Theta$ we have $$T_n(\X):=-2\ln\Lambda_n(\X)\to_{\mathcal{D}(\cdot;\theta)}\chi^2_{\text{dim}(\Theta)-\text{dim}(\Theta_0)}=\chi^2_{1-0}=\chi^2_1\text{ where }\Lambda_n(\x):=\frac{\sup_{\lambda\in\Theta_0}f_n(\x;\lambda)}{\sup_{\lambda\in\Theta}f_n(\x;\lambda)}$$
+We shall us $T_n(\X)$ as our test statistic.\
+We have
+\[\begin{array}{rrl}
+T(\X)&:=&-2\ln\Lambda_n(\X)\\
+&=&-2\ln\frac{\sup_{\lambda=0.55}f_n(\x;\lambda)}{\sup_{\lambda\in\reals^{>0}}f_n(\x;\lambda)}\\
+&=&-2\left[\ell_n(\x;\lambda)-\ell_n(\x;\hat\lambda_{MLE})\right]\\
+\end{array}\]
+Since I am constructing $\alpha=0.95$ confidence interval we wish to retain $\lambda$ if
+$$T_n(\x):=-2\left[\ell_n(\lambda;\x)-\ell_n(\hat\lambda_{MLE};\x)\right]<\chi^2_{1,\alpha}$$
+This is the confidence set
+\[\begin{array}{rcl}
+C(\x)&=&\left\{\theta:T_n(\x)<\chi^2_{1,\alpha}\right\}\\
+&=&\left\{-2\left[\ell_n(\lambda;\x)-\ell_n(\hat\lambda_{MLE};\x)\right]<\chi^2_{1,\alpha}\right\}\\
+&=&\left\{\ell_n(\lambda;\x)>\ell_n(\hat\lambda_{MLE};\x)-\frac{1}{2}\chi^2_{1,\alpha}\right\}
+\end{array}\]
+We can calculate the $\chi^2_{1,\alpha}$ and $\ell_n(\hat{\lambda}_n;\x)$ using r
+```{r}
+ell <- function(lambda) {
+  stopifnot(all(lambda > 0))
+  n <- length(xobs)
+  n * (-lambda + mean(xobs) * log(lambda))
+}
+
+alpha=0.95
+
+ell.mle<-optimise(ell,interval=c(0,1),maximum=TRUE)$objective
+quantile<-qchisq(alpha,1)
+cat("ell.mle=",ell.mle,"\nchisq_alpha=",quantile,sep="")
+```
+Giving
+\[\begin{array}{rcl}
+C(\x)&=&\left\{\ell_n(\lambda;\x)>\ell_n(\hat\lambda_{MLE};\x)-\frac{1}{2}\chi^2_{1,\alpha}\right\}\\
+&=&\left\{\ell_n(\lambda;\x)>`r ell.mle`-\frac{1}{2}`r quantile`\right\}\\
+&=&\left\{\ell_n(\lambda;\x)>`r ell.mle - .5*quantile`\right\}
+\end{array}\]
+
+```{r}
+x<-seq(0.4,.8,length.out=100)
+y<-sapply(x,function(p) ell(p))
+z<-x[which(y>ell.mle-.5*quantile)] # The values where the inequality holds
+cat("lower:",min(z),"\nupper:",max(z))
+```
+Thus
+$$C(\x)=\{\theta:\theta\in[`r min(z)`,`r max(z)`]\}$$
+We accept $H_0$ in this case.
+
+## b)
+
+```{r}
+alpha=0.9
+
+quantile<-qchisq(alpha,1)
+
+z<-x[which(y>ell.mle-.5*quantile)] # The values where the inequality holds
+cat("chisq_alpha=",quantile,"\nlower:",min(z),"\nupper:",max(z))
+```
+Thus
+$$C(\x)=\{\theta:\theta\in[`r min(z)`,`r max(z)`]\}$$
+We accept $H_0$ in this case.
