@@ -1749,10 +1749,10 @@ C(\x)&=&\left\{\theta:-2[\ell_n(\theta;\x)-\ell_n(\hat\theta_n;\x)]<\chi^2_{r,\a
 \end{array}\]
 This is an asymptotically exact $1-\alpha$ confidence set for $\theta$.
 
-\subsection{Categorical Distributions and Pearson's Chi-Squared Test}
+\subsection{Categorical Distributions and Pearson's $\chi^2$ Test}
 
 \definition{Categorical Distribution}
-Let $Y$ be a random variable which takes one value from a finite set $\{1,\dots,m\}$.\\
+Let $Y$ be a random variable which takes one value from a finite set $\{1,\dots,m\}$ where each value represents a unique category.\\
 Let $\text{p}:=(p_1,\dots,p_m)$ be a vector where $p_i=\prob(Y=i)$ then
 $$Y\sim\text{Categorical}(\textbf{p})$$
 \nb $\sum_{i=1}^mp_i=1,\ p_i\in[0,1]\ \forall\ i\in[1,m]$ and $p$ is a vector of $m-1$ free parameters.\\
@@ -1767,6 +1767,70 @@ This definition gives rise to the random vector
 $$\X:=(N_1,\dots,N_m)\sim\text{Multinomial}(n,\textbf{p})$$
 with
 $$\prob(N_1=n_1,\dots,N_m=n_m;\textbf{p})=\mathds{1}\left\{\sum_{i=1}^mn_i=n\right\}\left\{\dfrac{n!}{\prod_{i=1}^mn_i}\right\}\prod_{i=1}^np_i^{n_i}$$
+\nb $\expect(N_i)=np_i$ and $\var(N_i)=np_i(1-p_i)$.
+
+\subsubsection{Generalised Likelihood Ratio Test Statistic}
+
+\definition{Simplex}
+TODO Expand this\\
+$\mathcal{S}_m$ is a simplex of probability vectors of length $m$ if
+$$\mathcal{S}_m:=\left\{(_1,\dots,p_m)\in[0,1]^m:\sum_{i=1}^mp_i=1\right\}$$
+
+\propositionn{Generalised Likelihood Ratio}
+$$\Lambda_n(\x)=\frac{f_n(\x;\textbf{p}_0)}{\sup_{\textbf{p}\in\mathcal{S}_m}f_n(\x;\textbf{p})}$$
+
+\theorem{Maximum Likelihood Estimate for Multinomial $\textbf{p}$}
+Let $\X=(N_1,\dots,N_m)\sim\text{Multinomial}(n,\textbf{p}^*)$ for some $\textbf{p}^*\in\mathcal{S}_m$ and $\x=(n_1,\dots,n_m)$ be a realisation of $\X$.\\
+The maximum likelihood estimate of $\textbf{p}^*$ is
+$$\hat{\textbf{p}}(\x)=(\hat{p}_1(\x),\dots,\hat{p}_m(\x))=\left(\frac{n_1},\dots,\frac{n_m}{n}\right)$$
+
+\proof{Theorem 8.1}
+Note that
+$$\sum_{i=1}^mp_i=1\implies p_m=1-\sum_{i=1}^{m-1}p_i$$
+Hence there are only $m-1$ independent variables and
+\[\begin{array}{rcl}
+L(\textbf{p},\x)&=&L(p_1,\dots,p_{m-1};\x)\\
+&\propto&{\displaystyle \prod_{j=1}^mp_j^{n_j}}\\
+&=&{\displaystyle\left(\prod_{j=1}^{m-1}p_j^{n_j}\right)\left(1-\sum_{i=1}^{m-1}p_i\right)^{n_m}}
+\end{array}\]
+So
+$$\ell(p_1,\dots,p_{m-1};\x)=C+\left(\sum_{i=1}^{m-1}n_j\ln p_j\right)+n_m\ln\left(1-\sum_{i=1}^{m-1}p_i\right)$$
+Now for $k=1,\dots,m-1$.\\
+\[\begin{array}{rrcl}
+\text{Setting}\frac{\partial}{\partial p_k}\ell(p_1,\dots,p_{m-1};\x)&=&\frac{n_k}{p_k}-\frac{n_m}{1-\sum_{i=1}^{m-1}p_i}\\
+&&=&0\\
+\implies&\frac{n_k}{p_k}&=&\frac{n_m}{p_m}\ \forall\ k\in[1,m]
+\end{array}\]
+So $\frac{n_1}{p_1}=\dots=\frac{n_m}{p_m}=c$ and $\sum_{i=1}^mp_i=1$.\\
+$$\implies\sum_{i=1}^m\frac{n_i}{c}=1\implies\sum_{i=1}^mn_i=c\implies n=c$$
+Hence $\frac{n_k}{p_k}=n\implies\hat{p}_j=\frac{n_k}{n}\ \forall\ k\in[1,m]$.\\
+In order to confirm that this is a maximum we will show that $\ell(\textbf{p};\x)$ is concave.\\
+\ie for $\lambda\in[0,1]\ \ell(\lambda \textbf{p}+(1-\alpha)\textbf{p}';\x)\geq\lambda\ell(\textbf{p};\x)+(1-\lambda)\ell(\textbf{p}';\x)$.
+\[\begin{array}{rcl}
+\ell(\lambda\textbf{p}+(1-\lambda)\textbf{p}';\x)&=&\sum_{i=1}^m n_i\ln(\lambda p_i+(1-\lambda)p_i')\\
+&\geq&\sum_{i=1}^mn_i\left[\lambda_i\ln p_i + (1-\lambda)\ln p_i'\right]\text{ since $\ln x$ is concave}\\
+&=&\lambda\sum_{i=1}^mn_i\ln p_i+n_i(1-\lambda)\ln p'_i\\
+&=&\lambda\ell(\textbf{p};\x)+(1-\lambda)\ell(\textbf{p}';\x)
+\end{array}\]
+Thus concave.\\
+It follows that
+$$\Lambda_n(\x)=\frac{f_n(\x;\textbf{p}_0)}{\sup_{\textbf{p}\in\mathcal{S}_m}f_n(\x;\textbf{p})}=\prod_{i=1}^m\frac{p_{0,i}^{n_i}}{\hat{p}_i^{n_i}}=\prod_{i=1}^m\frac{p_{0,i}^{n_i}}{(n_i/n)^{n_i}}$$
+so that
+$$T_n(\x)=-2\ln\Lambda_n(\x)=-2\sum_{i=1}^mn_i\{\ln p_{0,i}-\ln(n_i/n)\}$$
+is the \textit{Generalised Likelihood Ratio} test statistic. From the general theorem
+$$T_n(\x)\to_{\mathcal{D}(\cdot;\textbf{p}_0}\chi^2_{m-1}$$
+since $\text{dim}(\mathcal{S}_m)=m-1$.\\
+Many people rewrite this statistic as
+\[\begin{array}{rcl}
+T_n(\x)&=&{\displaystyle2\sum_{j=1}^mo_j\ln\left(\frac{0_j}{e_j}\right)}\\
+&=&{\displaystyle2\sum_{j=1}^mn_j\ln\left(\frac{n_j/n}{p_{0,j}}\right)}\\
+&=&{\displaystyle-2\sum_{j=1}^mn_j\ln\left(\frac{n_j}{np_{0,j}}\right)}
+\end{array}\]
+where $o_j=n_j$ is the observered number in category $j$ and $e_j=np_{0,j}$ is the expected number in category $j$.$\hfill\square$
+
+\subsubsection{Pearson's $\chi^2$ Test Statistic}
+
+
 
 \newpage
 \setcounter{section}{-1}
