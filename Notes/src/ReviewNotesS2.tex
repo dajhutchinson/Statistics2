@@ -1,0 +1,991 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=1in, paperwidth=8.3in, paperheight=11.7in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{dsfont}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{changepage} 
+
+\begin{document}
+
+\pagestyle{fancy}
+\setlength\parindent{0pt}
+\allowdisplaybreaks
+
+\renewcommand{\headrulewidth}{0pt}
+
+% Cover page title
+\title{Statistics 2 - Reviewed Notes}
+\author{Dom Hutchinson}
+\date{\today}
+\maketitle
+
+% Header
+\fancyhead[L]{Dom Hutchinson}
+\fancyhead[C]{Statistics 2 - Reviewed Notes}
+\fancyhead[R]{\today}
+
+% Default enumerate labeling
+\setlist[enumerate,1]{label={\roman*)}}
+
+% Counters
+\newcounter{definition}[section]
+\newcounter{example}[section]
+\newcounter{notation}[section]
+\newcounter{proposition}[section]
+\newcounter{proof}[section]
+\newcounter{remark}[section]
+\newcounter{theorem}[section]
+
+% commands
+\newcommand{\dotprod}[0]{\boldsymbol{\cdot}}
+\newcommand{\cosech}[0]{\mathrm{cosech}\ }
+\newcommand{\cosec}[0]{\mathrm{cosec}\ }
+\newcommand{\sech}[0]{\mathrm{sech}\ }
+\newcommand{\prob}[0]{\mathbb{P}}
+\newcommand{\nats}[0]{\mathbb{N}}
+\newcommand{\cov}[0]{\mathrm{Cov}}
+\newcommand{\var}[0]{\mathrm{Var}}
+\newcommand{\expect}[0]{\mathbb{E}}
+\newcommand{\reals}[0]{\mathbb{R}}
+\newcommand{\integers}[0]{\mathbb{Z}}
+\newcommand{\indicator}[0]{\mathds{1}}
+\newcommand{\nb}[0]{\textit{N.B.} }
+\newcommand{\ie}[0]{\textit{i.e.} }
+\newcommand{\eg}[0]{\textit{e.g.} }
+\newcommand{\X}[0]{\textbf{X}}
+\newcommand{\x}[0]{\textbf{x}}
+\newcommand{\iid}[0]{\overset{\text{iid}}{\sim}}
+\newcommand{\proved}[0]{$\hfill\square$\\}
+
+\newcommand{\definition}[1]{\stepcounter{definition} \textbf{Definition \arabic{section}.\arabic{definition}\ - }\textit{#1}\\}
+\newcommand{\definitionn}[1]{\stepcounter{definition} \textbf{Definition \arabic{section}.\arabic{definition}\ - }\textit{#1}}
+\newcommand{\proof}[1]{\stepcounter{proof} \textbf{Proof \arabic{section}.\arabic{proof}\ - }\textit{#1}\\}
+\newcommand{\prooff}[1]{\stepcounter{proof} \textbf{Proof \arabic{section}.\arabic{proof}\ - }\textit{#1}}
+\newcommand{\example}[1]{\stepcounter{example} \textbf{Example \arabic{section}.\arabic{example}\ - }\textit{#1}\\}
+\newcommand{\examplee}[1]{\stepcounter{example} \textbf{Example \arabic{section}.\arabic{example}\ - }\textit{#1}}
+\newcommand{\notation}[1]{\stepcounter{notation} \textbf{Notation \arabic{section}.\arabic{notation}\ - }\textit{#1}\\}
+\newcommand{\notationn}[1]{\stepcounter{notation} \textbf{Notation \arabic{section}.\arabic{notation}\ - }\textit{#1}}
+\newcommand{\proposition}[1]{\stepcounter{proposition} \textbf{Proposition \arabic{section}.\arabic{proposition}\ - }\textit{#1}\\}
+\newcommand{\propositionn}[1]{\stepcounter{proposition} \textbf{Proposition \arabic{section}.\arabic{proposition}\ - }\textit{#1}}
+\newcommand{\remark}[1]{\stepcounter{remark} \textbf{Remark \arabic{section}.\arabic{remark}\ - }\textit{#1}\\}
+\newcommand{\remarkk}[1]{\stepcounter{remark} \textbf{Remark \arabic{section}.\arabic{remark}\ - }\textit{#1}}
+\newcommand{\theorem}[1]{\stepcounter{theorem} \textbf{Theorem \arabic{section}.\arabic{theorem}\ - }\textit{#1}\\}
+\newcommand{\theoremm}[1]{\stepcounter{theorem} \textbf{Theorem \arabic{section}.\arabic{theorem}\ - }\textit{#1}}
+
+\tableofcontents
+
+% Start of content
+\newpage
+
+\section{General}
+
+\subsection{Definitions}
+
+\definition{Probability Space, $(\Omega,\mathcal{F},\prob)$}
+A \textit{Probabiltiy Space} is a mathematicla construct for modelling the real world. A \textit{Probabilitiy Space} has three elements
+\begin{enumerate}
+	\item $\Omega$, Sample space;
+	\item $\mathcal{F}$, Set of events; and,
+	\item $\prob$, Probability Measure
+\end{enumerate}
+and must filfil the following criteria
+\begin{enumerate}
+	\item $\Omega\in\mathcal{F}$;
+	\item $\forall\ A\in\mathcal{D}\implies A^c\in\mathcal{F}$;
+	\item $\forall\ A_0,\dots,A_n\in\mathcal{F}\implies\left(\bigcup\limits_{i=0}^nA_i\right)\in\mathcal{F}$;
+	\item $\prob(\Omega)=1$; and,
+	\item $\prob\left(\bigcup\limits_{i=0}^n\right)=\sum\limits_{i=0}^n\prob(A_i)$ for any $n$ disjoint $A_0,\dots,A_n$.
+\end{enumerate}
+
+\definition{Random Variable}
+A \textit{Random Variable} is a function which maps maps an event in the sample space to a value. $X$ is a random variable if it satisfies the signature
+$$X:\Omega\to\reals$$
+
+\definition{Parametric Models}
+\textit{Parametric Models} are the class of statistical distributions whose probability mass/density function take parameters. These parameters represent values of interest in the population, such as mean or variance. We generally do not know these values so we estimate them from samples.\\
+
+\definition{Quantity of Interest}
+When analysing distributions it often helps to define \textit{Quantities of Interest} about the distributions (\eg Mean). These are defined as functions in terms of the parameters $\tau(\theta)$. We estimate \textit{Quantities of Interest} by passing estimated values of the parameters $\hat{\tau}=\tau(\hat{\theta})$.\\
+
+\subsection{Theorems}
+
+\theorem{Samples from a Normal Distribution are $\chi^2$ Distributed}
+Let $\X\iid\text{Normal}(\mu,\sigma^2)$. Then
+\[\begin{array}{rcl}
+{\displaystyle\sum_{i=1}^n\frac{(X_i-\mu)^2}{\sigma^2}}&\sim&\chi^2_n\\
+{\displaystyle\sum_{i=1}^n\frac{(X_i-\bar{X})^2}{\sigma^2}}&\sim&\chi^2_{n-1}\\
+\end{array}\]
+
+\theorem{Distance between Sample Mean \& Population Mean is $t_r$ Distributed}
+Let $\X\iid\text{Normal}(\mu,\sigma^2)$. Then
+$$\frac{\sqrt{n}}{s}(\bar{X}-\mu)\sim t_{n-1}$$
+\nb We don't need to know $\sigma^2$ to estimate the distance between $\bar{X}$ and $\mu$.\\
+
+\theorem{Multidimension Transform of a Random Variable}
+Consider an $n$-dimensional \textit{continuous} random variable $\X\sim f_\X(\cdot)$ which we wish to transform.\\
+Define a continuously differentiable bijective function $\textbf{g}:\reals^n\to\reals^n$ and $\textbf{h}:=\textbf{g}^{-1}$.\\
+Then if $\textbf{Y}:=\textbf{g}(\textbf{X})\sim f_\text{Y}(\cdot)$ we have
+$$f_\textbf{Y}(\textbf{y})=f_\X(\textbf{h}(\textbf{y}))J_\textbf{h}(\textbf{y})$$
+where $J_h(\textbf{y}):=\left|\text{det}\left(\dfrac{\partial \textbf{h}}{\partial\textbf{y}}\right)\right|=\left|\text{det}\begin{pmatrix}\frac{\partial h_1}{\partial y_1}&\dots&\frac{\partial h_1}{\partial y_n}\\\vdots&\ddots&\vdots\\\frac{\partial h_n}{\partial y_1}&\dots&\frac{\partial h_n}{\partial y_n}\end{pmatrix}\right|$.
+
+\theorem{Weak Law of Large Numbers}
+Let $\{X_n\}_{n\in\nats}$ be a sequence of idependent \& identically distributed random varibles.\\
+If $\expect(X_i)=\mu<\infty$ then
+$$\frac{1}{n}\sum_{i=1}^nX_i\to_\prob\mu$$
+
+\theorem{Central Limit Theorem}
+Let $\{X_n\}_{n\in\nats}$ be a sequence of independent \& indetically distributed with $\expect(X_i)=\mu<\infty$ and $\var(X_i)=\sigma^2<\infty$. Then\\
+$$\sqrt\frac{n}{\sigma^2}(Z_n-\mu)\to_\mathcal{D}Z\sim\text{Normal}(0,1)$$
+
+\section{Estimation}
+
+\subsection{Likelihood}
+
+\definition{Likelihood Function}
+The \textit{Likelihood Function} is a family of functions which measure the likely of a certain realisation of a random variable is given the parameters of a model have a certain value.
+$$L(\pmb{\theta};\x):=Cf_X(\x;\theta)\text{ for }C>0$$
+where $\X\sim f_n(\cdot;\pmb{\theta}^*)$ with $\pmb{\theta}^*$ unknown and $\x$ is a realisation of $\X$.\\
+\nb \textit{Likelihood Functions} have signature $L(\cdot\x):\theta\to[0,\infty)$.\\
+\nb This is also known as the \textit{Observed Likelihood Function}.\\
+
+\definition{Log-Likelihood Function}
+The \textit{Log-Likelihhod Function} is the family of functions which are equivalent to the natural log of the \textit{Likelihood Function}.
+$$\ell(\theta;\x):=\ln f_n(\x;\theta)+C\text{ for }\underbrace{C}_{\equiv\ln C}\in\reals$$
+\nb This is increasing with $L(cdot;\x)$.\\
+
+\remark{Likelihood for Independent \& Identically Distributed Random Variables}
+Let $\X\iid f(\cdot;\theta)$ and $\x$ be a realisation of $\X$. Then
+\[\begin{array}{rcl}
+L_n(\theta;\x)&:=&{\displaystyle\prod_{i=1}^nL(\theta;x_i)}\\
+\ell_n(\theta;\x)&:=&{\displaystyle\sum_{i=1}^n\ell(\theta;x_i)}
+\end{array}\]
+
+\theorem{The Likelihood Function is Invariant under Bijective Transformations which are independent of Model Parameters}
+Consider $\X\sim f_\X(\cdot;\theta)$ and $\textbf{g}:\reals^n\to\reals^n$ be a bijective function which is independent of $\theta$.\\
+Define $\textbf{Y}:=\textbf{g}(\X)\sim f_\textbf{Y}(\cdot;\theta)$. Then
+$$f_\textbf{Y}(\textbf{y};\theta)\propto f_\X(\textbf{g}^{-1}(\textbf{y});\theta)$$
+Hence
+$$L_\textbf{Y}(\theta;\textbf{g}(\x))\propto L_\X(\theta;\x)$$
+
+\proof{Theorem 2.1}
+Consider $\X\sim f_\X(\cdot;\theta)$ and $\textbf{g}:\reals^n\to\reals^n$ be a bijective function which is independent of $\theta$.\\
+Define $\textbf{h}:=\textbf{g}^{-1}$ and $\textbf{Y}:=\textbf{g}(\X)$.\\
+We consider the cases where $\X$ is discrete \& continuous independently
+\begin{itemize}
+	\item[\textit{Discrete Case}] Let $\X$ be a discrete random variable. Then
+	\[\begin{array}{rcl}
+	f_\textbf{Y}(\textbf{y};\theta)&=&\prob(\textbf{Y}=\textbf{y};\theta)\\
+	&=&\prob(\textbf{g}^{-1}(\textbf{Y})=\textbf{g}^{-1}(\textbf{y});\theta)\\
+	&=&\prob(h(\textbf{Y})=h(\textbf{Y});\theta)\\
+	&=&\prob*\X=h(\textbf{y});\theta)\\
+	&=&f_\X(\textbf{g}^{-1}(\textbf{y});\theta)
+	\end{array}\]
+	\item[\textit{Continuous Case}] Let $\X$ be a continuous random variable.\\
+	By \textbf{Theorem 1.3}
+	$$f_\textbf{Y}(\textbf{y};\theta)=f_\X(\textbf{g}^{-1}(\textbf{y});\theta)J_{g^{-1}}(\textbf{y})$$
+	Since $J_{\textbf{g}^{-1}}$ is independent of $\theta$ this case is solved.
+\end{itemize}
+In both cases $L_\textbf{Y}(\theta;\textbf{y})=f_\textbf{Y}(\textbf{y};\theta)\propto f_\X(\textbf{g}^{-1}(\textbf{y});\theta)=L_\X(\theta;\x)$.\proved
+
+\definition{Maximum Likelihood Estimate}
+Let $\X\sim f_n(\cdot;\theta)$ and $\x$ be a realisation of $\X$.\\
+The \textit{Maximum Likelihood Estimate} of $\X$ is the value $\hat\theta\in\Theta$ which produces the greatest value of the \textit{Likelihood Function} of $\X$.
+$$\hat\theta_\text{MLE}(\x):=\text{argmax}_\theta L(\theta;\x)=\text{argmax}_\theta\ell(\theta;\x)$$
+\nb The \textit{Maximum Likelihood Estimate} is not necessarily unique.\\
+
+\theorem{Maximum Likelihood Estimate of Reparameterisation}
+Define random variable $\tau=g(X)$ where $g:\reals\to\reals$. Then
+$$\hat\tau_\text{MLE}=\tau(\hat\theta_\text{MLE})$$
+
+\proof{Theorem 2.2}
+\textit{This is a proof by contradiction}.\\
+Suppose $\exists\ \tau^*\in G$ st $\tilde{f}(x;\tau^*)>\tilde{f}(x;\tau^*)$.\\
+We know that $\forall\ \theta\in\Theta,\ f(x;\theta)=\tilde{f}(x;g(\theta))$ and $\forall\ \tau\in G,\ f(x;g^{-1}(\tau))=\tilde{f}(x;\tau)$.\\
+We deduce that
+\[\begin{array}{rcl}
+f(x;g^{-1}(\tau^*))&=&\tilde{f}(x;\tau^*)\\
+&>&\tilde{f}(x;\hat{\tau})\text{ by assumption}\\
+&=&f(x;g^{-1}(\hat{\tau}))\\
+&=&f(x;\hat{\theta})
+\end{array}\]
+This contradicts the assumption that $\hat{\theta}$ is an maximum likelihood estimate of $\theta$.\proved
+
+\remark{Finding Maximum Likelihood Estimates - Multivariate}
+Let $X\sim f_X(\cdot;\pmb\theta)$ be continuous random variable where $f_X(\cdot)$ is differentiable and $\pmb\theta$ is an $n$-dimensional parameter.\\
+Let $\x$ be a realisation of $\X$.\\
+To find a \textit{Maximum Likelihood Estimate} for $\pmb\theta$
+\begin{enumerate}
+	\item Find the gradient of $\ell(\pmb\theta;\x)$ wrt $\pmb\theta$.
+	$$\nabla\ell(\pmb\theta;\x):=\begin{pmatrix}\frac{\partial}{\partial\theta_1}\ell(\pmb\theta;\x)&\dots&\frac{\partial}{\partial\theta_n}\ell(\pmb\theta;\x)\end{pmatrix}$$
+	\item Equate $\nabla\ell(\pmb\theta;\x)$ to the zero-vector and solve for each $\pmb\theta$ to find extrama of $\ell$.
+	$$\nabla\ell(\pmb\theta;\x)=\pmb0$$
+	\item Calculate the \textit{Hessian} of $\ell(\pmb\theta;\x)$
+	$$\nabla^2\ell(\pmb\theta;\x)=\begin{pmatrix}\frac{\partial}{\partial\theta_1^2}\ell(\pmb\theta;\x)&\dots&\frac{\partial}{\partial\theta_1\theta_n}\ell(\pmb\theta;\x)\\\vdots&\ddots&\vdots\\\frac{\partial}{\partial\theta_n\theta_1}\ell(\pmb\theta;\x)&\dots&\frac{\partial}{\partial\theta_n^2}\ell(\pmb\theta;\x)\end{pmatrix}$$
+	\item Test each extremum $\pmb{\hat\theta}$ to see if it is a maximum
+\begin{center}If $\text{det}(H(\pmb{\hat\theta}))>0$ and $\frac{\partial}{\partial\theta_1^2}\ell(\pmb{\hat\theta};\x)<0$ then $\pmb{\hat\theta}$ is a local maximum.\end{center}
+\ie Check $H(\pmb{\hat\theta})$ is \textit{negative definite}.\\
+\end{enumerate}
+
+\definition{Likelihood Ratio}
+Let $\X\iid f(\cdot;\theta^*)$ for $\theta^*\in\Theta$ and $\{\hat\theta_i\}_{n\in\nats}$ be a sequence of consistent \textit{Maximum Likelihood Estimaors} of $\theta^*\in\Theta$.\\
+We define the \textit{Likelihood Ratio} as
+$$\Lambda_n(\x):=\frac{L(\theta^*;\x)}{L(\hat\theta_n;\x}\in[0,1]\text{ for }\x\in\mathcal{X}^n$$
+
+\theorem{Asymptotic Distribution of Likelihood Ratio}
+Let $\X\iid f(\cdot;\theta^*)$ for $\theta^*\in\Theta$ and $\{\hat\theta_i\}_{n\in\nats}$ be a sequence of consistent \textit{Maximum Likelihood Estimaors} of $\theta^*\in\Theta$.\\
+Suppose the conditions of \textbf{Theorem 2.13} hold (\ie $X_n$ is asymptotically normal). Then
+$$-2\ln\Lambda_n(\X_n)\to_{\mathcal{D}(\cdot;\theta^*)}\chi^2_1$$
+
+\subsection{Estimators}
+
+\definition{Estimation}
+Let $\X\sim f_n(\cdot;\theta^*)$ with $\theta^*\in\Theta$ and $\x$ be a realisation of $\X$.\\
+As \textit{Estimation} of model parameter $\theta^*$ is a statistic, $\hat\theta(\x)=T(\x)$, which is indtended to approximated the true value of $\theta^*$.\\
+\nb Interchangeable with \textit{Estimate}.\\
+
+\definition{Estimator}
+Let $\X\sim f_n(\cdot;\theta^*)$ with $\theta^*\in\Theta$ and $\x$ be a realisation of $\X$.\\
+An \textit{Estimator} of model paramter $\theta^*$ is the random variable $\hat\theta:=\hat\theta(\X)$ where $\hat\theta(\x)$ is an \textit{estimation} of $\theta^*$.\\
+
+\definition{Bias}
+The \textit{Bias} of an \textit{Estimator}, $\hat\theta$, is its expected error.\\
+\ie By how much an estimator consistently deviates from the true value of the parameter).\\
+Let $\theta^*$ be the true value of parameter $\theta$. Then
+\[\begin{array}{rrl}
+\text{Bias}(\hat\theta;\theta^*)&:=&\expect(\hat\theta-\theta^*;\theta^*)\\
+&=&\expect(\hat\theta;\theta^*)-\theta^*
+\end{array}\]
+\nb An \textit{Estimator} is \textit{Unbiased} if $\forall\ \theta\in\Theta\ \text{Bias}(\theta^*;\theta)=0\Longleftrightarrow\expect(\hat\theta;\theta)=\theta$.\\
+
+\definition{Mean Square Error}
+The \textit{Mean Square Error} of an \textit{Estimator}, $\hat\theta$, measures the average of its square error.\\
+Let $\theta^*$ be the true value of parameter $\theta$. Then
+\[\begin{array}{rrl}
+\text{MSE}(\hat\theta;\theta^*)&:=&\expect\left[(\hat\theta(\X)-\theta^*)^2;\theta^*\right]\\
+&=&\var(\hat\theta;\theta^*)+\text{Bias}(\hat\theta;\theta^*)^2
+\end{array}\]
+
+\definition{Distribution of an Estimator}
+Let $\X\sim f_n(\cdot;\theta^*)$ with $\theta^*\in\Theta\subseteq\reals$.\\
+Let $\hat\theta(\X)$ be a real-valued \textit{Estimator} of $\theta^*$. Then
+\[\begin{array}{rrl}
+F_{\hat\theta(\X)}(t;\theta^*)&:=&\prob(\hat\theta(\X)\leq t;\theta^*)\\
+&=&{\displaystyle\int_{\mathcal{X}^n}}\mathds{1}\{\hat\theta(\x)\leq t\}f_n(\x;\theta^*)d\x
+\end{array}\]
+\nb The distribution of an \textit{Estimator} depends on the true value of the parameter it is estimating.\\
+\nb As sample size increases the distribution of an estimator should converge to a more standard distribution.
+
+\subsection{Confidence Sets}
+
+\definition{Random Interval}
+TODO\\
+
+\definition{Observed Confidence Interval}
+Let $\X$ be a random variable, $\mathcal{I}(\X):=[L(\X),U(\X)]$ and $\x$ be a realisation of $\X$.\\
+$\mathcal{I}(\x)=[L(\x),U(\x)]$ is an \textit{Observed Confidence Interval}.\\
+
+\definition{Coverage of an Interval}
+Let $\X\sim f_n(\cdot;\theta)$ for $\theta\in\Theta=\reals$.\\
+Define $L:\mathcal{X}^n\to\Theta\ \&\ U:\mathcal{X}^n\to\Theta$ st $\forall\ \x\in\mathcal{X}^n,\ L(\x)<U(\x)$.\\
+The \textit{Coverage} of the \textit{Random Interval} $\mathcal{I}(\X):=[L(\X),U(\X)]$ at $\theta$ is defined to be
+$$C_\mathcal{I}(\theta):=\prob(\theta\in[L(\X),U(\X)];\theta)$$
+\nb \textit{Coverage} is the probability that a realisation of a random variable lies in a given random interval for a given parameter value.\\
+
+\definition{Confidence Interval}
+Let $\alpha\in[0,1]$ and $\mathcal{I}(\X):=[L(\X),U(\X)]$ be a random interval.\\
+We say that $\mathcal{I}(\X)$ is a $1-\alpha$ \textit{Confidence Interval} if
+$$\forall\ \theta\in\Theta,\ C_\mathcal{I}(\theta)\geq1-\alpha$$
+\nb $\mathcal{I}(\X)$ is an \textit{\underline{Exact} Confidence Interval} if $\forall\ \theta\in\Theta,\ C_\mathcal{I}(\theta)=1-\alpha$.\\
+
+\proposition{Transformed Confidence Interval}
+Let $\X\sim f(\cdot;\theta^*)$ for $\theta^*\in\Theta$ and $\mathcal{I}(\X):=[L(\X),U(\X)]$ be a confidence interval for $\theta^*$.\\
+Let $\tau:=g(\theta)$ be a bijective, continuously diferential function. If
+\begin{itemize}
+	\item[-] $g(\cdot)$ is \textbf{increasing} then $[L(\x),U(\x)]=[g(L(\x)),g(U(\x))]$.
+	\item[-] $g(\cdot)$ is \textbf{decreasing} then $[L(\x),U(\x)]=[g(U(\x)),g(L(\x))]$.
+\end{itemize}
+
+\proposition{Confidence Interval for Reparameterisations}
+Let $\X_n\sim f(\cdot;\theta^*)$ for $\theta^*\in\Theta\subseteq\reals$ and $\tau_n:=g(\theta)$ be a bijective \& continuously differentiable function.\\
+When $\X_n$ is a regular statistical model we have
+$$\sqrt{n\tilde{I}(\tau^*)}(\hat\tau_n-\tau^*)\to_{\mathcal{D}(\cdot;\tau^*)}Z\sim\text{Normal}(0,1)$$
+which leads to the \textit{Confidence Interval}
+$$\tilde{\mathcal{I}}(\X):=[\tilde{L}(\X),\tilde{U}(\X)]\text{ where }\tilde{L}(\X)=\hat\tau_n-z_{\alpha/2}\sqrt{\dfrac{g'(\theta^*)^2}{nI(\theta^*)}}\text{ and }\tilde{U}(\X)=\hat\tau_n+z_{\alpha/2}\sqrt{\dfrac{g'(\theta^*)^2}{nI(\theta^*)}}$$
+\nb This confidence interval is \textbf{not} necessarily the same as transforming $[L(\x),U(\x)]$ directly.\\
+
+\proposition{Confidence Intervals with unknown variance, $\sigma^2$}
+When variance, $\sigma^2$, is unknown we can define a consistent sequence of estimators $\{\hat\sigma^2_n\}_{n\in\nats}$ 
+$$\hat\sigma_n^2:=\frac{1}{n-1}\sum_{i=1}^n(\X_i-\hat\mu_n)^2$$
+
+\definition{Wald's Approach}
+Let $\X\iid f(\cdot;\theta^*)$ for $\theta^*\in\Theta\subset\reals$.\\
+Using \textit{Wald's Approach} we can define a confidence interval for $\theta^*$ using the asymptotic distribution of the \textit{Maximum Likelihood Estimator} for $\theta^*$.
+$$\mathcal{I}(\tau^*):=[L(\X),U(\X)]\text{ where } L(\x):=\hat\theta_n-z_{\alpha/2}\sqrt{nI(\theta^*)}\text{ and }U(\x)=\hat\theta_n+z_{\alpha/2}\sqrt{nI(\theta^*)}$$
+\nb This definition ensures that as $\prob(\theta\in\mathcal{I}(\X))\underset{n\to\infty}{\longrightarrow}1-\alpha$.\\
+
+\remark{Limitations of Wald's Approach}
+Let $\mathcal{I}(\theta^*)$ be a \textit{Confidence Interval} defined using \textit{Wald's Approach}.\\
+There are certain limitations of \textit{Wald's Approach}
+\begin{enumerate}
+	\item It is possible $\exists\ \theta\not\in\mathcal{I}(\theta^*)$ st $\exists\ \theta'\in\mathcal{I}(\theta^*)$ where $L(\theta;\x)>L(\theta';\x)$.
+	\item It is possible $\exists\ \theta\in\mathcal{I}(\theta^*)$ where $L(\theta;\x)=0$.
+	\item \textit{Wald Confidence Interval}s are not invariant under reparameterisation.
+\end{enumerate}
+
+\definition{Confidence Set}
+Let $\X_n\iid f_n(\cdot;\theta^*)$ for $\theta^*\in\Theta$ and $\hat\theta_n$ be an estimator of $\theta$.\\
+\textit{Confidence Sets} for $\theta^*$ are the possible values of $\theta$ whoses likelihood is close to that of the \textit{Maximum Likelihood Estimate} of $\theta$.\\
+\textit{Confidence Sets} are not necessarily contiguous.
+$$C(\X_n):=\left\{\theta\in\Theta:\ell(\hat\theta_n;\X_n)-\ell(\theta;\X_n)\leq\frac{1}{2}\chi^2_{1,\alpha}\right\}\subseteq\Theta$$
+\textit{Confidence Interval} sets are asymptotically $1-\alpha$ for $\theta^*$ since
+$$\prob(\theta^*\in C(\X_n);\theta^*)\underset{n\to\infty}{\longrightarrow}1-\alpha$$
+\nb This definition and result are applications of \textbf{Definition 2.4} \& \textbf{Theorem 2.3}.\\
+\nb \textit{Confidence Sets} are hard to define explicitly without a computer.\\
+
+\theorem{Confidence Set of Reparameterisation}
+Let $\X\sim f(\cdot;\theta^*)$ for $\theta^*\in\Theta$ and $\tau:=g(\theta)$  where $g:\Theta\to G$ is a \underline{bijection}.\\
+Let $C(\x)$ be a confidence set for $\theta^*$ and $\tilde{C}(\x)$ be a confidence set for $\tau^*$. Then
+$$\forall\ \x\in\mathcal{X}^n,\ \theta^*\in\Theta\text{ we have }\theta\in C(\x)\Longleftrightarrow g(\theta\in\tilde{C}(\x))$$
+\nb $\tilde{C}(\x):=\left\{\theta\in\Theta:\tilde\ell_n(\hat\theta_n;\x)-\tilde\ell(\theta;\x)\leq\frac{1}{2}\chi^2_{1,\alpha}\right\}$.\\
+
+\proof{Theorem 2.4}
+Let $\x\in\chi^n$ be arbitrary.\\
+Everything rests on the observation that
+$$\forall\ \theta\in\Theta,\ \ell(\theta;\x)=\ln f(\x;\theta)=\ln f(\x;g(\theta)=\tilde\ell(g(\theta;\x)$$
+and similary
+$$\forall\ \tau\in G,\ \tilde\ell(\tau;\x)=\ln \tilde{f}(\x;\tau)=\ln f(\x;g^{-1}(\tau))=\ell(g^{-1}(\tau);\x)$$
+Note that $g(\hat\theta_n)$ is the \textit{Maximum Likelihood Estimate} of $\tau$.\\
+Assume $\theta\in C(\x)$. Then
+$$-2\left[\ell(\theta;\x)-\ell(\hat\theta_n;\x)\right]\leq\chi^2_{1,\alpha}$$
+Thus
+$$-2\left[\tilde\ell(g(\theta);\x)-\tilde\ell(g(\hat\theta_n);\x)\right]\leq\chi^2_{1,\alpha}$$
+Thus $g(\theta\in\tilde{C}(\x)$.\\
+So $\theta\in C(\x)\implies g(\theta)\in\tilde{C}(\x)$.\\
+\\
+Similarly, assume that $g(\theta)\in\tilde{C}(\x)$. Thus
+$$-2\left[\ell(\theta;\x)-\ell(\hat\theta_n;\x)\right]\leq\chi^2_{1,\alpha}$$
+Thus $\theta\in C(\x)$.\\
+So $\theta\in C(\x)\Longleftrightarrow g(\theta)\in\tilde{X}(\x)$.\\
+\\
+For the last part, this correspondence implies that
+$$\{\x\in\chi^n;\theta^*\in C(\x)\}=\{\x\in\chi^2:g(\theta^*)\in\tilde{C}(\x\}$$
+Thus, we can conclude from the equivalnce of the events
+$$\{\theta^*\in C(\X)=\{g(\theta^*)\in\tilde{C}(\X)\}$$
+
+\remark{Confidence Set Rule of Thumb}
+Under the conditions of \textbf{Theorem 2.3} there is a rule of thumb that
+$$\prob(\theta^*\in C(\x))\approx0.95\text{ where }C\approx\left\{\theta\in\Theta:\ell(\hat\theta_n;\x)-\ell(\theta;\x)\leq2\right\}$$
+
+\definition{Wilk's Approach}
+TODO - Is this just confidence sets?
+
+\subsection{Convergence}
+
+\definition{Convergence}
+Let $\{z_n\}_{n\in\nats}$ be a deterministic sequence of real values and $z\in\reals$.\\
+We say $\{z_n\}$ \textit{converges} to limit $z$ if
+$$\forall\ \varepsilon>0\ \exists\ n_0\in\nats\text{ st }\forall\ n\geq n_0\quad |z_n-z|\leq\varepsilon$$
+\nb This is the same for vectors.\\
+
+\definition{Convergence in Probability}
+Let $\{Z_n\}_{n\in\nats}$ be a sequence of random variables and $Z$ be a random variable in the same probability space.\\
+We say that $\{Z_n\}_{n\in\nats}$ \textit{Converges in Probability} to $Z$ if
+$$\forall\ \varepsilon>0\quad\lim_{n\to\infty}\prob(|Z_n-Z|>\varepsilon)=0$$
+\nb This is denoted as $Z_n\to_\prob Z$.\\
+
+\definition{Convergence in Distribution}
+Let $\{Z_n\}_{n\in\nats}$ be a sequence of random variables and $Z$ be a random variable, not necessarily in the same probability space.\\
+We say $\{Z_n\}_{n\in\nats}$ \textit{Converges in Distribution} to $Z$ if
+$$\forall\ z\in Z\text{ where }F_Z(z)\text{ is continuous }\lim_{n\to\infty}F_{Z_n}(z)=F_Z(z)$$
+\ie $F_{X_n}$ converges in value to $F_X$ as $n\to\infty$.\\
+\nb This is dentoed as $Z_n\to_\mathcal{D}Z$.\\
+
+\definition{Convergence in Quadratic Mean}
+Let $\{Z_n\}_{n\in\nats}$ be a sequence of random variables and $Z$ be a random variable, not necessarily in the same probability space.\\
+We say $\{Z_n\}_{n\in\nats}$ \textit{Converges in Quadratic Mean} to $Z$ if
+$$\lim_{n\to\infty}\expect\left[(Z_n-Z)^2\right]=0$$
+\nb This is denoted as $Z_n\to_\text{qm}Z$.\\
+
+\theorem{$Z_n\to_\prob Z\implies Z_n\to_\mathcal{D}Z$}
+
+\theorem{$Z_n\to_\text{qm}Z\implies Z_n\to_\prob Z$}
+
+\theorem{$Z_n\to_\prob a\Longleftrightarrow Z_n\to_\mathcal{D} a\text{ for }a\in\reals$}
+
+\theorem{Continuous Mapping Theorem}
+Let $\{Z_n\}_{n\in\nats}$ be a sequence of random variabesl and $Z$ be a random varible.\\
+Let $g:Z\to G$ be a function which maps from the space of random variable $Z$ to a space $G$. Then
+\begin{enumerate}
+	\item If $Z_n\to_\prob Z$ then $g(Z_n)\to_\prob g(Z)$.
+	\item If $Z_n\to_\mathcal{D}Z$ then $g(Z_n)\to_\mathcal{D}g(Z)$.
+\end{enumerate}
+
+\theorem{Slutsky's Theorem}
+Let $\{Y_n\}_{n\in\nats}\ \&\ \{Z_n\}_{n\in\nats}$ be sequences of random varibles, $Y$ be a random variables \& $c\in\reals\backslash\{0\}$.\\
+If $Y_n\to_\mathcal{D} Y$ and $Z_n\to_\mathcal{D} c$. Then
+\begin{enumerate}
+	\item $Y_n+Z_n\to_\mathcal{D}Y+c$.
+	\item $Y_nZ_n\to_\mathcal{D}Yc$.
+	\item $\dfrac{Y_n}{Z_n}\to_\mathcal{D}\dfrac{Y}{c}$.
+\end{enumerate}
+
+\definition{Consistent Sequence of Estimators}
+Let $\X_n\sim f_n(\cdot;\theta)$ be a random vector and $\{\hat\theta_n(\cdot):\mathcal{X}^n\to\Theta\}_{n\in\nats}$ be a sequence of estimators for $\theta$.\\
+We say $\{\hat\theta_n\}$ is \textit{Consistent} if
+$$\forall\ \theta\in\Theta\quad\hat\theta_n(\X_n)\to_{\prob(\cdot;\theta)}\theta$$
+
+\theoremm{$\hat\theta_n\to_\text{qm}\theta\implies\{\hat\theta_n\}$ is consistent}
+
+\subsection{Performance of Estimators}
+
+\remark{Measuring Performance of an Estimator}
+We measure the performance of an estimator $\hat\theta$ in terms of variance since its mean should be $\theta^*$ and is thus a bad measure.\\
+Lower variance indicates better performance.\\
+
+\definition{Fisher Information Regularity Conditions}
+Define $\Theta\subset\reals$ and $f(x;\theta)$ be a probability mass/density function.\\
+If a model fulfils the following criteria then it is sufficiently \textit{regular} for \textit{Fisher Information} to be drawn from it
+\begin{enumerate}[label=\roman*)]
+	\item $\forall\ x\in\mathcal{X}$ \textbf{both} $L'(\theta;x)=\frac{d}{d\theta}f(x;\theta)$ and $L''(\theta;x)=\frac{d^2}{d\theta^2}f(x;\theta)$ \textit{exist}.
+	\item $\forall\ \theta\in\Theta$ the set $S:=\{x\in\mathcal{X}:\ f(x;\theta)>0\}$ is \textit{independent} of $\theta\in\Theta$.
+	\item The idenity below \textit{exists}
+	$$\int_S\frac{d}{d\theta}f(x;\theta)dx=\frac{d}{d\theta}\int_Sf(x;\theta)dx=0$$
+\end{enumerate}
+\nb Statistical Models which fulfil all these criteria are described as \textit{Regular}.\\
+
+\definition{Score Function - Single Random Variable}
+Let $X\sim f(\cdot;\theta)$ for some $\theta\in\Theta$ and $x$ be a realisation of $X$.\\
+The \textit{Score Function} measures the sensitivity of the likelihood function  wrt the parameter it is estimating.
+$$\ell'(\theta;x):=\frac{d}{d\theta}\ell(\theta;x)=\frac{\frac{d}{d\theta}f(x;\theta)}{f(x;\theta)}$$
+
+\definition{Score Function - Independent \& Identically Distributed Random Variables}
+Let $\X\iid f(\cdot;\theta)$ with $\theta\in\Theta$ and $\x$ be a realisation of $\X$.
+$$\ell'_n(\theta;\x):=\sum_{i=1}^n\frac{d}{d\theta}\ell(\theta;x_i)$$
+
+\prooff{By Regularity Conditions $\expect(\ell'(\theta;X);\theta)=0\ \forall\ \theta\in\Theta$}
+\[\begin{array}{rcl}
+\expect(\ell'(\theta;X);\theta)&=&{\displaystyle\int_S\dfrac{\frac{d}{d\theta}f(x;\theta)}{f(x;\theta)}f(x;\theta)dx}\\
+&=&{\displaystyle\int_S\frac{d}{d\theta}f(x;\theta)dx}\\
+&=&{\displaystyle\frac{d}{d\theta}\int_Sf(x;\theta)dx}\\
+&=&\frac{d}{d\theta}(1)\\
+&=&0\ \forall\ \theta\in\Theta
+\end{array}\]
+
+\definition{Fisher Information - Single Random Variable}
+Let $X\sim f(\cdot;\theta)$ be an sufficiently regular (see \textbf{Definition 2.14}) observable random variable with $\theta$ unknown.\\
+\textit{Fisher Information} measures the amount of information $X$ carries about $\theta$.
+\[\begin{array}{rrl}
+I(\theta)&:=&\expect(\ell'(\theta;X)^2;\theta)\\
+&=&\var(\ell'(\theta;X);\theta)\text{ by \textbf{Proof 2.3}}
+\end{array}\]
+\nb This is the expectation of the score, squared $\equiv$ The second moment of the score.\\
+
+\definition{Fisher Information - Independent \& Identically Distributed Random Variables}
+Let $\X\iid f(\cdot;\theta)$ with $\theta\in\Theta$ and $\x$ be a realisation of $\X$.
+\[\begin{array}{rrl}
+I_n(\theta)&:=&\expect(\ell'_n(\theta;\X)^2;\theta)\\
+&=&\var(\ell'_n(\theta;\X);\theta)\\
+&=&nI(\theta)
+\end{array}\]
+
+\definition{Observed Fisher Information}
+Let $\X\iid f(\cdot;\theta^*)$ be a random n-dimensional vector.\\
+The \textit{Observed Fisher Information} at $\theta$ is
+$$nJ_n(\theta)=-\ell''(\theta;\X)=-\sum_{i=1}^n\ell''(\theta;X_i)$$
+\nb $\expect(J_n(\theta^*;\theta^*)=I(\theta^*)$. This is a deterministic value, not an expectation like \textit{Fisher Information}.\\
+
+\theorem{Fisher Information of Reparameterisation}
+Let $X\sim f(\cdot;\theta)$ for $\theta\in\Theta\subseteq\reals$ and $\tau:=g(\theta)$ be a bijective \& continuously differentiable function.\\
+Consider the reparameterisation $\tilde{f}(x;\tau):=f(x;g(\theta))=f(x;g^{-1}(\tau))$.\\
+The \textit{Fisher Information} for this reparameterisation, $\tilde{f}$ is given by
+$$\tilde{I}(\tau)=\frac{I(\theta)}{g'(\theta)^2}$$
+
+\proof{Theorem 2.9}
+Since $\tilde{f}(x;\tau)=f(x;g^{-1}(\tau))$ the log-likelihood for $tau$ is
+$$\tilde\ell(\tau;x)=\ln\tilde{f}(x;\tau)=\ln f(x;g^{-1}(\tau))$$
+The score is therefore
+\[\begin{array}{rcl}
+\tilde\ell'(\tau;x)&=&\frac{d}{d\tau}\ln f(x;g^{-1}(\tau))\\
+&=&\frac{d}{d\theta}\ln f(x;g^{-1}(\tau))\times\frac{d}{d\tau}g^{-1}(\tau)\\
+&=&\ell'(g^{-1}(\tau);x)\times\dfrac{1}{g'(g^{-1}(\tau))}\\
+&=&\dfrac{\ell'(\theta;x)}{g'(\theta)}
+\end{array}\]
+No we use the definition of \textit{Fisher Information}
+\[\begin{array}{rcl}
+\tilde{I}(\tau)&=&\expect(\tilde\ell'(\tau;X)^2;\tau)\\
+&=&\expect\left(\dfrac{\ell'(\theta;X)^2}{g'(\theta)^2};\theta\right)\\
+&=&\dfrac{1}{g'(\theta)^2}\expect\left(\ell'(\theta;X)^2;\theta\right)\\
+&=&\dfrac{I(\theta)}{g'(\theta)^2}
+\end{array}\]
+
+\theorem{Alternative Expression of Fisher Information}
+Let $X\sim f(\cdot;\theta)$ be a sufficiently regular random variable. Then
+$$\text{if }\forall\ \theta\in\Theta\ \int_\mathcal{X}\frac{d^2}{d\theta^2}f(x;\theta)dx=\frac{d}{d\theta}\int_\mathcal{X}\frac{d}{d\theta}f(x;\theta)dx\text{ then }I(\theta)=-\expect\left(\frac{d^2}{d\theta^2}\ell(\theta;X);\theta\right)$$
+
+\proof{Theorem 2.9}
+By the \textit{Quotient Rule}
+\[\begin{array}{rcl}
+\frac{d^2}{d\theta^2}\ell(\theta;x)&=&\dfrac{d}{d\theta}\dfrac{\frac{d}{d\theta}f(x;\theta)}{f(x;\theta)}\\
+&=&\dfrac{\frac{d^2}{d\theta^2}f(x;\theta)}{f(x;\theta)}-\left(\dfrac{\frac{d}{d\theta}f(x;\theta)}{f(x;\theta)}\right)^2
+\end{array}\]
+Consequently
+\[\begin{array}{rrcl}
+&\expect\left(\frac{d^2}{d\theta^2}\ell(\theta;X);\theta\right)&=&{\displaystyle\int_S\frac{\frac{d^2}{d\theta^2}f(x;\theta)}{f(x;\theta}f(x;\theta)dx-\int_S\left(\frac{\frac{d}{d\theta}f(x;\theta)}{f(x;\theta)}\right)^2f(x;\theta)dx}\\
+&&=&{\displaystyle\int_S\frac{d^2}{d\theta^2}f(x;\theta)dx-\int_S\ell'(\theta;x)^2f(x;\theta)dx}\\
+&&=&0-\expect(\ell'(\theta;X)^2;\theta)\\
+&&=&-I(\theta)\\
+\implies&I(\theta)&=&-\expect\left(\frac{d^2}{d\theta^2}\ell(\theta;X);\theta\right)
+\end{array}\]
+\proved
+
+\theorem{Distribution of Maximum Likelihood Estimators for Regular Models}
+Let $\X_n\iid f_n(\cdot;\theta^*)$ be a sufficiently regular statistically model and $\{\hat\theta_n\}_{n\in\nats}$ be a consistent sequence of \textit{Maximum Likelihood Estimators} for $\theta^*$. Then
+$$\sqrt{nI(\theta^*)}(\hat\theta_n-\theta^*)\to_{\mathcal{D}(\cdot;\theta^*)}Z\sim\text{Normal}(0,1)$$
+Here $I(\theta^*)$ is unknown so we replace it with
+\begin{enumerate}
+	\item $I(\hat{\theta}_n)$ when
+	\begin{enumerate}
+		\item $I(\theta)$ is continuous in a neighbourhood of $\theta^*$;
+		\item And, the interval $[L(\X),U(\X)]$ with $L(\x):=\hat{\theta}_n-z_{\alpha/2}\sqrt{nI(\hat{\theta}_n)}$ and ${U(\x):=\hat{\theta}_n+z_{\alpha/2}\sqrt{nI(\hat{\theta}_n)}}$ is an asymptotically exact $1-\alpha$ confidence interval for $\theta*$.
+	\end{enumerate}
+	\item $J_n(\hat{\theta}_n):=-\frac{1}{n}\sum\limits_{i=1}^n\ell''(\hat{\theta}_n;X_i)$ when
+	\begin{enumerate}
+		\item $\hat\theta_n\to_{\prob(\cdot;\theta^*)}\theta^*$;
+		\item $I(\theta)=-\expect(\ell''(\theta;X);\theta)\ \forall\ \ theta\in\Theta$;
+		\item $\exists\ C:\mathcal{X}\to[0,\infty)$ st $\expect(C(X_1);\theta^*)<\infty,\ \Xi\subset\Theta$ is an open set containing $\theta^*$ and $\Delta(\cdot):\Xi\to[0,\infty)$ is continuous at 0 st $\Delta(0)=0$, and st $\forall\ \theta,\theta^*,x\in \Xi^2\times\mathcal{X}$
+		$$|\ell''(\theta;x)-\ell''(\theta';x)|\leq C(x)\Delta(\theta-\theta')$$
+		\item And, the interval $[L(\X),U(\X)]$ with $L(\x):=\hat{\theta}_n-z_{\alpha/2}\sqrt{nJ_n(\hat{\theta}_n)}$ and ${U(\x):=\hat{\theta}_n+z_{\alpha/2}\sqrt{nJ_n(\hat{\theta}_n)}}$ is an asymptotically exact $1-\alpha$ confidence interval for $\theta^*$
+	\end{enumerate}
+\end{enumerate}
+
+\theorem{Cramer-Rao Inequality}
+Let \textit{Cramer-Rao Inequality} provides us with a \textit{lower bound} for the performance of all estimators.\\
+Let $\X_n\iid f(\cdot;\theta)$ be a sufficiently regular random vector and $\hat\theta_n(\cdot)$ be an estimator of $\theta$ with expectation $m_1(\theta):=\expect(\hat\theta_n(\X_n);\theta)$.\\
+$$\text{if }\forall\ \theta\in\Theta,\ \underbrace{\frac{d}{d\theta}\int\hat{\theta}_n(\x)f_n(\x;\theta)d\x}_{\expect(\hat{\theta}_n)}=\int\hat{\theta}_n(\x)\frac{d}{d\theta}f_n(\x;\theta)d\x$$
+Then
+$$\forall\ \theta\in\Theta,\ \var(\hat\theta_n(\X);\theta)\geq\frac{m_1'(\theta)^2}{nI(\theta)}$$
+
+\proof{Cramer-Rao Inequality}
+We notice that
+\[\begin{array}{rcl}
+m'(\theta)&=&\frac{d}{d\theta}\expect(\hat{\theta}_n(\X_n);\theta)\\
+&=&\frac{d}{d\theta}\int_{S^n}\hat{\theta}_n(\x_n)f_n(\x_n;\theta)d\x_n
+\end{array}\]
+The clever part of this proof is to observe that
+\[\begin{array}{rcl}
+\var(\hat{\theta}_n(\X_n);\theta)nI(\theta)&=&\var(\hat{\theta}_n(\X_n);\theta)\var(\ell_n(\theta;\X_n);\theta)\\
+&\geq&\cov(\hat{\theta}_n(X_n),\ell'_n(\theta;\X_n);\theta)^2\text{ by Covariance Inequality}
+\end{array}\]
+Thus
+\[\begin{array}{rrcl}
+&\cov(\hat{\theta}_n(X_n),\ell'_n(\theta;\X_n);\theta)^2&=&\expect(\hat{\theta}_n(X_n)\ell_n'(\theta;\X_n);\theta)-\expect(\hat{\theta}_n(\X_n);\theta)\expect(\ell'_n(\theta;\X_n);\theta)\\
+&&=&\expect(\hat{\theta}_n(X_n)\ell_n'(\theta;\X_n);\theta)-\expect(\hat{\theta}_n(\X_n);\theta)\times0\\
+&&=&\expect(\hat{\theta}_n(X_n)\ell_n'(\theta;\X_n);\theta)\\
+&&=&{\displaystyle\int_{S^n}\hat{\theta}_n(\x_n)\ell'_n(\theta;\x_n)f_n(\x_n;\theta)d\x_n}\\
+&&=&{\displaystyle\int_{S^n}\hat{\theta}_n(\x_n)\frac{\frac{d}{d\theta}f_n(\x_n;\theta)}{f_n(\x_n;\theta)}f_n(\x_n;\theta)d\x_n}\\
+&&=&{\displaystyle\int_{S^n}}\hat{\theta}_n(\x_n)\frac{d}{d\theta}f_n(\x_n;\theta)\\
+&&=&\frac{d}{d\theta}{\displaystyle\int_{S^n}\hat{\theta}_n(\x_n)f_n(\x_n;\theta)d\x_n}\text{ by regularity assumption}\\
+&&=&m'(\theta)\\
+\implies&\var(\hat{\theta}_n(X_n);\theta)nI(\theta)&\geq&m'(\theta)^2
+\end{array}\]
+
+\remark{Cramer-Rao Inequality with an Unbiased Estimator}
+Let $\hat\theta_n$ be an unbiased estimator of $\theta$ (\ie $m_1(\theta)=\theta$). Then
+$$\var(\hat\theta_n(\X_n);\theta)=\text{MSE}(\hat\theta_n(\X_n);\theta)\geq\frac{1}{nI(\theta)}$$
+
+\subsection{Asymptotic Distribution of Estimators}
+
+\theorem{Asymptotic Distribution of Maximum Likelihood Estimators}
+Suppose that $\X_n\iid f(\cdot;\theta^*)$ for some $\theta^*\in\Theta$ and assume that
+\begin{enumerate}[label=\roman*)]
+	\item The sequence of maximum likelihood estiamtors $\{\hat{\theta}_n(\X_n)\}$ is consistent;
+	\item The \textit{Fisher Information Regularity Conditions} (\textbf{Definition 6.2}) hold and ${I(\theta^*)=-\expect[\ell''(\theta;X);\theta]>0}$.
+	\item $\exists\ C:\mathcal{X}\to[0,\infty)$ such that $\expect[C(X_1);\theta^*]<\infty$ and $\Delta:\Xi\to[0,\infty)$, where $\Xi\subset\Theta$ st $\theta^*\in\Xi$, that is continuous at 0 st $\Delta(0)=0$, such that 
+	$$\forall\ (\theta,\theta',x')\in\chi^2\times\mathcal{X},\quad|\ell''(\theta;x)-\ell(\theta';x)|\leq C(x)\Delta(\theta-\theta')$$
+\end{enumerate}
+Then $\forall\ \theta^*\in\Theta$
+$$\sqrt{nI(\theta^*)}(\hat{\theta}_n(\X_n)-\theta^*)\to_{\mathcal{D}(\dot;\theta^*)}Z\sim\text{Normal}(0,1)$$
+
+\proof{Theorem 2.11}
+By \textbf{Theorem 2.11} $\ell'_n(\hat{\theta}_n;\X)=\ell'_n(\theta^*;\X)+(\hat{\theta}_n-\theta^*)[\ell''_n(\theta^*;\X)+R_n]$ where $\frac{1}{n}R_n\to_{\prob(\cdot;\theta^*)}0$.\\
+Since $\hat{\theta}_n$ is the maximum likelihood estimator \& the \textit{Fisher Information Regularity Conditions} hold, the score at $\ell'(\hat{\theta}_n;X)=0$.\\
+Hence, $0=\ell''(\hat{\theta}_n;X)=\ell'_n(\theta;X)+(\hat{\theta}_n-\theta^*)\{\ell''(\theta;X)+R_n\}$.\\
+Rearranging \& rescalling by $\sqrt{n}$ gives
+$$\sqrt{n}(\hat{\theta}_n-\theta^*)=\frac{\frac{1}{\sqrt{n}}\ell'(\theta^*;X)}{-\frac{1}{\sqrt{n}}\{\ell''(\theta^*;X)+R_n}=:\frac{U_n}{V_n-\frac{R_n}{n}}$$
+Recall that $\ell'_n(\theta^*;X)=\sum\limits_{i=1}^n\ell'(\theta;X_i)$ and $\ell''_n(\theta^*;X)=\sum\limits_{i=1}^n\ell''(\theta^*;X_i)$.\\
+Since $\expect(\ell'(\theta^*;X_i);\theta^*)=0$ and $\var(\ell'(\theta^*;X_i);\theta^*)=I(\theta^*)$\\$\implies U_n\to_{\mathcal{D}(\cdot;\theta^*)}U\sim\text{Normal}(0,I(\theta^*))$ by the \textit{Central Limit Theorem}.\\
+We observed that $V_n\to_{\prob(\cdot;\theta^*)}I(\theta^*)$ by the \textit{Weak Law of Large Numbers} since ${\expect(-\ell''(\theta^*;X_i);\theta^*)=I(\theta^*)}$.\\
+It follows that $V_n-\frac{1}{n}R_n\to_{\prob(\cdot;\theta^*)}I(\theta^*)$ by \textit{Slutsky's Theorem}.\\
+Using \textit{Slutsky's Theorem} again
+$$\sqrt{n}(\hat{\theta}_n-\theta^*)=\frac{U_n}{V_n-\frac{1}{n}R_n}\to_{\mathcal{D}(\cdot;\theta^*)}\frac{\sqrt{I(\theta^*)}}{I(\theta^*)}Z\text{ where }Z\sim\text{Normal}(0,1)$$
+We can rewrite this as
+$$\sqrt{nI(\theta^*)}(\hat{\theta}_n-\theta^*)\to_{\mathcal{D}(\cdot;\theta^*)}Z\sim\text{Normal}(0,1)$$
+
+\theorem{Convergence of Score of Maximum Likelihood Estimators}
+Under the conditions in \textbf{Theorem 2.11}, with $\hat\theta_n$ a Maximum Likelihood Estimator
+$$\ell'_n(\hat\theta_n;\X)=\ell'_n(\theta^*;\X)+(\hat\theta_n-\theta^*)[\ell''_n(\theta^*;\X)+R_n\}$$
+where $\frac{1}{n}R_n\to_{\prob(\cdot;\theta^*)}0$.\\
+
+\proof{Theorem 2.12}
+\textit{This is an non-examinable, sketch proof of \textbf{Theorem 8.2}}.\\
+By the regularity conditions and the mean alue theorem
+$$\frac{\ell_n'(\theta;\x)-\ell'_n(\theta^*;\x)}{\theta-\theta^*}=\ell''_n(\tilde{\theta};\x)$$
+for some $\tilde{\theta}\in(\theta,\theta^*)$. Hence, we deduce that
+\[\begin{array}{rcl}
+\ell'_n(\theta;\x)-\ell_n'(\theta^*;\x)&=&(\theta-\theta^*)\ell''_n(\tilde{\theta};\x)\\
+&=&(\theta-\theta^*)\{\ell''_n(\theta^*;\x)+[\ell''_n(\tilde{\theta};\x)-\ell_n(\theta^*;\x)]\}\\
+&=&(\theta-\theta^*)\{\ell''_n(\theta;\x)+R_n(\theta,\theta^*,\x)\}
+\end{array}\]
+Now we replace $\theta$ with the maximum likelihood estimator $\hat{\theta}_n:=\hat{\theta}_n(\X)$. We find
+$$\ell'(\hat{\theta}_n;\X)=\ell'_n(\theta^*;\X)+(\hat{\theta}_n-\theta^*)\{\ell''_n(\theta^*;\X)+R_n(\hat{\theta}_n,\theta^*,\x\}$$
+and we need to analyse $R_n$.\\
+Since $\hat{\theta}_n\to_{\prob(\cdot;\theta^*)}\theta^*$ we can take $n$ large enough that $\prob(\hat{\theta}_n\in\Xi;\theta^*)$ with arbitrarily high probability.\\
+On the event $\{\hat{\theta}\in\Xi\}$ and we have $\{\tilde{\theta}_n\in\Xi\}$ since $\tilde{\theta}_n\in(\hat{\theta}_n,\theta^*)$ and
+\[\begin{array}{rcl}
+|\frac{1}{n}R_n|&=&\frac{1}{n}|\ell''_n(\tilde{\theta}_n;\X)-\ell_n''(\theta^*;\X)|\\
+&=&\dfrac{1}{n}\left|\sum\limits_{i=1}^n\ell''(\tilde{\theta}_n;X_i)-\ell''(\theta^*;X_i)\right|\\
+&\leq&\dfrac{1}{n}\sum\limits_{i=1}^n\left|\ell''(\tilde{\theta}_n;X_i)-\ell''(\theta^*;X_i)\right|\\
+&\leq&\Delta(\tilde{\theta}_n-\theta^*)\left\{\dfrac{1}{n}\sum\limits_{i=1}^nC(X_i)\right\}
+\end{array}\]
+from the smoothness condition on $\ell''$.\\
+From the \textit{Weak Law of Large Numbers}
+$$\frac{1}{n}\sum_{i=1}^nC(X_i)\to_{\prob(\cdot;\theta^*)}\expect(C(X_1);\theta^*)<\infty$$
+and from the consistency of $\{\hat{\theta}_n\}$ and $\{\tilde{\theta}_n\}$ and continuity of $\Delta(\cdot)$ we have by the \textit{Continuous Mapping Theorem}
+$$\Delta(\tilde{\theta}_n-\theta^*)\to_{\prob(\cdot;\theta^*)}0$$
+Hence, $\frac{1}{n}R_n\to_{\prob(\cdot;\theta^*)}0\hfill\square$
+
+\subsubsection{Confidence Intervals}
+
+\theorem{Convergence in Distirbution of Confidence Intervals}
+Let $\X\sim f(\cdot;\theta^*)$ with $\theta\in\Theta$ and define $\{\hat\theta_n\}_{n\in\nats}$ be a consistent sequence of estimators of $\theta^*$.\\
+Suppose that $\{\hat\theta_n\}$ is asymptotically normal in the sense that
+$$\exists\ \sigma^2>0\text{ st }\frac{\hat{\theta}_n(\X)-\theta^*}{\sqrt{\sigma^2/n}}\to_{\mathcal{D}(\cdot;\theta^*)}Z\sim\text{Normal}(0,1)$$
+Then
+\begin{center}$\forall\ \alpha\in(0,1),\ \mathcal{I}_n(\X)-[L_n(\X),U_n(\X)]$ is an asymptotically exact $1-\alpha$ condifence interval\end{center}
+where $L_n(\x):=\hat{\theta}_n(\x)-z_{\alpha/2}\sqrt{\frac{\sigma^2}{n}}$ and $U_n(\x):=\hat{\theta}(\x)+z_{\alpha/2}\sqrt{\frac{\sigma^2}{n}}$.\\
+
+\proof{Theorem 2.13}
+Let $\{W_n\}_{n\in\nats}$ be defined by $W_n:=\frac{\hat{\theta}_n(X)-\theta^*}{\sqrt{\sigma^2/n}}$.\\
+Since $W_n\to_{\mathcal{D}(\cdot;\theta^*)}Z\sim\text{Normal}(0,1)$ we have
+\[\begin{array}{rcl}
+\prob(-z_{\alpha/2}\leq W_n\leq z_{\alpha/2})&=&F_{W_n}(z_{\alpha/2})-F_{W_n}(-z_{\alpha/2})\\
+&\underset{n\to\infty}{\longrightarrow}&\Phi(z_{\alpha/2})-\Phi(-z_{\alpha/2})\\
+&=&1-\alpha
+\end{array}\]
+Similary to before we have the equivalence of events
+$$\{-z_{\alpha/2}\leq W_n\leq z_{\alpha/2}\}=\left\{\hat{\theta}_n-z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\leq\theta^*\leq\hat{\theta}_n+z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\right\}$$
+So $\lim_{n\to\infty}\prob\left(\hat{\theta}_n(X)-z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\leq\theta^*\leq\hat{\theta}_n(X)+z_{\alpha/2}\frac{\sigma}{\sqrt{n}};\theta^*\right)=1-\alpha$.\proved
+
+
+\subsection{Efficiency of Estimators}
+
+\definition{Efficient Estimator}
+Let $\hat\theta$ be an estimator of parameter $\theta$.\\
+$\hat\theta$ is said to be an \textit{Efficient Estimator} if its variance is equal to the \textit{Craner-Rao Lower Bound} $\forall\ \theta^*$.
+$$\forall\ \theta^*,\ \var(\hat\theta;\theta^*)=\frac{m'(\theta^*)^2}{nI(\theta)}$$
+
+\definition{Asymptotically Efficient Sequence of Estimators}
+Let $\X\sim f(\cdot;\theta)$ for $\theta\in\Theta$ and $\{\hat\theta_n(\X)\}_{n\in\nats}$  be a sequence of estimators.\\
+The sequence $\{\hat\theta_n\}$ is \textit{Asumptotically Efficient} if either
+\begin{enumerate}
+	\item its \textit{Mean-Squared Error} converges in value to the \textit{Cramer-Rao Lower Bound}
+	$$\forall\ \theta\in\Theta,\ n\text{MSE}(\hat\theta_n(\X_n);\theta)\underset{n\to\infty}{\longrightarrow}\frac{1}{I(\theta)}$$
+	\item Or, $\hat\theta_n$ \textit{Converges in Distribution} to a standard Normal
+	$$\forall\ \theta\in\Theta,\ \sqrt{nI(\theta)}(\hat\theta-\theta)\to_{\mathcal{D}(\cdot;\theta)}Z\sim\text{Normal}(0,1)$$
+\end{enumerate}
+
+\remarkk{Under the conditions of \textbf{Theorem 2.11} Maximum Likelihood Estimators are Asymptotically Efficient}
+
+
+
+\newpage
+\setcounter{section}{-1}
+\section{Appendix}
+
+\subsection{Notation}
+
+\notation{Convergence}
+$\{z_n\}_{n\in\nats}\to z$ denotes that the sequence of deterministic values $\{z_n\}_{n\in\nats}$ converges in \underline{value} to $z\in\reals$.\\
+$\{Z_n\}_{n\in\nats}\to_\prob Z$ denotes that the sequence of random variables $\{Z_n\}_{n\in\nats}$ converges in \underline{probability} to random variable $Z$.\\
+$\{Z_n\}_{n\in\nats}\to_{\prob(\cdot;\theta)} Z$ denotes that the sequence of random variables $\{Z_n\}_{n\in\nats}$ converges in \underline{probability} to random variable $Z$, dependent upon parameter $\theta$.\\
+$\{Z_n\}_{n\in\nats}\to_\mathcal{D} Z$ denotes that the sequence of random variables $\{Z_n\}_{n\in\nats}$ converges in \underline{distribution} to random variable $Z$.\\
+
+\notationn{Gamma Function}
+$$\Gamma(x):=\int_0^\infty t^{x-1}e^{-t}dt$$
+
+\subsection{Definitions}
+
+\definition{Correlation}
+LEt $X$ \& $Y$ be random variables.\\
+\textit{Correlation} is a measure of dependence between two random variables
+$$\text{Corr}(X,Y):=\frac{\cov(X,Y)}{\sqrt{\var(X)\var(Y)}}\in[-1,1]$$
+
+\definition{Covariance}
+\textit{Covariance} is a measures the joint variability of two random variables.\\
+Consider random variable $X$ \& $Y$
+$$\cov(X,Y)=\expect[(X-\expect(X))(Y-\expect(Y))]=\expect(XY)-\expect(X)\expect(Y)$$
+If $X$ \& $Y$ are independent then $\cov(X,Y)=0$.\\
+By definition of \textit{Covaraince} $\cov(X,X)=\var(X)$.\\
+
+\definition{Estimation}
+Let $\X\sim f_n(\cdot;\theta^*)$ with $\theta^*\in\Theta$ and $\x$ be a realisation of $\X$.\\
+As \textit{Estimation} of model parameter $\theta^*$ is a statistic, $\hat\theta(\x)=T(\x)$, which is indtended to approximated the true value of $\theta^*$.\\
+\nb Interchangeable with \textit{Estimate}.\\
+
+\definition{Estimator}
+Let $\X\sim f_n(\cdot;\theta^*)$ with $\theta^*\in\Theta$ and $\x$ be a realisation of $\X$.\\
+An \textit{Estimator} of model paramter $\theta^*$ is the random variable $\hat\theta:=\hat\theta(\X)$ where $\hat\theta(\x)$ is an \textit{estimation} of $\theta^*$.\\
+
+\definition{Expectation}
+\textit{Expectation} is the mean value for a random variable.\\
+Consider \textit{continuous} random variable $X$ with pdf $f_X$ and \textit{discrete} random variable $Y$ with pmf $f_Y$. Then
+$$\expect(X):=\int_\reals xf_X(x)dx\quad\text{and}\quad\expect(Y):=\sum_{y\in\mathcal{Y}}yp_Y(y)$$
+For a function $g:\reals\to\reals$ we have
+$$\expect(g(X)):=\int_\reals g(x)f_X(x)dx\quad\text{and}\quad\expect(g(Y)):=\sum_{y\in\mathcal{Y}}g(y)p_Y(y)$$
+For linear transformations of a random variable $Z$ we find
+$$\expect(aZ+b)=a\expect(Z)+b\quad\text{for }a,b\in\reals$$
+
+\definition{Five-Number Summary}
+The \textit{Five-Number Summary} of a sample contains the sample's: median; lower hinge; upper hinge; minimum value; \& maximum value.\\
+
+\definition{Hinges}
+\textit{Hinges} describe the spread of data in a sample, while trying to ignore extreme data. The \textit{Lower Hinge}, $H_1$, is the median of the set containing the median \& values with rank \underline{less} than the sample median . The \textit{Upper Hinge}, $H_3$, is the median of the set containing the median \& values with rank \underline{greater} than the sample median.\\
+
+\definition{Median}
+The \textit{Median} is the central value of a data set.\\
+Consider a data set $x_0,\dots,x_n$
+\begin{itemize}
+	\item[-] If $\exists\ m\in\nats\text{ st } n=2m+1$ (\ie $n$ is odd) then the median is $x_{(m+1)}$.
+	\item[-] Else $\exists\ m\in\nats\text{ st } n=2m$ (\ie $n$ is even) then the median is $x_{(m+1)}$.
+\end{itemize}
+
+\definition{Moments}
+The \textit{Moments} of a random variable $X$ are the expected values of powers of $X$.
+$$n^{\text{th}}\text{ moment of }X:=\expect(X^n$$
+\nb $\expect(X^n)\neq\expect(X)^n$.\\
+
+\definition{Order Statistic}
+An \textit{Order Statistic} is a data set where the data has been placed in increasing order of value, not time. We use $x_{(i)}$ to denote the $i^\text{th}$ lowest value in $(x_0,\dots,x_n)$.\\
+
+\definition{Quartiles}
+\textit{Quartiles} describe the spread of data in a sample.  The \textit{Lower Quartile}, $Q_1$, is the median of the set of values with rank \underline{less} than the sample median . The \textit{Upper Quartile}, $Q_3$, is the median of the set of values with rank \underline{greater} than the sample median.\\
+\nb These sets do \underline{not} contain the median.\\
+
+\definition{Sample Mean}
+The \textit{Sample Mean} is the mean value of all data points within a sample. Consider a sample $\{x_1,\dots,x_n\}$
+$$\bar{x}:=\frac{1}{n}\sum_{i=1}^nx_i$$
+
+\definition{Sample Variance}
+\textit{Sample Variance} is a measure of spread of data in a sample around the sample mean. For a sample $\{x_1,\dots,x_n\}$
+$$s^2:=\frac{1}{n-1}\sum_{i=1}^n(x_i-\bar{x})^2=\frac{1}{n-1}\left(\left(\sum_{i=1}^nx_i^2\right)-n\bar{x}^2\right)$$
+
+\definition{Statistic}
+Let $\x$ be some data.\\
+A \textit{Statistic} is any function of the data, $T(\x)$.\\
+\nb \textit{Statistics} are independent of unknown model parameters.\\
+
+\definition{Trimmed Sample Mean}
+The \textit{Trimmed Sample Mean} is the average value of a subset of data points within a sample. The subset is defined to ignore the $\frac{\Delta}{2}\%$ largest \& smallest values of the sample. For a $\Delta\%$ trimmed mean we define
+$$\bar{x}_\Delta:=\frac{1}{n-2k}\sum_{i=k+1}^{n-k-1}x_i\ \mathrm{with}\ k=\left\lfloor\frac{n\Delta}{100}\right\rfloor$$
+
+\definition{Variance}
+\textit{Variance} measures how far a set of random numbers are spread from their average value.\\
+Consider random variable $X$
+$$\var(X):=\expect[(X-\expect(X))^2]=\expect(X^2)-\expect(X)^2$$
+For linear transformation of a random variable $X$ we find
+$$\var(aX+b(=a^2\var(X)$$
+For a linear transformation of two random variables $X$ \& $Y$ we ahve
+$$\var(aX+bY)=a^2\var(X)+b^2\var(Y)+2ab\cov(X,Y)\quad\text{for }a,b\in\reals$$
+
+\definition{Skew}
+\textit{Skew} describes the spread of values in a sample which are less than the median, relative to the spread of values greater than the median. A sample is \textit{Left-Skewed} if $|H_3-H_2|<|H_1-H_2|$. A sample is \textit{Right-Skewed} if $|H_3-H_2|>|H_1-H_2|$.\\
+
+\subsection{Theorems}
+
+\theorem{Cauchy-Scwarz Inequality}
+Let $X$ \& $Y$ be real-valued random variables in the same probability space. Then
+$$\expect(XY)^2\leq\expect(X^2)\expect(Y^2)$$
+
+\theorem{Chebyshev's Inequality}
+Let $X$ be a random variable.\\
+Define $\mu:=\expect(X)$ and $\sigma^2:=\var(X)$. Then
+$$\forall\ a>0\quad\prob(|X-\mu|\geq a)\leq\frac{\sigma^2}{a^2}$$
+
+\theorem{Covariance Inequality}
+Let $X$ \& $Y$ be real-valued random varaibles in teh same probability space. Then
+$$\cov(X,Y)^2\leq\var(X)\var(Y)$$
+
+\theorem{Joint Probability Density of Simple Random Sample}
+Let $\X_1,\dots,X_n$ be a set of \underline{independent} random variables with pdfs $f_{X_1},\dots,f_{X_n}$, respectfully, and $x_1,\dots,x_n$ be a realisation of $X_1,\dots,X_n$.\\
+The probability of obtaining $x_1,\dots,x_n$ is
+$$f_{X_1,\dots,X_n}(x_1,\dots,x_n)=\prod_{i=1}^nf_{X_i}(x_i;\theta)$$
+
+\theorem{Markov's Inequality}
+Let $X\sim f_X(\cdot)$ be a non-negative continuous random variable. Then
+$$\forall\ a>0\quad\prob(X\geq a)\leq\frac{\expect(X)}{a}$$
+
+\subsection{Probability Distributions}
+
+\definition{Bernoulli Distribution}
+Let $X\sim\text{Bernoulli}(p)$.\\
+A \textit{discrete} random variable which takes 1 with probability $p$ \& 0 with probability $(1-p)$. Then
+\[\begin{array}{rcl}
+p_X(k)&=&\begin{cases}1-p&\text{if }k=0\\p&\text{if }k=1\\0&\text{otherwise}\end{cases}\\
+P_X(k)&=&\begin{cases}0&\text{if }k<0\\1-p&\text{if }k\in[0,1)\\1&\text{otherwise}\end{cases}\\
+\expect(X)&=&p\\
+\var(X)&=&p(1-p)\\
+\mathcal{M}_X(t)&=&(1-p)+pe^t
+\end{array}\]
+\nb Often we define $q:=1-p$ for simplicity.\\
+
+\definition{Binomial Distribution}
+Let $X\sim\text{Binomial}(n,p)$.\\
+A \textit{discrete} random variable modelled by a \textit{Binomial Distribution} on $n$ independent events and rate of success $p$.\\
+\[\begin{array}{rcl}
+p_X(k)&=&{n\choose k}p^k(1-p)^{n-k}\\
+P_X(k)&=&\sum_{i=1}^k{n\choose i}p^i(1-p)^{n-i}\\
+\expect(X)&=&np\\
+\var(X)&=&np(1-p)\\
+\mathcal{M}_X(t)&=&[(1-p)+pe^t]^n
+\end{array}\]
+\nb If $Y:=\sum_{i=1}^nX_i$ where $\X\iid\text{Bernoulli}(p)$ then $Y\sim\text{Binomial}(n,p)$.\\
+
+\definition{$\chi^2$ Distribution}
+Let $X\sim\chi^2_r$.\\
+A \textit{continuous} random variable modelled by the \textit{$\chi^2$ Distribution} with $r$ degrees of freedom. Then
+\[\begin{array}{rcl}
+f_X(x)&=&\dfrac{1}{2^{r/2}\Gamma(r/2)}x^{\frac{r}{2}-1}e^{-\frac{x}{2}}\\
+F_X(x)&=&\dfrac{1}{\Gamma(k/2)}\gamma\left(\frac{r}{2},\frac{x}{2}\right)\\
+\expect(X)&=&r\\
+\var(X)&=&2r\\
+\mathcal{M}_X(t)&=&\indicator\{t<\frac{1}{2}\}(1-2t)^{-\frac{r}{2}}
+\end{array}\]
+\nb If $Y:=\sum_{i=1}^kZ_i^2$ with $\textbf{Z}\iid\text{Normal}(0,1)$ then $Y\sim\chi^2_k$.\\
+
+\definition{Exponential Distribution}
+Let $X\sim\text{Exponential}(\lambda)$.\\
+A \textit{continuous} random variable modelled by a \textit{Exponential Distribution} with rate-parameter $\lambda$. Then
+\[\begin{array}{rcl}
+f_X(x)&=&\indicator\{t\geq0\}.\lambda e^{-\lambda x}\\
+F_X(x)&=&\indicator\{t\geq0\}.\left(1-e^{-\lambda x}\right)\\
+\expect(X)&=&\dfrac{1}{\lambda}\\
+\var(X)&=&\dfrac{1}{\lambda^2}\\
+\mathcal{M}_X(t)&=&\indicator\{t<\lambda\}\dfrac{\lambda}{\lambda-t}
+\end{array}\]
+\nb Exponential Distribution is used to model the wait time between decays of a radioactive source.\\
+
+\definition{Gamma Distribution}
+Let $X\sim\Gamma(\alpha,\beta)$.\\
+A \textit{continuous} random variable modelled by a \textit{Gamma Distribution} with shape parameter $\alpha>0$ \& rate parameter $\beta$. Then
+\[\begin{array}{rcll}
+f_X(x)&=&\dfrac{1}{\Gamma(\alpha)}\beta^\alpha x^{\alpha-1}e^{-\beta x}\\
+F_X(x)&=&\dfrac{\Gamma(\alpha)}\gamma(\alpha,\beta x)\\
+\expect(X)&=&\dfrac{\alpha}{\beta}\\
+\var(X)&=&\dfrac{\alpha}{\beta^2}\\
+\mathcal{M}_X(t)&=&\indicator\{t<\beta\}\left(1-\frac{t}{\beta}\right)^{-\alpha}
+\end{array}\]
+\nb There is an equivalent definition of a \textit{Gamma Distribution} in terms of a shape \& \underline{scale} parameter. The scale parameter is 1 over the rate parameter in this definition.\\
+
+\definition{Normal Distribution}
+Let $X$ be a continuous random variable modelled by a \textit{Normal Distribution} with mean $\mu$ \& variance $\sigma^2$.\\
+Then
+\[\begin{array}{rcl}
+f_X(x)&=&\dfrac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}\\
+F_X(x)&=&\dfrac{1}{\sqrt{2\pi\sigma^2}}\int\limits_{-\infty}^xe^{-\frac{(y-\mu)^2}{2\sigma^2}}dy\\
+\expect(X)&=&\mu\\
+\var(X)&=&\sigma^2\\
+\mathcal{M}_X(\theta)&=&e^{\mu\theta+\sigma^2\theta^2(1/2)}
+\end{array}\]
+
+\definition{Pareto Distribution}
+Let $X\sim\text{Pareto}(x_0,\theta)$.\\
+A \textit{continuous} random variable modelled by a \textit{Pareto Distribution} with minimum value $x_0$ \& shape parameter $\alpha>0$. Then
+\[\begin{array}{rcll}
+f_X(x)&=&\dfrac{\alpha x_0^\alpha}{x^{\alpha+1}}\\
+F_X(x)&=&1-\left(\dfrac{x_0}{x}\right)^\alpha\\
+\expect(X)&=&\begin{cases}\infty&\alpha\leq1\\\dfrac{\alpha x_0}{\alpha-1}&\alpha>1\end{cases}\\
+\var(X)&=&\begin{cases}\infty&\alpha\leq2\\\dfrac{x_0^2\alpha}{(\alpha-1)^2(\alpha-2)}&\alpha>2\end{cases}\\
+\mathcal{M}_X(t)&=&\indicator\{t<0\}\alpha(-x_0t)^\alpha\Gamma(-\alpha,-x_0t)
+\end{array}\]
+
+\definition{Poisson Distribution}
+Let $X\sim\text{Poisson}(\lambda)$.\\
+A \textit{discrete} random variable modelled by a \textit{Poisson Distribution} with rate parameter $\lambda$. Then
+\[\begin{array}{rcll}
+p_X(k)&=&\dfrac{e^{-\lambda}\lambda^k}{k!}&\text{for }k\in\nats_0\\
+P_X(k)&=&{\displaystyle e^{-\lambda}\sum_{i=1}^k\frac{\lambda^i}{i!}}\\
+\expect(X)&=&\lambda\\
+\var(X)&=&\lambda\\
+\mathcal{M}_X(t)&=&e^{\lambda(e^t-1)}
+\end{array}\]
+\nb Poisson Distribution is used to model the number of radioactive decays in a time period.\\
+
+\definition{$t$-Distribution}
+Let $X\sim t_r$.\\
+A \textit{continuous} random variable with $r$ degrees of freedom. Then
+\[\begin{array}{rcll}
+f_X(k)&=&{\displaystyle\frac{\Gamma\left(\frac{\nu+1}{2}\right)}{\sqrt{\nu\pi}\Gamma\left(\frac{\nu}{2}\right)}\left(1+\frac{x^2}{\nu}\right)^{-\frac{\nu+1}{2}}}\\
+\expect(X)&=&\begin{cases}0&\text{if }\nu>1\\\text{undefined}&\text{otherwise}\end{cases}\\
+\var(X)&=&\begin{cases}\frac{\nu}{\nu-2}&\text{if }\nu>2\\\infty&1<\nu\leq2\\\text{undefined}&\text{otherwise}\end{cases}\\
+\mathcal{M}_X(t)&=&\text{undefined}
+\end{array}\]
+\nb Let $Y\sim\text{Normal}(0,1)\ \&\ Z\sim\chi^2_r$ be independent random variables then $X:=\dfrac{Y}{\sqrt{Z/r}}\sim t_r$.\\
+
+\definition{Uniform Distribution - Uniform}
+Let $X\sim\text{Uniform}(a,b)$.\\
+A \textit{continuous} random variable with lower bound $a$ \& upper bound $b$. Then
+\[\begin{array}{rcll}
+f_X(x)&=&\begin{cases}\frac{1}{b-a}&x\in[a,b]\\0&\text{otherwise}\end{cases}\\
+F_X(x)&=&\begin{cases}0&x<a\\\frac{x-a}{b-a}&x\in[a,b]\\1&\text{otherwise}\end{cases}\\
+\expect(X)&=&\frac{1}{2}(a+b)\\
+\var(X)&=&\frac{1}{12}(b-a)^2\\
+\mathcal{M}_X(t)&=&\begin{cases}\dfrac{e^{tb}-e^{ta}}{t(b-a)}&t\neq0\\1&t=0\end{cases}
+\end{array}\]
+
+\subsection{Identities}
+
+\subsubsection{Likelihood}
+
+\proposition{Binomial}
+Let $X\sim\text{Binomial}(n,p)$ with $n\ \&\ p$ unknown and $x$ be a realisation of $X$. Then
+\[\begin{array}{rcl}
+L(n,p;x)&\propto&{n\choose x}p^x(1-p)^{n-x}\\
+\ell(n,p;\x)&=&\ln{n\choose x}+x\ln p+(n-x)\ln(1-p)+C\\
+\hat{n}_\text{MLE}&=&\frac{x}{\hat{p}}\\
+\hat{p}_\text{MLE}&=&\frac{x}{\hat{n}}\\
+\end{array}\]
+
+\proposition{Normal}
+Let $\X\iid\text{Normal}(\mu,\sigma^2)$ with $\mu\ \&\ \sigma^2$ unknown and $\x$ be a realisation of $\X$. Then
+\[\begin{array}{rcl}
+L(\mu,\sigma^2;\x)&\propto&{\displaystyle(\sigma^2)^{-\frac{n}{2}}\text{exp}\left(-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2\right)}\\
+\ell(\mu,\sigma^2;\x)&=&{\displaystyle-n\ln\sigma^2-\frac{1}{\sigma^2}\sum_{i=1}^n(x_i-\mu)^2}+C\\
+\hat{\mu}_\text{MLE}&=&\bar\x\\
+\hat{\sigma}^2_\text{MLE}&=&{\displaystyle\frac{1}{n}\sum_{i=1}^n(x_i-\hat\mu)^2}\\
+\end{array}\]
+
+\proposition{Poisson}
+Let $\X\iid\text{Poisson}(\lambda)$ with $\lambda$ unknown and $\x$ be a realisation of $\X$. Then
+\[\begin{array}{rcl}
+L(\lambda;\x)&\propto&e^{-\lambda n}\lambda^{n\bar{x}}\\
+\ell(\lambda;\x)&=&-\lambda_n+n\bar{x}\ln\lambda+C\\
+\hat\lambda_\text{MLE}&=&\bar{x}
+\end{array}\]
+
+\proposition{Uniform}
+Let $\X\iid\text{Uniform}(a,b)$ with $a\ \&\ b$ unknown and $\x$ be a realisation of $\X$. Then
+\[\begin{array}{rcl}
+L(a,b;\x)&\propto&\begin{cases}\frac{1}{(b-a)^n}&a\leq\ x_i\leq b\ \forall\ x_i\in\x\\0&\text{otherwise}\end{cases}\\
+\ell(a,b;\x)&=&\begin{cases}-\ln(b-a)&a\leq\ x_i\leq b\ \forall\ x_i\in\x\\0&\text{otherwise}\end{cases}\\
+\hat{a}_\text{MLE}&=&\min\{x_i:x_i\in\x\}\\
+\hat{b}_\text{MLE}&=&\max\{x_i:x_i\in\x\}
+\end{array}\]
+
+\end{document}
