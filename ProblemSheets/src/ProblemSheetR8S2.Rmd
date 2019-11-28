@@ -93,11 +93,13 @@ Since I am constructing $\alpha=0.95$ confidence interval we wish to retain $\la
 $$T_n(\x):=-2\left[\ell_n(\lambda;\x)-\ell_n(\hat\lambda_{MLE};\x)\right]<\chi^2_{1,\alpha}$$
 This is the confidence set
 \[\begin{array}{rcl}
-C(\x)&=&\left\{\theta:T_n(\x)<\chi^2_{1,\alpha}\right\}\\
-&=&\left\{-2\left[\ell_n(\lambda;\x)-\ell_n(\hat\lambda_{MLE};\x)\right]<\chi^2_{1,\alpha}\right\}\\
-&=&\left\{\ell_n(\lambda;\x)>\ell_n(\hat\lambda_{MLE};\x)-\frac{1}{2}\chi^2_{1,\alpha}\right\}
+C(\x)&=&\left\{\lambda\in\reals^{>0}:T_n(\x)<\chi^2_{1,\alpha}\right\}\\
+&=&\left\{\lambda\in\reals^{>0}:-2\left[\ell_n(\lambda;\x)-\ell_n(\hat\lambda_{MLE};\x)\right]<\chi^2_{1,\alpha}\right\}\\
+&=&\left\{\lambda\in\reals^{>0}:\ell_n(\lambda;\x)>\ell_n(\hat\lambda_{MLE};\x)-\frac{1}{2}\chi^2_{1,\alpha}\right\}
 \end{array}\]
-We can calculate the $\chi^2_{1,\alpha}$ and $\ell_n(\hat{\lambda}_n;\x)$ using r
+There is a rule of thumb that at the $5%$ signifcance level the confidence set can be approximated as
+$$C(\x)=\left\{\lambda\in\reals^{>0}:\ell_n(\lambda;\x)\geq\ell(\hat\theta_n;\x)-2\right\}$$
+We can estimate the bounds of this set using r to calculate $\ell_n(\lambda;\x)$ at regular intervals.
 ```{r}
 ell <- function(lambda) {
   stopifnot(all(lambda > 0))
@@ -105,39 +107,44 @@ ell <- function(lambda) {
   n * (-lambda + mean(xobs) * log(lambda))
 }
 
-alpha=0.95
-
 ell.mle<-optimise(ell,interval=c(0,1),maximum=TRUE)$objective
-quantile<-qchisq(alpha,1)
-cat("ell.mle=",ell.mle,"\nchisq_alpha=",quantile,sep="")
+cat("ell.mle=",ell.mle,sep="")
 ```
 Giving
 \[\begin{array}{rcl}
-C(\x)&=&\left\{\ell_n(\lambda;\x)>\ell_n(\hat\lambda_{MLE};\x)-\frac{1}{2}\chi^2_{1,\alpha}\right\}\\
-&=&\left\{\ell_n(\lambda;\x)>`r ell.mle`-\frac{1}{2}`r quantile`\right\}\\
-&=&\left\{\ell_n(\lambda;\x)>`r ell.mle - .5*quantile`\right\}
+C(\x)&=&\left\{\ell_n(\lambda;\x)>\ell_n(\hat\lambda_{MLE};\x)-2\right\}\\
+&=&\left\{\ell_n(\lambda;\x)>`r ell.mle`-2\right\}\\
+&=&\left\{\ell_n(\lambda;\x)>`r ell.mle - 2`\right\}
 \end{array}\]
 
 ```{r}
 x<-seq(0.4,.8,length.out=100)
 y<-sapply(x,function(p) ell(p))
-z<-x[which(y>ell.mle-.5*quantile)] # The values where the inequality holds
-cat("lower:",min(z),"\nupper:",max(z))
+z<-x[which(y>ell.mle-2)] # The values where the inequality holds
+cat("lower:",min(z),"\nupper:",max(z),sep="")
+plot(x,y,type="l",xlab="theta",ylab="Likelihood")
+abline(h=ell.mle-2,col="red")
 ```
 Thus
-$$C(\x)=\{\theta:\theta\in[`r min(z)`,`r max(z)`]\}$$
+$$C(\x)=\{\theta\in[`r min(z)`,`r max(z)`]\}$$
 We accept $H_0$ in this case.
 
 ## b)
 
 ```{r}
 alpha=0.9
-
 quantile<-qchisq(alpha,1)
 
 z<-x[which(y>ell.mle-.5*quantile)] # The values where the inequality holds
 cat("chisq_alpha=",quantile,"\nlower:",min(z),"\nupper:",max(z))
+plot(x,y,type="l",xlab="theta",ylab="Likelihood")
+abline(h=ell.mle-.5*quantile,col="red")
 ```
 Thus
-$$C(\x)=\{\theta:\theta\in[`r min(z)`,`r max(z)`]\}$$
+\[\begin{array}{rcl}
+C(\x)&=&\left\{\lambda\in\reals^{>0}:\ell_n(\lambda;\x)>\ell_n(\hat\lambda_{MLE};\x)-\frac{1}{2}`r quantile`\right\}\\
+&=&\left\{\lambda\in\reals^{>0}:\ell_n(\lambda;\x)>`r ell.mle`-`r .5*quantile`\right\}\\
+&=&\left\{\lambda\in\reals^{>0}:\ell_n(\lambda;\x)>`r ell.mle - .5*quantile`\right\}\\
+&=&\{\lambda\in[`r min(z)`,`r max(z)`]\text{ from R}
+\end{array}\]
 We accept $H_0$ in this case.
