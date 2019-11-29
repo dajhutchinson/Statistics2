@@ -5,10 +5,11 @@ author: "Dom Hutchinson"
 header-includes:
    - \usepackage{dsfont}
    - \usepackage{fancyhdr}
+   - \pagestyle{fancy}
+   - \renewcommand{\headrulewidth}{0pt}
    - \fancyhead[L]{Dom Hutchinson}
    - \fancyhead[C]{Statistics 2 - Problem Sheet 8}
    - \fancyhead[R]{\today}
-   - \renewcommand{\headrulewidth}{0pt}
    - \newcommand{\dotprod}[0]{\boldsymbol{\cdot}}
    - \newcommand{\cosech}[0]{\mathrm{cosech}\ }
    - \newcommand{\cosec}[0]{\mathrm{cosec}\ }
@@ -37,6 +38,7 @@ output:
   word_document: default
 ---
 ```{r}
+set.seed(16111998)
 xtab<-c(109,65,22,3,1,0)
 xobs<-rep(0:5,xtab)
 n<-length(xobs)
@@ -57,8 +59,9 @@ p(\X)&=&\prob(T(\X)\geq T(\x);0.5)\\
 &=&\prob\left(\sum_{i=1}^{200}X_i\geq`r sum(xobs)`;0.5\right)\\
 &=&\prob(Y\geq`r sum(xobs)`)\text{ by independence where } Y\sim\text{Poisson}(200\times0.5)=\text{Poisson}(100)\\
 &=&1-\prob(Y<`r sum(xobs)`)\\
-&=&`r 1-ppois(sum(xobs)-1,100)`
+&=&`r round(1-ppois(sum(xobs)-1,100),3)`
 \end{array}\]
+This is a very low $p$-value suggesting that the observered data is very extreme if $H_0$ is true.
 
 # Question 2
 ## a)
@@ -113,8 +116,8 @@ cat("ell.mle=",ell.mle,sep="")
 Giving
 \[\begin{array}{rcl}
 C(\x)&=&\left\{\ell_n(\lambda;\x)>\ell_n(\hat\lambda_{MLE};\x)-2\right\}\\
-&=&\left\{\ell_n(\lambda;\x)>`r ell.mle`-2\right\}\\
-&=&\left\{\ell_n(\lambda;\x)>`r ell.mle - 2`\right\}
+&=&\left\{\ell_n(\lambda;\x)>`r round(ell.mle,2)`-2\right\}\\
+&=&\left\{\ell_n(\lambda;\x)>`r round(ell.mle,2) - 2`\right\}
 \end{array}\]
 
 ```{r}
@@ -126,7 +129,7 @@ plot(x,y,type="l",xlab="theta",ylab="Likelihood")
 abline(h=ell.mle-2,col="red")
 ```
 Thus
-$$C(\x)=\{\theta\in[`r min(z)`,`r max(z)`]\}$$
+$$C(\x)=\{\theta\in[`r round(min(z),3)`,`r round(max(z),3)`]\}$$
 We accept $H_0$ in this case.
 
 ## b)
@@ -142,9 +145,24 @@ abline(h=ell.mle-.5*quantile,col="red")
 ```
 Thus
 \[\begin{array}{rcl}
-C(\x)&=&\left\{\lambda\in\reals^{>0}:\ell_n(\lambda;\x)>\ell_n(\hat\lambda_{MLE};\x)-\frac{1}{2}`r quantile`\right\}\\
-&=&\left\{\lambda\in\reals^{>0}:\ell_n(\lambda;\x)>`r ell.mle`-`r .5*quantile`\right\}\\
-&=&\left\{\lambda\in\reals^{>0}:\ell_n(\lambda;\x)>`r ell.mle - .5*quantile`\right\}\\
-&=&\{\lambda\in[`r min(z)`,`r max(z)`]\text{ from R}
+C(\x)&=&\left\{\lambda\in\reals^{>0}:\ell_n(\lambda;\x)>\ell_n(\hat\lambda_{MLE};\x)-\frac{1}{2}`r round(quantile,2)`\right\}\\
+&=&\left\{\lambda\in\reals^{>0}:\ell_n(\lambda;\x)>`r round(ell.mle,2)`-`r .5*round(quantile,2)`\right\}\\
+&=&\left\{\lambda\in\reals^{>0}:\ell_n(\lambda;\x)>`r round(ell.mle,2) - .5*round(quantile,2)`\right\}\\
+&=&\{\lambda\in[`r round(min(z),3)`,`r round(max(z),3)`]\text{ from R}
 \end{array}\]
 We accept $H_0$ in this case.
+
+# Question 4
+```{r}
+lambda<-round(optimise(ell,interval=c(0,1),maximum=TRUE)$maximum,2) # 2dp MLE
+breaks<-c(-Inf,seq(0,4,by=1),Inf)
+obs<-table(cut(xobs,breaks))
+exp<-ppois(breaks[-1],lambda)-ppois(breaks[-length(breaks)],lambda)
+exp<-n*exp
+round(cbind(obs,exp),1)
+
+t_obs<-sum((obs-exp)^2/exp)
+p_val<-1-pchisq(t_obs,df=length(breaks)-1)
+cat("lambda=",lambda,"\nt_obs=",t_obs,"\np-val=",p_val,sep=" ")
+```
+Here the $p$-value is high, suggesting that $\text{Poisson}(`r lambda`)$ is a good model for these observations.
