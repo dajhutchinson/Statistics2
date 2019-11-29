@@ -1830,7 +1830,11 @@ where $o_j=n_j$ is the observered number in category $j$ and $e_j=np_{0,j}$ is t
 
 \subsubsection{Pearson's $\chi^2$ Test Statistic}
 
-
+\definition{Pearson's $\chi^2$ Test Statistic}
+Let $\x\sim\text{Categoritcal}(\textbf{p})$ where $\textbf{p}:=(p_0,\dots,p_m)$ and $\x$ is a relisation of $\X$.\\
+We define \textit{Pearson's $\chi^2$ Test Statistic}  as
+$$T_\text{Pearson}(\x):=\sum_{j=1}^m\frac{(n_j-np_{0,j}^2}{np_{0,j}}=\sum_{j=1}^m\frac{(o_j-e_j)^2}{e_j}\to_{\mathcal{D}(\cdot;\textbf{p}_0)}\chi^2_{m-1}$$
+where $o_j$ is the number of observations of category $j$ and $e_j$ is the expected number of observations of category $j$.
 
 \newpage
 \setcounter{section}{-1}
