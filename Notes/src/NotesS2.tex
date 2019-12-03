@@ -1833,8 +1833,43 @@ where $o_j=n_j$ is the observered number in category $j$ and $e_j=np_{0,j}$ is t
 \definition{Pearson's $\chi^2$ Test Statistic}
 Let $\x\sim\text{Categoritcal}(\textbf{p})$ where $\textbf{p}:=(p_0,\dots,p_m)$ and $\x$ is a relisation of $\X$.\\
 We define \textit{Pearson's $\chi^2$ Test Statistic}  as
-$$T_\text{Pearson}(\x):=\sum_{j=1}^m\frac{(n_j-np_{0,j}^2}{np_{0,j}}=\sum_{j=1}^m\frac{(o_j-e_j)^2}{e_j}\to_{\mathcal{D}(\cdot;\textbf{p}_0)}\chi^2_{m-1}$$
+$$T_\text{Pearson}(\x):=\sum_{j=1}^m\frac{(n_j-np_{j})^2}{np_{j}}=\sum_{j=1}^m\frac{(o_j-e_j)^2}{e_j}\to_{\mathcal{D}(\cdot;\textbf{p})}\chi^2_{m-1}$$
 where $o_j$ is the number of observations of category $j$ and $e_j$ is the expected number of observations of category $j$.
+\nb TODO - something about degrees of freedom.\\
+
+\subsection{Goodness-of-Fit Example - Mendel's Peas}
+Gregor Mendel, the father of modern genetics, performed experiments to test his theory of inheritance in the 1850s \& 60s.\\
+There are $k=4$ types of peas
+\begin{enumerate}
+	\item Round Yellow.
+	\item Wrinked Yellow.
+	\item Round Green, and
+	\item Wrinkled Green,
+\end{enumerate}
+According to Medel's theory of inheritance, the number of peas of each type in the second generation of a crossing experiment should be an observatio of a $\text{Multinomial}(n,\textbf{p}_0)$ random vector where
+$$\textbf{p}_0=\left(\frac{9}{16},\frac{3}{16},\frac{3}{16},\frac{1}{16}\right)$$
+This consitutes the null hypothesis.\\
+In Mendel's experiment, with $n=556$, he recored
+$$\x=(n_1,\dots,n_4)=(315,101,108,32)$$
+The test statistic is
+\[\begin{array}{rcl}
+w&=&\displaystyle\sum_{i=1}^k\frac{(n_i-np_{0,i})^2}{np_{0,i}}\\
+&=&0.47
+\end{array}\]
+The $p$-value is therefore the probability that a $\chi^2_{k-1}=\chi^2_3$ random variable exceeds $0.47$
+$$p(\x)=\prob(\chi^2_3>0.47)=0.925$$
+We would not reject the null hypothesis for any reasonable $\alpha$, so the data does not contadict his theory.
+In fact the $P$-value is quite large and there is some controversy regarding whether Mendel's results are \textit{too good}.\\
+
+Ronald Fisher looked at Mendel's data for a sequence of $m$ similar experiments and discovered that they seemed all to obtain this kind of unusually good agreement. Each test statistic $w_i$ is modelled approximately as an observation of an independent $\chi^2_{k_i-1}$ random variable where $k_i$ is eh number of possible outcomes in experiment $i$.\\
+Since the sum of independent $\chi^2_{k_i-1}$ random variables is $\chi^2_{\sum_i(k_i-1)}$ random variable, one can use the sum of the test statistics as a test statistic and compute the $p$-value
+$$p(\x)=\prob\left(Y\geq\sum_{i=1}^mw_i\right)\text{ where }Y\sim\chi^2_{\sum_i(k_1-1)}$$
+The fact he obtaind a \textit{pooled $\chi^2$} test statistic of $\sum_{i=1}^mw_i=42$ and a a value of $\sum_{i=1}^m(k_i-1)=84$.\\
+$$p(\x)=\prob(Y\geq42)\approx0.999965\text{ where }Y\sim\chi^2_{84}$$
+But Fisher's $H_0$ was that Mendel's data was \textit{gathered honestly} and assumed that Mendel's theory is true. And his alternative hypthesis $H_1$ was that the data was \underline{not} collected honestly. Thus his $p$-value is in fact
+$$\prob(-Y\geq-42)=\prob(Y\leq42)=0.000035$$
+So Fisher's $H_0$ is rejected with a very low $\alpha$.\\
+Therea are many who belive taht neither Mendel, nor his assistants, did anything untoward in their experiments but it is an interesting applicaiton nonetheless.
 
 \newpage
 \setcounter{section}{-1}
