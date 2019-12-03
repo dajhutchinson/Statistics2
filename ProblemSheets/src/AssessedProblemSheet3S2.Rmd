@@ -1,0 +1,226 @@
+---
+title: "Compupter Practical 3"
+subtitle: "Statistics 2"
+author: "Dom Hutchinson"
+header-includes:
+   - \usepackage{dsfont}
+   - \usepackage{fancyhdr}
+   - \pagestyle{fancy}
+   - \renewcommand{\headrulewidth}{0pt}
+   - \fancyhead[L]{Dom Hutchinson}
+   - \fancyhead[C]{Statistics 2 - Computer Practical 3}
+   - \fancyhead[R]{\today}
+   - \newcommand{\dotprod}[0]{\boldsymbol{\cdot}}
+   - \newcommand{\cosech}[0]{\mathrm{cosech}\ }
+   - \newcommand{\cosec}[0]{\mathrm{cosec}\ }
+   - \newcommand{\sech}[0]{\mathrm{sech}\ }
+   - \newcommand{\prob}[0]{\mathbb{P}}
+   - \newcommand{\nats}[0]{\mathbb{N}}
+   - \newcommand{\cov}[0]{\mathrm{Cov}}
+   - \newcommand{\var}[0]{\mathrm{Var}}
+   - \newcommand{\expect}[0]{\mathbb{E}}
+   - \newcommand{\reals}[0]{\mathbb{R}}
+   - \newcommand{\integers}[0]{\mathbb{Z}}
+   - \newcommand{\indicator}[0]{\mathds{1}}
+   - \newcommand{\nb}[0]{\textit{N.B.} }
+   - \newcommand{\ie}[0]{\textit{i.e.} }
+   - \newcommand{\eg}[0]{\textit{e.g.} }
+   - \newcommand{\X}[0]{\textbf{X}}
+   - \newcommand{\x}[0]{\textbf{x}}
+   - \newcommand{\iid}[0]{\overset{\text{iid}}{\sim}}
+   - \newcommand{\proved}[0]{$\hfill\square$\\}
+output:
+  pdf_document: 
+     fig_width: 6
+     fig_height: 4
+  html_notebook: default
+  html_document: default
+  word_document: default
+---
+```{r}
+options(warn=-1)
+diabetes<-read.csv("data/diabetes_data.csv",header=T)
+head(diabetes)
+
+missing<-function(var) { # Map missing values to median
+  med<-median(var[var>0])
+  var[var==0]<-med
+  return(var)
+}
+diabetes$Glucose<-missing(diabetes$Glucose)
+diabetes$BloodPressure<-missing(diabetes$BloodPressure)
+diabetes$Insulin<-missing(diabetes$Insulin)
+diabetes$SkinThickness<-missing(diabetes$SkinThickness)
+diabetes$BMI<-missing(diabetes$BMI)
+
+head(diabetes)
+```
+
+# Question 1
+```{r}
+breaks<-c(-Inf,seq(45,95,by=5),Inf) # Quantise data
+obs<-table(cut(diabetes$BloodPressure,breaks))
+
+# Perform Pearson's Goodness of Fit Test
+n<-length(diabetes$BloodPressure)
+m<-length(breaks)-1-3
+mu<-mean(diabetes$BloodPressure) # MLE
+sigma<-sd(diabetes$BloodPressure) # MLE
+
+x<-seq(20,120,0.1)
+plot(density(diabetes$BloodPressure))
+lines(x,dnorm(x,mu,sigma))
+
+exp<-n*(pnorm(breaks[-1],mean=mu,sd=sigma)-pnorm(breaks[-length(breaks)],mean=mu,sd=sigma)) # calculate expected values
+round(cbind(obs,exp),1) # Display observed & expected values
+
+t_obs<-sum((obs-exp)^2/exp) # observered test statistic
+p_val<-1-pchisq(t_obs,df=m) # p-value
+cat("mu=",mu,"\nsigma=",sigma,"\ndf=",m,"\nt_obs=",t_obs,"\np-val=",p_val,sep="")
+```
+
+# Question 2
+Let $X_1,\dots,X_n\iid\text{Normal}(\mu,12^2)$ model the blood pressume of members of the study.\
+Here I shall test the hypotheses
+$$H_0:\mu=70\text{ against }H_1:\mu>70$$
+I shall use Pearson's test statistic
+$$T(\X):=\sum_{i=1}^m\frac{(o_i-e_i)^2}{e_i}=\sum_{i=1}^m\frac{(o_i-np_i)^2}{np_i}\to_\mathcal{D}\chi^2_{m-1}$$
+where $o_i$ is the number of observations in inteval $i$, $e_i$ is the expected number of observations of interval $i$ \& $p_i$ is the probability of an observation belonging to interval $i$ given the null-hypothes is true.\
+Due to the breaks chosen in Question 1 $m='r length(obs)'$.
+```{r}
+mu<-70; sigma<-12
+exp<-n*(pnorm(breaks[-1],mean=mu,sd=sigma)-pnorm(breaks[-length(breaks)],mean=mu,sd=sigma))
+round(cbind(obs,exp),1)
+
+t_obs<-sum((obs-exp)^2/exp) # observered test statistic
+p_val<-1-pchisq(t_obs,df=m) # p-value
+cat("mu=",mu,"\nsigma=",sigma,"\ndf=",m,"\nt_obs=",t_obs,"\np-val=",p_val,sep="")
+```
+
+# Question 3
+Let $Y_i\overset{\text{ind}}{\sim}\text{Bernoulli}(\sigma(\theta^Tx_i))$ for $i\in[1,n]$ $\pi_i=\prob(Y_i=1)$ where $\sigma(z):=\frac{1}{1+e^{-z}}$.\
+Then
+\[\begin{array}{rrrl}
+&\pi_i&:=&\prob(Y_i=1)\\
+&&=&\sigma(\theta^Tx_i)\\
+&&:=&\dfrac{1}{1+e^{-\theta^Tx_i}}\\
+&&=&\dfrac{1}{1+e^{-\sum_{j=1}^d\theta_jx_{ij}}}\\
+\implies&\ln\pi_i&=&\ln\left(\dfrac{1}{1+e^{-\sum_{j=1}^d\theta_jx_{ij}}}\right)\\
+&&=&\ln1-\ln(1+e^{-\sum_{j=1}^d\theta_jx_{ij}})\\
+&&=&-\ln(1+e^{-\sum_{j=1}^d\theta_jx_{ij}})\\
+\text{and}&\ln(1-\pi_i)&=&\ln\left(1-\dfrac{1}{1+e^{-\sum_{j=1}^d\theta_jx_{ij}}}\right)\\
+&&=&\ln\left(\dfrac{e^{-\sum_{j=1}^d\theta_jx_{ij}}}{1+e^{-\sum_{j=1}^d\theta_jx_{ij}}}\right)\\
+&&=&\ln(e^{-\sum_{j=1}^d\theta_jx_{ij}})-\ln(1+e^{-\sum_{j=1}^d\theta_jx_{ij}})\\
+&&=&-\left(\sum_{j=1}^d\theta_jx_{ij}\right)-\ln(1+e^{-\sum_{j=1}^d\theta_jx_{ij}})\\
+\implies&\ln\dfrac{\pi_i}{1-\pi_i}&=&\ln(\pi_i)-\ln(1-\pi)\\
+&&=&-\ln(1+e^{-\sum_{j=1}^d\theta_jx_{ij}})+\left(\sum_{j=1}^d\theta_jx_{ij}\right)+\ln(1+e^{-\sum_{j=1}^d\theta_jx_{ij}})\\
+&&=&\sum_{j=1}^d\theta_jx_{ij}
+\end{array}\]
+
+```{r}
+Xnames <- colnames(diabetes[, -9]) #get names of explanatory variables
+par(mfrow=c(1,3))
+for (i in 1:8) {
+boxplot(diabetes[,i]~diabetes$Outcome,main=paste(Xnames[i]),
+names=c("Negative","Positive"),xlab="Diabetes test")
+}
+```
+
+# Question 4
+Here I shall test whether the variables \textit{BloodPressure, SkinThichness, Insulin} and \textit{Age} are statistically significant to the development of diabetes.\
+To do so I shall test the hypotheses
+$$H_0:\pmb\theta:=(\theta_3,\theta_4,\theta_5,\theta_8)=\pmb0\text{ against }H_1:\pmb\theta\neq\pmb0$$
+Consider the likelihood ratio statistic
+$$\Lambda_n:=\frac{L(\hat{\pmb\theta}_0;\pmb{x})}{L(\hat{\pmb\theta}_\text{MLE};\pmb{x})}$$
+and define test statistic
+$$T_n(\X):=-2\Lambda_n=-2[\ell(\hat{\pmb\theta}_0;\pmb{X})-\ell(\hat{\pmb\theta}_\text{MLE};\pmb{X})]\sim\chi^2_r$$
+where $r=4$ since we only have four restrictions under the null hypothesis.\
+```{r}
+X_rest<-cbind(1,as.matrix(diabetes[,c(1,2,6,7)])) # Variables we are not testing (ie assuming others=0)
+X_full<-cbind(1,as.matrix(diabetes[,1:8])) # all variables
+Y<-diabetes[,9] # outcomes
+
+# sigmoid function
+sigma<-function(z) {
+   1/(1+exp(-z))
+}
+
+
+# Log likelihood
+ell<-function(theta,X,y) {
+   p<-as.vector(sigma(X%*%theta))
+   sum(y*log(p)+(1-y)*log(1-p))
+}
+
+# score function
+score<-function(theta,X,y) {
+   p<-as.vector(sigma(X%*%theta))
+   as.vector(t(X)%*%(y-p))
+}
+
+# MLE
+maximise.ell<-function(ell,score,X,y,theta0) {
+   optim.out<-optim(theta0, fn=ell, gr=score, X=X, y=y, method="BFGS", control=list(fnscale=-1, maxit=1000, reltol=1e-16))
+   return(list(theta=optim.out$par, value=optim.out$value))
+}
+
+theta_hat_0.value<-maximise.ell(ell,score,X_rest,Y,rep(0,5))$value
+theta_hat_mle.value<-maximise.ell(ell,score,X_full,Y,rep(0,9))$value
+cat("ell(theta_hat_0): ",theta_hat_0.value,"\nell(theta_hat_mle): ",theta_hat_mle.value,sep="")
+```
+Using these results we can calculate an observed test statistic
+$$T_n(\textbf{x})=-2[\ell(\hat{\pmb\theta}_0;\pmb{x})-\ell(\hat{\pmb\theta}_\text{MLE};\pmb{x})]=-2[`r theta_hat_0.value`-`r theta_hat_mle.value`]=`r t_obs<--2*(theta_hat_0.value-theta_hat_mle.value); t_obs`$$
+Since $T_n(\X)\sim\chi^2_4$ we have an observered $p$-value of
+$$p(\x):=\prob(T_n(\X)\geq T_n(\x);H_0)=\prob(\chi^2_4\geq`r t_obs`)=`r p_val<-1-pchisq(t_obs,4);p_val`$$
+Using the code described in the epilogue we can confirm this value
+```{r}
+model1<-glm(Y~X_full,family=binomial) #full model
+model2<-glm(Y~X_rest,family=binomial) #restricted model
+suppressMessages(library(lmtest))
+lrtest(model1, model2)
+```
+This is not statistically significant enough to suggest rejecting $H_0$.\
+Thus we accept that the variables \textit{BloodPressure, SkinThichness, Insulin} and \textit{Age} are \underline{not} statistically significant for the development of diabetes.
+
+# Question 5
+```{r}
+set.seed(16111998)
+generate.ys<-function(X,theta) {
+   n<-dim(X)[1]
+   rbinom(n,size=1,prob=sigma(X%*%theta))
+}
+
+simulate<-function(theta_hat_mle) {
+   new_Y<-generate.ys(X_rest,theta_hat_mle)
+   
+   theta_hat_0.value<-maximise.ell(ell,score,X_rest,new_Y,rep(0,5))$value
+   theta_hat_mle.value<-maximise.ell(ell,score,X_full,new_Y,rep(0,9))$value
+   
+   t_obs<--2*(theta_hat_0.value-theta_hat_mle.value)
+}
+
+n_trials=2000; m<-4
+theta_hat_mle<-maximise.ell(ell,score,X_rest,Y,rep(0,5))$theta
+simulation.raw<-sapply(1:n_trials, function(i) simulate(theta_hat_mle))
+```
+
+## a)
+```{r}
+x<-seq(0,20,0.1)
+plot(x,dchisq(x,m),type="l",col="darkgreen",xlab="T(x)",ylab="",main="Comparision of density of observed statistics & chi^2_4 distribution")
+lines(density(simulation.raw),col="red",lty=2)
+legend("topright",legend=c("chi^2_4","Simulation"),lty=1:2,col=c("darkgreen","red"))
+```
+
+## b)
+```{r}
+breaks<-c(-Inf,seq(1,13,by=1),Inf)
+obs<-table(cut(simulation.raw,breaks))
+
+exp<-n_trials*(pchisq(breaks[-1],4)-pchisq(breaks[-length(breaks)],4))
+round(cbind(obs,exp),1)
+
+t_obs<-sum((obs-exp)^2/exp) # observered test statistic
+p_val<-1-pchisq(t_obs,df=m) # p-value
+cat("df=",m,"\nt_obs=",t_obs,"\np-val=",p_val,sep="")
+```
