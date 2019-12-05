@@ -39,63 +39,71 @@ output:
 ---
 ```{r}
 options(warn=-1)
-diabetes<-read.csv("data/diabetes_data.csv",header=T)
-head(diabetes)
+diabetes<-read.csv("data/diabetes_data.csv",header=T) # load data set
 
-missing<-function(var) { # Map missing values to median
-  med<-median(var[var>0])
-  var[var==0]<-med
-  return(var)
+missing<-function(v){ # Replace missing values with median of non-zero values
+   med<-median(v[v>0])
+   v[v==0]<-med
+   return(v)
 }
+
 diabetes$Glucose<-missing(diabetes$Glucose)
 diabetes$BloodPressure<-missing(diabetes$BloodPressure)
 diabetes$Insulin<-missing(diabetes$Insulin)
 diabetes$SkinThickness<-missing(diabetes$SkinThickness)
 diabetes$BMI<-missing(diabetes$BMI)
-
-head(diabetes)
 ```
 
 # Question 1
+Here I shall test the hypotheses
+\begin{center}$H_0:$ BloodPressure data can be modelled by a $\mathcal{N}(\mu,\sigma^2)$ distribution\\ $H_1:$ BloodPressure data can \textbf{not} be modelled by a $\mathcal{N}(\mu,\sigma^2)$ distribution\end{center}
+I shall use the maximum likelihood estimates for $\mu$ and $\sigma^2$.
+$$\hat{\mu}_\text{MLE}=\frac{1}{n}\sum_{i=1}^nx_i\text{ and }\hat\sigma^2=\frac{1}{n}\sum_{i=1}^n(x_i-\bar{x})^2$$
+Define the test statistic
+$$T_\text{pearson}(\X)=\sum_{j=1}^m\dfrac{(o_j-e_j)^2}{e_j}\to_\mathcal{D}\chi^2_r$$
+where $o_j$ is the number of observations of class $j$ and $e_j$ is the expected number of observations of class $j$, assuming $H_0$ is true.\
+In this case $r=m-3=7-3=4$ since we have 7 classes of observations but 3 constraints due to the normal distribution.
 ```{r}
-breaks<-c(-Inf,seq(45,95,by=5),Inf) # Quantise data
+breaks<-c(-Inf,seq(45,95,by=10),Inf) # Quantise data
 obs<-table(cut(diabetes$BloodPressure,breaks))
 
 # Perform Pearson's Goodness of Fit Test
-n<-length(diabetes$BloodPressure)
-m<-length(breaks)-1-3
-mu<-mean(diabetes$BloodPressure) # MLE
-sigma<-sd(diabetes$BloodPressure) # MLE
+n<-length(diabetes$BloodPressure) # number of data points
+r<-length(obs)-3 # degrees of freedom
+mu<-sum(diabetes$BloodPressure)/n # MLE mean
+sigma<-sqrt(sum((diabetes$BloodPressure-mu)^2)/n) # MLE variance
 
-x<-seq(20,120,0.1)
-plot(density(diabetes$BloodPressure))
-lines(x,dnorm(x,mu,sigma))
-
-exp<-n*(pnorm(breaks[-1],mean=mu,sd=sigma)-pnorm(breaks[-length(breaks)],mean=mu,sd=sigma)) # calculate expected values
-round(cbind(obs,exp),1) # Display observed & expected values
+exp<-n*(pnorm(breaks[-1],mean=mu,sd=sigma)-pnorm(breaks[-length(breaks)],mean=mu,sd=sigma)) # expected values
+round(cbind(obs,exp),1) # return data table
 
 t_obs<-sum((obs-exp)^2/exp) # observered test statistic
-p_val<-1-pchisq(t_obs,df=m) # p-value
-cat("mu=",mu,"\nsigma=",sigma,"\ndf=",m,"\nt_obs=",t_obs,"\np-val=",p_val,sep="")
+p_val<-1-pchisq(t_obs,df=r) # p-value
+cat("mu=",mu,"\nsigma=",sigma,"\ndf=",r,"\nt_obs=",t_obs,"\np_val=",p_val,sep="") # return test values
 ```
+Here the $p$-value ($`r p_val`$) is not statistically significant enough to reject $H_0$, for a reasonable significance level.\
+Thus we accept that \textit{BloodPressure} can be modelled by a Normal distribution.
 
 # Question 2
 Let $X_1,\dots,X_n\iid\text{Normal}(\mu,12^2)$ model the blood pressume of members of the study.\
 Here I shall test the hypotheses
 $$H_0:\mu=70\text{ against }H_1:\mu>70$$
 I shall use Pearson's test statistic
-$$T(\X):=\sum_{i=1}^m\frac{(o_i-e_i)^2}{e_i}=\sum_{i=1}^m\frac{(o_i-np_i)^2}{np_i}\to_\mathcal{D}\chi^2_{m-1}$$
-where $o_i$ is the number of observations in inteval $i$, $e_i$ is the expected number of observations of interval $i$ \& $p_i$ is the probability of an observation belonging to interval $i$ given the null-hypothes is true.\
-Due to the breaks chosen in Question 1 $m='r length(obs)'$.
+$$T_\text{pearson}(\X)=\sum_{j=1}^m\dfrac{(o_j-e_j)^2}{e_j}\to_\mathcal{D}\chi^2_r$$
+where $o_j$ is the number of observations of class $j$ and $e_j$ is the expected number of observations of class $j$, assuming $H_0$ is true.\
+In this case $r=`r length(obs)`-1=`r length(obs)-1`$ due to the breaks chosen in Question 1.
 ```{r}
 mu<-70; sigma<-12
-exp<-n*(pnorm(breaks[-1],mean=mu,sd=sigma)-pnorm(breaks[-length(breaks)],mean=mu,sd=sigma))
-round(cbind(obs,exp),1)
+m<-length(obs) # number of classes
+
+exp<-n*(pnorm(breaks[-1],mean=mu,sd=sigma)-pnorm(breaks[-length(breaks)],mean=mu,sd=sigma)) # expected number of outcomes
+round(cbind(obs,exp),1) # display data table
 
 t_obs<-sum((obs-exp)^2/exp) # observered test statistic
-p_val<-1-pchisq(t_obs,df=m) # p-value
-cat("mu=",mu,"\nsigma=",sigma,"\ndf=",m,"\nt_obs=",t_obs,"\np-val=",p_val,sep="")
+p_val<-1-pchisq(t_obs,df=m-1) # p-value
+cat("mu=",mu,"\nsigma=",sigma,"\ndf=",m-1,"\nt_obs=",t_obs,"\np_val=",p_val,sep="") # display test values
 ```
+Here the $p$-value ($`r p_val`$) is statistically significant enough to reject $H_0$, for a reasonable significance level.\
+Thus we accept the alternative hypothesis, that $\mu>70$.
 
 # Question 3
 Let $Y_i\overset{\text{ind}}{\sim}\text{Bernoulli}(\sigma(\theta^Tx_i))$ for $i\in[1,n]$ $\pi_i=\prob(Y_i=1)$ where $\sigma(z):=\frac{1}{1+e^{-z}}$.\
@@ -118,33 +126,10 @@ Then
 \end{array}\]
 
 ```{r}
-Xnames <- colnames(diabetes[, -9]) #get names of explanatory variables
-par(mfrow=c(1,3))
-for (i in 1:8) {
-boxplot(diabetes[,i]~diabetes$Outcome,main=paste(Xnames[i]),
-names=c("Negative","Positive"),xlab="Diabetes test")
-}
-```
-
-# Question 4
-Here I shall test whether the variables \textit{BloodPressure, SkinThichness, Insulin} and \textit{Age} are statistically significant to the development of diabetes.\
-To do so I shall test the hypotheses
-$$H_0:\pmb\theta:=(\theta_3,\theta_4,\theta_5,\theta_8)=\pmb0\text{ against }H_1:\pmb\theta\neq\pmb0$$
-Consider the likelihood ratio statistic
-$$\Lambda_n:=\frac{L(\hat{\pmb\theta}_0;\pmb{x})}{L(\hat{\pmb\theta}_\text{MLE};\pmb{x})}$$
-and define test statistic
-$$T_n(\X):=-2\Lambda_n=-2[\ell(\hat{\pmb\theta}_0;\pmb{X})-\ell(\hat{\pmb\theta}_\text{MLE};\pmb{X})]\sim\chi^2_r$$
-where $r=4$ since we only have four restrictions under the null hypothesis.\
-```{r}
-X_rest<-cbind(1,as.matrix(diabetes[,c(1,2,6,7)])) # Variables we are not testing (ie assuming others=0)
-X_full<-cbind(1,as.matrix(diabetes[,1:8])) # all variables
-Y<-diabetes[,9] # outcomes
-
 # sigmoid function
 sigma<-function(z) {
    1/(1+exp(-z))
 }
-
 
 # Log likelihood
 ell<-function(theta,X,y) {
@@ -163,64 +148,90 @@ maximise.ell<-function(ell,score,X,y,theta0) {
    optim.out<-optim(theta0, fn=ell, gr=score, X=X, y=y, method="BFGS", control=list(fnscale=-1, maxit=1000, reltol=1e-16))
    return(list(theta=optim.out$par, value=optim.out$value))
 }
+```
 
-theta_hat_0.value<-maximise.ell(ell,score,X_rest,Y,rep(0,5))$value
-theta_hat_mle.value<-maximise.ell(ell,score,X_full,Y,rep(0,9))$value
-cat("ell(theta_hat_0): ",theta_hat_0.value,"\nell(theta_hat_mle): ",theta_hat_mle.value,sep="")
+# Question 4
+Here I shall test whether the variables \textit{BloodPressure, SkinThichness, Insulin} and \textit{Age} are statistically significant to the development of diabetes.\
+To do so I shall test the hypotheses
+$$H_0:\pmb\theta:=(\theta_3,\theta_4,\theta_5,\theta_8)=\pmb0\text{ against }H_1:\pmb\theta\neq\pmb0$$
+Consider the likelihood ratio statistic
+$$\Lambda_n:=\frac{L(\hat{\pmb\theta}_0;\pmb{x})}{L(\hat{\pmb\theta}_\text{MLE};\pmb{x})}$$
+where $\hat{\pmb\theta}_0$ is the maximum likelihood estimator under the null hypothesis and $\hat{\pmb\theta}_\text{MLE}$ is the maximum likelihood estimator for the full model.\
+Define test statistic
+$$T_n(\X):=-2\Lambda_n=-2[\ell(\hat{\pmb\theta}_0;\pmb{X})-\ell(\hat{\pmb\theta}_\text{MLE};\pmb{X})]\sim\chi^2_r$$
+where $r=4$ since the null hypothesis specifies restrictions on four variables.
+```{r}
+X_rest<-cbind(1,as.matrix(diabetes[,c(1,2,6,7)])) # Variables we are not testing (ie assuming others=0)
+X_full<-cbind(1,as.matrix(diabetes[,1:8])) # all variables
+Y<-diabetes[,9] # outcomes
+
+theta_hat_0.value<-maximise.ell(ell,score,X_rest,Y,rep(0,5))$value # MLE under H0
+theta_hat_mle.value<-maximise.ell(ell,score,X_full,Y,rep(0,9))$value # MLE for full model
+cat("ell(theta_hat_0): ",theta_hat_0.value,"\nell(theta_hat_mle): ",theta_hat_mle.value,sep="") # output values
 ```
 Using these results we can calculate an observed test statistic
-$$T_n(\textbf{x})=-2[\ell(\hat{\pmb\theta}_0;\pmb{x})-\ell(\hat{\pmb\theta}_\text{MLE};\pmb{x})]=-2[`r theta_hat_0.value`-`r theta_hat_mle.value`]=`r t_obs<--2*(theta_hat_0.value-theta_hat_mle.value); t_obs`$$
+$$T_n(\textbf{x})=-2[\ell(\hat{\pmb\theta}_0;\pmb{x})-\ell(\hat{\pmb\theta}_\text{MLE};\pmb{x})]=-2[(`r round(theta_hat_0.value,2)`)-(`r round(theta_hat_mle.value,2)`)]=`r t_obs<--2*(theta_hat_0.value-theta_hat_mle.value); round(t_obs,2)`$$
 Since $T_n(\X)\sim\chi^2_4$ we have an observered $p$-value of
-$$p(\x):=\prob(T_n(\X)\geq T_n(\x);H_0)=\prob(\chi^2_4\geq`r t_obs`)=`r p_val<-1-pchisq(t_obs,4);p_val`$$
-Using the code described in the epilogue we can confirm this value
+$$p(\x):=\prob(T_n(\X)\geq T_n(\x);H_0)=\prob(\chi^2_4\geq`r round(t_obs,2)`)=`r p_val<-1-pchisq(t_obs,4);round(p_val,4)`$$
+Using the code described in the epilogue we can confirm this calculation.
 ```{r}
 model1<-glm(Y~X_full,family=binomial) #full model
 model2<-glm(Y~X_rest,family=binomial) #restricted model
-suppressMessages(library(lmtest))
-lrtest(model1, model2)
+suppressMessages(library(lmtest)) # load library
+lrtest(model1, model2) # perform linear regression test
 ```
-This is not statistically significant enough to suggest rejecting $H_0$.\
-Thus we accept that the variables \textit{BloodPressure, SkinThichness, Insulin} and \textit{Age} are \underline{not} statistically significant for the development of diabetes.
+Here the $p$-value ($`r round(p_val,4)`$) is not statistically significant enough to reject $H_0$, for a reasonable significance level.\
+Thus we accept that the variables \textit{BloodPressure, SkinThichness, Insulin} and \textit{Age} are \underline{not} statistically significant for the development of diabetes and thus $(\theta_3,\theta_4,\theta_5,\theta_8)=\pmb0$.
 
 # Question 5
 ```{r}
-set.seed(16111998)
-generate.ys<-function(X,theta) {
+set.seed(795430357) # Set RNG seed
+
+generate.ys<-function(X,theta) { # Generate new outcomes from data
    n<-dim(X)[1]
    rbinom(n,size=1,prob=sigma(X%*%theta))
 }
 
 simulate<-function(theta_hat_mle) {
-   new_Y<-generate.ys(X_rest,theta_hat_mle)
+   new_Y<-generate.ys(X_rest,theta_hat_mle) # Generate new outcomes
    
-   theta_hat_0.value<-maximise.ell(ell,score,X_rest,new_Y,rep(0,5))$value
+   theta_hat_0.value<-maximise.ell(ell,score,X_rest,new_Y,rep(0,5))$value # Calculate MLEs
    theta_hat_mle.value<-maximise.ell(ell,score,X_full,new_Y,rep(0,9))$value
    
-   t_obs<--2*(theta_hat_0.value-theta_hat_mle.value)
+   t_obs<--2*(theta_hat_0.value-theta_hat_mle.value) # Calculate observed test statistic
 }
 
-n_trials=2000; m<-4
+n_trials<-1000
 theta_hat_mle<-maximise.ell(ell,score,X_rest,Y,rep(0,5))$theta
-simulation.raw<-sapply(1:n_trials, function(i) simulate(theta_hat_mle))
+simulation.raw<-sapply(1:n_trials, function(i) simulate(theta_hat_mle)) # Run simulation
 ```
 
 ## a)
 ```{r}
 x<-seq(0,20,0.1)
-plot(x,dchisq(x,m),type="l",col="darkgreen",xlab="T(x)",ylab="",main="Comparision of density of observed statistics & chi^2_4 distribution")
-lines(density(simulation.raw),col="red",lty=2)
+plot(x,dchisq(x,4),type="l",col="darkgreen",xlab="T(x)",ylab=""
+     ,main="Comparision of density of observed statistics & chi^2_4 distribution") # Plot chi^2_m distribution
+lines(density(simulation.raw),col="red",lty=2) # Plot distribution of obsered test statistics
 legend("topright",legend=c("chi^2_4","Simulation"),lty=1:2,col=c("darkgreen","red"))
 ```
 
 ## b)
+Here I shall test the hypotheses
+$$H_0:-2\ln\Lambda_n\sim\chi^2_4\text{ against }H_1:-2\ln\Lambda_n\not\sim\chi^2_4$$
+This shall be done using Pearson's Goodness-of-Fit test. Usint test statistic
+$$T_\text{pearson}(\X)=\sum_{j=1}^m\dfrac{(o_j-e_j)^2}{e_j}\to_\mathcal{D}\chi^2_r$$
+In this case $r=12-1=11$ since I split the observed data into twelve classes and there is one constraint on these classes.
 ```{r}
-breaks<-c(-Inf,seq(1,13,by=1),Inf)
+breaks<-c(-Inf,seq(1,11,by=1),Inf) # quantise data
 obs<-table(cut(simulation.raw,breaks))
 
-exp<-n_trials*(pchisq(breaks[-1],4)-pchisq(breaks[-length(breaks)],4))
-round(cbind(obs,exp),1)
+exp<-n_trials*(pchisq(breaks[-1],4)-pchisq(breaks[-length(breaks)],4)) # Expected number of observations
+round(cbind(obs,exp),1) # Output data table
 
+r<-length(obs)-1
 t_obs<-sum((obs-exp)^2/exp) # observered test statistic
-p_val<-1-pchisq(t_obs,df=m) # p-value
-cat("df=",m,"\nt_obs=",t_obs,"\np-val=",p_val,sep="")
+p_val<-1-pchisq(t_obs,df=r) # p-value
+cat("df=",r,"\nt_obs=",t_obs,"\np_val=",p_val,sep="") # output test values
 ```
+Here the $p$-value ($`r p_val`$) is not statistically significant enough to reject $H_0$, for a reasonable significance level.\
+Thus we accept that the test statistic $-2\ln\Lambda_n$ is distributed according to $\chi^2_4$.
