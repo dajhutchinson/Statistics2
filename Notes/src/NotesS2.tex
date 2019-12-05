@@ -1913,7 +1913,7 @@ $$\vartheta\sim\text{Beta}(\alpha,\beta)$$
 for some shape parmeters $\alpha,\beta>0$.\\
 \nb To determine the values of $\alpha$ \& $\beta$ we define the mean \& variane we want and then solve the simultaneous equations this produces.\\
 
-\theorem{Bayes Theorem}
+\theorem{Bayes' Theorem}
 Let $\{B_i\}_{i\in\nats}$ be a collection of events wich partitions $\Omega$. \ie $\bigcup_iB_i=\Omega$ and $B_i\bigcap B_j=\emptyset\ \forall\ i\neq j$.\\
 Then
 \[\begin{array}{rrcl}
@@ -1922,7 +1922,7 @@ Then
 &&=&\dfrac{\prob(A|B_j)\prob(B_j)}{\sum_i\prob(A|B_i)\prob(B_i)}
 \end{array}\]
 
-\example{}
+\example{Using a Prior}
 Consider a bag containing a ball of unknown colour which may be either black or white (We shall refer to the is unknown colour as $\theta\in\{w,b\}$).\\
 A white ball is added to the bag, then a ball is drawn at random , the ball we pick is white.\\
 What is the probability that the remaining ball is white, or in other words the probabiltiy that $\vartheta=w$?\\
@@ -1938,6 +1938,107 @@ We observe $X=W$ so we can \textit{update} the distribution of $\vartheta$ via c
 Hence the posterior distribution for $\vartheta$ is
 $$\prob(\vartheta=\theta|X=2)=\begin{cases}\frac{2}{3},&\vartheta=w\\\frac{1}{3},&\vartheta=b\end{cases}$$
 
+\theorem{Generalisation of Prior Beliefs}
+Suppose $\vartheta$ is a continuous random varible.\\
+The density of the \textit{prior}, $\prob(\theta)$ can be generalised as
+\[\begin{array}{rclcl}
+p(\theta|\x)&=&\dfrac{f_n(\x;\theta)p(\theta)}{\int_\Theta f_n(\x;\psi)p(\psi)d\psi}&\propto&f_n(\x;\theta)p(\theta)\\
+&=&\dfrac{L(\theta;\x)p(\theta)}{\int_\Theta L(\psi;\x)p(\psi)d\psi}&\propto&L(\theta;\x)p(\theta)
+\end{array}\]
+This shows the \textit{posterior} distribution combines the information of the \textit{prior} \& that carried by the \textit{data} (given the model).\\
+
+\example{Bernoulli Likelihood with Beta Prior}
+Let $\X\iid\text{Bernoulli}(\theta)$ and suppose a $\text{Beta}(\alpha,\beta)$ distribution is used for a prior distriution of $\theta$.\\
+Here we derive the posterior distribution $\prob(\theta|\x)$.\\
+Consider the likelihood
+\[\begin{array}{rcl}
+L(\theta;\x)&\propto&\displaystyle\prod_{i=1}^n\theta^{x_i}(1-\theta)^{1-x_i}\text{ a Bernoulli Distribution}\\
+&=&\theta^{\sum x_i}(1-\theta)^{n-\sum x_i}\\
+&=&\theta^{n\bar{x}}(1-\theta)^{n(1-\bar{x})}
+\end{array}\]
+Since the posterior statisifies $\prob(\theta|\x)\propto L(\theta;\x)\prob(\theta)$. Hence
+\[\begin{array}{rcl}
+\prob(\theta;\x)&\propto&\left[\theta^{n\bar{x}}(1-\theta)^{n(1-\bar{x})}\right]\cdot\left[\theta^{\alpha-1}(1-\theta)^{\beta-1}\right]\\
+&=&\theta^{n\bar{x}+\alpha-1}(1-\theta)^{n(1-\bar{x})+\beta-1}\\
+&\sim&\text{Beta}(n\bar{x}+\alpha,n(1-\bar{x})+\beta)
+\end{array}\]
+Consider the affect this had on the mean
+\[\begin{array}{lrcl}
+\text{Prior}&\expect(\theta)&=&\dfrac{\alpha}{\alpha+\beta}\\
+\text{Posterior}&\expect(\theta|\x)&=&\dfrac{n\bar{x}+\alpha}{\alpha+\beta+n}\\
+&&=&\bar{x}\left(\dfrac{n}{\alpha+\beta+n}\right)+\dfrac{\alpha}{\alpha+\beta+n}\\
+&&\underset{n\to\infty}{\longrightarrow}&\bar{x}
+\end{array}\]
+
+\remark{Calculating Posterior}
+To calculate the \textit{posterior}, $\prob(\theta|\x)$, precisely we can use that $\int p(\theta|\x)d\theta=1$ if $\theta$ is continuous, and $\sum p(\theta|\x)=1$ is $\theta$ is discrete.\\
+However, in many cases this is unnecessary as we can identitfy the distribution through the expressioni of the \textit{posterior} in terms of $\theta$.\\
+
+\subsection{Posterior Distributions}
+
+\definition{Conjugacy}
+A \textit{prior} is said to be \textit{Conjugate} if its distribution is of the same family of distribtions as the \textit{posterior}'s.\\
+
+\proposition{Choosing a Posterior Distribution}
+It can be hard to known what to choose as a \textit{Posterior} distribution as there is often an overwhelming amount of information which can be incorparted into this decision.\\
+Some common choices are
+\begin{enumerate}[label=\roman*)]
+	\item \textit{Posterioir mean} of the distribtuion, $\displaystyle\int_\Theta\theta p(\theta|\x)d\theta$.\\
+	\nb useful if the posterior distribution is \textit{unimodal}.
+	\item The \textit{Maximum a Posteriori Estimator}, $\text{argmax}_{\theta\in\Theta}p(\theta|\x)$.\\
+	\nb Can be misleading in some contrived situations.
+	\item The \textit{median}, or more general quantiles.
+	\item \textit{Posterior Variance}.
+\end{enumerate}
+
+\example{Uniform Prior}
+The number of male births in paris where $x=251,527$, while the number of female births was $y=241,945$.\\
+Here we want to assess whether the probability of a male birth, $\theta$, is above $\frac{1}{2}$ or not.\\
+Consider a binomial distribution $\text{Binomial}(x+y,\theta)$.\\
+Since we have a lack of prior information about the true value of $\theta$ we shall model it using a uniform distribution. This is equivalent to a $\text{Beta}(1,1)$ distribution.\\
+This yields a posterior distribution
+$$(\vartheta|X=x)\sim\text{Beta}(251528,241946)$$
+and from this we can compute a $p$-value
+$$p(\x)=\prob(\vartheta>\frac{1}{2}|X=x)\approx1-1.15\times 10^{-42}$$
+This is very large thus we conclude that $\theta$ is most likely greater than $\frac{1}{2}$.\\
+
+\theorem{$\text{Uniform}[0,1]\sim\text{Beta}(1,1)$}
+
+\definition{Posterior Expected Loss}
+Let $p(\theta|x)$ denote the \textit{Posterior} density.\\
+Then the \textit{Posterior Expected Loss} of an estimate $\hat\theta$ of $\theta$ is
+$$R(\hat\theta|\x):=\int L(\theta,\hat\theta)\prob(\theta|\x)d\theta
+$$
+where $L(\theta,\hat\theta)$ is a non-negative \textit{Loss Function}.\\
+\nb AKA \textit{Posterior Risk}.\\
+\nb $\hat\theta$ is a fixed value.\\
+
+\definition{Bayes Estimate}
+A \textit{Bayes Estimate} is obtained by minimising the \textit{Posterior Risk}
+$$\hat\theta_\text{Bayes}=\text{argmin}_{\theta\in\Theta}R(\hat\theta|\x)$$
+
+\theorem{Squared Error Loss}
+Define a loss function $L(\theta,\hat\theta)=(\theta-\hat\theta)^2$ and suppose $\int\theta^2 p(\theta|\x)d\theta<\infty$ (\ie is finite). Then
+$$\hat\theta_\text{Bayes}=\int_{\Theta}\theta p(\theta|\x)d\theta=\text{Posterior Mean}$$
+
+\proof{Theorem 2.2}
+For simplicity define $\pi(\theta):=\prob(\theta|\x)$, $s:=\int\theta^2\pi(\theta)d\theta$ and $m=\int\theta\pi(\theta)d\theta$. Then
+\[\begin{array}{rcl}
+R(\hat\theta)&=&\int L(\theta,\hat\theta)\prob(\theta|\x)d\theta\\
+&=&\int(\theta-\hat\theta)^2\pi(\theta)d\theta\\
+&=&\int(\theta^2-2\hat\theta\theta+\hat\theta^2)\pi(\theta)d\theta\\
+&=&\int\theta^2\pi(\theta)d\theta-2\hat\theta\int\theta\pi(\theta)d\theta+\hat\theta\underbrace{\int\pi(\theta)d\theta}_{=1}\\
+&=&s-2\hat\theta m+\hat\theta^2
+\end{array}\]
+We want $\text{argmin}_{\hat\theta}R(\hat\theta)$.\\
+Since $R(\hat\theta)$ is quadratic we find that
+$$\hat\theta_\text{min}=-\dfrac{-2m}{2\times 1}=m$$
+
+\remark{}
+If we consider \textit{Squared Error Loss} then th eposteriori mean minisise the risk and the minimised risk is
+$$T(\theta,\hat\theta_\text{Bayes}=\int(\theta-\hat\theta_\text{Bayes})^2p(\theta|\x)d\theta=\var_{p(\theta|\x)}(\theta)$$
+which is the \textit{Posterior Variance}.\\
+
 \newpage
 \setcounter{section}{-1}
 \section{Appendix}
@@ -1952,6 +2053,10 @@ $$\nabla f(\pmb{\theta};\x):=\begin{pmatrix}
 \vdots&\vdots&\ddots&\vdots\\
 \dfrac{\partial^2 f(\pmb{\theta};\x)}{\partial\theta_1\partial\theta_n}&\dfrac{\partial^2 f(\pmb{\theta};\x)}{\partial\theta_2\theta_n}&\dots&\dfrac{\partial^2 f(\pmb{\theta};\x)}{\partial\theta_n^2}
 \end{pmatrix}$$
+
+\theorem{Minimum of a Quadratic}
+Consider the quadratic $ax^2+bx+c$. We have that
+$$x_\text{min}=-\frac{b}{2a}$$
 
 \subsection{Notation}
 
