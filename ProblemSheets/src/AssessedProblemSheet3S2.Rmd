@@ -62,7 +62,7 @@ $$\hat{\mu}_\text{MLE}=\frac{1}{n}\sum_{i=1}^nx_i\text{ and }\hat\sigma^2=\frac{
 Define the test statistic
 $$T_\text{pearson}(\X)=\sum_{j=1}^m\dfrac{(o_j-e_j)^2}{e_j}\to_\mathcal{D}\chi^2_r$$
 where $o_j$ is the number of observations of class $j$ and $e_j$ is the expected number of observations of class $j$, assuming $H_0$ is true.\
-In this case $r=m-3=7-3=4$ since we have 7 classes of observations but 3 constraints due to the normal distribution.
+In this case $r=m-3=7-3=4$ since we have seven classes of observations but three constraints on these classes due to the assumption of a normal distribution (mean, variance \& sum of class sizes).
 ```{r}
 breaks<-c(-Inf,seq(45,95,by=10),Inf) # Quantise data
 obs<-table(cut(diabetes$BloodPressure,breaks))
@@ -84,23 +84,21 @@ Here the $p$-value ($`r p_val`$) is not statistically significant enough to reje
 Thus we accept that \textit{BloodPressure} can be modelled by a Normal distribution.
 
 # Question 2
-Let $X_1,\dots,X_n\iid\text{Normal}(\mu,12^2)$ model the blood pressume of members of the study.\
+Let $X_1,\dots,X_n\iid\text{Normal}(\mu,12^2)$ model the \textit{blood pressure} of members of the study.\
 Here I shall test the hypotheses
 $$H_0:\mu=70\text{ against }H_1:\mu>70$$
-I shall use Pearson's test statistic
-$$T_\text{pearson}(\X)=\sum_{j=1}^m\dfrac{(o_j-e_j)^2}{e_j}\to_\mathcal{D}\chi^2_r$$
-where $o_j$ is the number of observations of class $j$ and $e_j$ is the expected number of observations of class $j$, assuming $H_0$ is true.\
-In this case $r=`r length(obs)`-1=`r length(obs)-1`$ due to the breaks chosen in Question 1.
+Define test statistic
+$$T(\X)=\dfrac{\bar{\X}-\mu_0}{\sigma/\sqrt{n}}=\dfrac{\bar{\X}-70}{12/\sqrt{768}}\to_\mathcal{D}\text{Normal}(0,1)$$
+This convergence in distribution is a result of the central limit theorem.
+
 ```{r}
 mu<-70; sigma<-12
-m<-length(obs) # number of classes
+n<-length(diabetes$BloodPressure) # number of data points
+x_bar<-mean(diabetes$BloodPressure)
 
-exp<-n*(pnorm(breaks[-1],mean=mu,sd=sigma)-pnorm(breaks[-length(breaks)],mean=mu,sd=sigma)) # expected number of outcomes
-round(cbind(obs,exp),1) # display data table
-
-t_obs<-sum((obs-exp)^2/exp) # observered test statistic
-p_val<-1-pchisq(t_obs,df=m-1) # p-value
-cat("mu=",mu,"\nsigma=",sigma,"\ndf=",m-1,"\nt_obs=",t_obs,"\np_val=",p_val,sep="") # display test values
+t_obs<-(x_bar-mu)/(sigma/sqrt(n)) # observered test statistic
+p_val<-1-pnorm(t_obs) # p-value
+cat("mu=",mu,"\nsigma=",sigma,"\nx_bar=",x_bar,"\nt_obs=",t_obs,"\np_val=",p_val,sep="") # display test values
 ```
 Here the $p$-value ($`r p_val`$) is statistically significant enough to reject $H_0$, for a reasonable significance level.\
 Thus we accept the alternative hypothesis, that $\mu>70$.
@@ -185,7 +183,7 @@ Thus we accept that the variables \textit{BloodPressure, SkinThichness, Insulin}
 
 # Question 5
 ```{r}
-set.seed(795430357) # Set RNG seed
+set.seed(779543035) # Set RNG seed
 
 generate.ys<-function(X,theta) { # Generate new outcomes from data
    n<-dim(X)[1]
@@ -195,13 +193,13 @@ generate.ys<-function(X,theta) { # Generate new outcomes from data
 simulate<-function(theta_hat_mle) {
    new_Y<-generate.ys(X_rest,theta_hat_mle) # Generate new outcomes
    
-   theta_hat_0.value<-maximise.ell(ell,score,X_rest,new_Y,rep(0,5))$value # Calculate MLEs
-   theta_hat_mle.value<-maximise.ell(ell,score,X_full,new_Y,rep(0,9))$value
+   theta_hat_0.value<-maximise.ell(ell,score,X_rest,new_Y,rep(0,5))$value # MLE under H0
+   theta_hat_mle.value<-maximise.ell(ell,score,X_full,new_Y,rep(0,9))$value # MLE under full model
    
-   t_obs<--2*(theta_hat_0.value-theta_hat_mle.value) # Calculate observed test statistic
+   t_obs<--2*(theta_hat_0.value-theta_hat_mle.value) # observed test statistic
 }
 
-n_trials<-1000
+n_trials<-500
 theta_hat_mle<-maximise.ell(ell,score,X_rest,Y,rep(0,5))$theta
 simulation.raw<-sapply(1:n_trials, function(i) simulate(theta_hat_mle)) # Run simulation
 ```
@@ -220,18 +218,18 @@ Here I shall test the hypotheses
 $$H_0:-2\ln\Lambda_n\sim\chi^2_4\text{ against }H_1:-2\ln\Lambda_n\not\sim\chi^2_4$$
 This shall be done using Pearson's Goodness-of-Fit test. Usint test statistic
 $$T_\text{pearson}(\X)=\sum_{j=1}^m\dfrac{(o_j-e_j)^2}{e_j}\to_\mathcal{D}\chi^2_r$$
-In this case $r=12-1=11$ since I split the observed data into twelve classes and there is one constraint on these classes.
+In this case $r=12-1=11$ since I split the observed data into twelve classes and there is a single constraint on these classes (sum of class sizes).
 ```{r}
 breaks<-c(-Inf,seq(1,11,by=1),Inf) # quantise data
 obs<-table(cut(simulation.raw,breaks))
 
 exp<-n_trials*(pchisq(breaks[-1],4)-pchisq(breaks[-length(breaks)],4)) # Expected number of observations
-round(cbind(obs,exp),1) # Output data table
+round(cbind(obs,exp),1) # Return data table
 
 r<-length(obs)-1
 t_obs<-sum((obs-exp)^2/exp) # observered test statistic
 p_val<-1-pchisq(t_obs,df=r) # p-value
-cat("df=",r,"\nt_obs=",t_obs,"\np_val=",p_val,sep="") # output test values
+cat("df=",r,"\nt_obs=",t_obs,"\np_val=",p_val,sep="") # return test values
 ```
 Here the $p$-value ($`r p_val`$) is not statistically significant enough to reject $H_0$, for a reasonable significance level.\
 Thus we accept that the test statistic $-2\ln\Lambda_n$ is distributed according to $\chi^2_4$.
