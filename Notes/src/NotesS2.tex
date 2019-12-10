@@ -1897,10 +1897,10 @@ However by considering each experiment we note that we have \textit{prior} belie
 These beliefs are not encoded in our \textit{frequentist} test statistic.\\
 
 \definition{$\beta$-Distribution}
-Let $X\sim\text{Beta}(\alpha,\beta)$.\
+Let $X\sim\text{Beta}(\alpha,\beta)$.\\
 A \textit{continuous} random variable with shape parameters $\alpha,\beta>0$. Then
 \[\begin{array}{rcl}
-f_X(x)&\propto&x^{\alpha-1}(1-x)^{\beta-1}\mathds{1}\{x\in[0,1]\\
+f_X(x)&\propto&x^{\alpha-1}(1-x)^{\beta-1}\mathds{1}\{x\in[0,1]\}\\
 \expect(X)&=&\dfrac{\alpha}{\alpha+\beta}\\
 \var(X)&=&\dfrac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}\\
 \mathcal{M}_X(t)&=&1+{\displaystyle\sum_{k=1}^\infty\left(\prod_{r=0}^{k-1}\dfrac{\alpha+r}{\alpha+\beta+r}\right)\dfrac{t^k}{k!}}
@@ -2036,9 +2036,66 @@ $$\hat\theta_\text{min}=-\dfrac{-2m}{2\times 1}=m$$
 
 \remark{}
 If we consider \textit{Squared Error Loss} then th eposteriori mean minisise the risk and the minimised risk is
-$$T(\theta,\hat\theta_\text{Bayes}=\int(\theta-\hat\theta_\text{Bayes})^2p(\theta|\x)d\theta=\var_{p(\theta|\x)}(\theta)$$
+$$T(\theta,\hat\theta_\text{Bayes})1=\int(\theta-\hat\theta_\text{Bayes})^2p(\theta|\x)d\theta=\var_{p(\theta|\x)}(\theta)$$
 which is the \textit{Posterior Variance}.\\
 
+\propositionn{Alternative Loss Functions}
+\begin{enumerate}
+	\item If $L(\theta,\hat\theta):=|\theta-\hat\theta|$ then $\hat\theta_\text{Bayes}$ is the posterior \underline{median}.
+	\item If $L(\theta,\hat\theta):=\mathds{1}\{theta\neq\hat\theta\}$ and $\theta$ is discrete, then $\hat\theta_\text{Bayes}$ is the posterior \underline{mode}.
+\end{enumerate}
+
+\proof{Proposition 2.2 i)}
+First we compute $R(\hat\theta|\x)$
+\[\begin{array}{rcl}
+R(\hat\theta)&=&\displaystyle\int_{-\infty}^\infty|\theta-\hat\theta|p(\theta|\x)d\theta\\
+&=&\displaystyle\int_{-\infty}^{\hat\theta}(\hat\theta-\theta)p(\theta|\x)d\theta+\displaystyle\int_{\hat\theta}^\infty(\theta-\hat\theta)p(\theta|\x)d\theta\\
+&=&\hat\theta\displaystyle\int_{-\infty}^{\hat\theta}p(\theta|\x)d\theta-\hat\theta\displaystyle\int_{-\infty}^{\hat\theta}\theta p(\theta|\x)d\theta+\displaystyle\int_{\hat\theta}^\infty\theta p(\theta|\x)d\theta-\hat\theta\displaystyle\int_{\hat\theta}^\infty p(\theta|\x)d\theta\\
+\end{array}\]
+We want to find the minimum of $R(\hat\theta|\x)$
+\[\begin{array}{rcl}
+R'(\hat\theta)&=&\frac{d}{d\hat\theta}R(\hat\theta)\\
+&=&\displaystyle\int_{-\infty}^{\hat\theta}p(\theta|\x)d\theta+\hat\theta p(\hat\theta|\x)-\hat\theta p(\hat\theta|\x)-\hat\theta p(\hat\theta|\x)-\displaystyle\int_{\hat\theta}^\infty p(\theta|\x)d\theta+\hat\theta p(\hat\theta|\x)\\
+&=&\displaystyle\int_{-\infty}^{\hat\theta}p(\theta|\x)d\theta-\displaystyle\int_{\hat\theta}^\infty p(\theta|\x)d\theta
+\end{array}\]
+Setting $R'(\hat\theta)=0$
+$$\displaystyle\int_{-\infty}^{\hat\theta}p(\theta|\x)d\theta=\displaystyle\int_{\hat\theta}^\infty p(\theta|\x)d\theta\implies\hat\theta=\text{Median}$$
+Taking $R''(\hat\theta)=p(\hat\theta|\x)+p(\hat\theta|\x)>0\ \forall\ \hat\theta$ thus this is a minimum.
+
+\subsection{Credible Intervals}
+
+\definition{Symmetric $1-\alpha$ Credible Interval}
+In the scalar case we find $\theta_1,\theta_2\in\Theta$ st
+$$\int_{-\infty}^{\theta_1}p(\theta|\x)d\theta=\alpha/2\text{ and }\int_{\theta_2}^\infty p(\theta|\x)d\theta=\alpha/2$$
+The interval $(\theta_1,\theta_2)$ is called a \textit{Symmetric $1-\alpha$ Credible Interval}.\\
+
+\definition{High Posterior Density Set}
+The \textit{High Posterior Density Set}, $\mathcal{HPD}(1-\alpha)$, is the level set
+$$\mathcal{HPD}_v:=\{\theta\in\Theta:p(\theta|\x)\geq v\}$$
+where $v$ is chosen st
+$$\prob(\theta\in\mathcal{HPD}_v|\x)=\int_{\mathcal{HPD}_v}p(\theta|\x)d\theta=1-\alpha$$
+\nb This is a set, not an inverval.\\
+
+\theorem{The $\mathcal{HPD}(1-\alpha)$ redivle set is the smallest subet of $\Theta$ containing exactly $1-\alpha$ of the total probability.}
+
+\remark{High Posterior Density Sets are harder to determine without a computer than Symmetric Credible Intervals}
+
+\example{}
+We have established that for the Beta/Bernoulli Model, with statistical parameter $\theta$, the posterior for $n$ observations is $\text{Beta}(n\bar{x}+\alpha,n(1+\bar{x})+\beta)$ distribution whose mean and variance are
+$$\expect(\theta|\x)=\frac{n\bar{x}+\alpha}{n+\alpha+\beta}=\frac{\bar{x}+\alpha/n}{1+(\alpha+\beta)/n}$$
+and
+$$\var(\theta|\x)=\frac{(n\bar{x}+\alpha)[n(1-\bar{x})+\beta]}{(n+\alpha+\beta)^2(n+\alpha+\beta+1)}=\frac{(\bar{x}+\alpha/n)[(1-\bar{x})+\beta/n]}{[1+(\alpha+\beta)/n]^2[n+\alpha+\beta+1]}$$
+In this example it is easier to see that the Bayes estimator with squared error loss is
+$$\hat\theta_\text{Bayes}(\X)+\frac{n\bar{X}+\alpha}{n+\alpha+\beta}$$
+and hence that
+$$\hat\theta_\text{Bayes}(\X)\to_{\prob(\cdot;\theta)}\theta\text{ by the weak law of large numbers}$$
+and the fact that $\frac\alpha{n}\ \&\ \frac{\alpha+\beta}{n}$ both converge to 0 as $n\to\infty$.\\
+Similaryy, the posterior variance is
+$$\frac{\bar{X}+\alpha/n)[(1-\bar{X})+\beta/n]}{[1+(\alpha+\beta)/n]^2[n+\alpha+\beta+1]} \to_{\prob(\cdot;\theta)}0$$
+since $\bar{X}\to_{\prob(\cdot;\theta)}\theta$.\\
+This is a rudimentary frequentist analysis of a Bayes Estimator.
+
+\subsection{Bayesian Hypothesis Testing}
 \newpage
 \setcounter{section}{-1}
 \section{Appendix}
