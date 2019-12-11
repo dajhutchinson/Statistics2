@@ -2096,6 +2096,52 @@ since $\bar{X}\to_{\prob(\cdot;\theta)}\theta$.\\
 This is a rudimentary frequentist analysis of a Bayes Estimator.
 
 \subsection{Bayesian Hypothesis Testing}
+
+\remark{Difference to Frequestist Hypothesis Testing}
+Consider a model with posterior distribution $p(\theta|\x)$ and assume that we would like to test
+$$H_0:\theta\in\Theta_0\text{ against }H_1:\theta\in\Theta_1$$
+The difference in \textit{Bayesian Hypothesis Testing}, compared to \textit{Frequentist Hypothesis Testing} is that we can actually calculate
+$$\prob(\vartheta\in\Theta_0|\X=\x)=\int_{\Theta_0}p(\theta|\x)d\theta\text{ and }\prob(\vartheta\in\Theta_1|\X=\x)=\int_{\Theta_1}p(\theta|\x)d\theta$$
+
+\example{}
+Consider the simple hypotheses
+$$H_0:\theta=\theta_0\text{ against }H_1:\theta=\theta_1$$
+In a \textit{Bayesian} framework we can take into account the cost of making an error, and base our decision on the minimisation of this cost.\\
+We construct a loss table
+\begin{center}\begin{tabular}{|c|c|c|}
+\hline
+Truth$\backslash$ Decision&$\theta_0$&$\theta_1$\\
+\hline
+$\theta_0$&$L_{00}$&$L_{10}$\\
+\hline
+$\theta_1$&$L_{10}$&$L_{11}$\\
+\hline
+\end{tabular}\end{center}
+$L_{ij}$ is the loss for choosing $H_i$ when actually $\theta=\theta_j$.\\
+We assume $L_{ik}>L_{jj}$ for $i\neq j$ (\ie it is always more costly to make a wrong decision).\\
+We aim to choose the hypothesis with the smallest \textit{Posterior Expected Cost}.\\
+When we choose $H_0$ we \textit{risk} the following loss
+$$R_0=L_{00}\times p(\theta_0|\x)+L_{01}\times p(\theta_1|\x)$$
+and when we chosse $H_1$ we risk the loss
+$$R_1=L_{10}\times p(\theta_0|\x)+L_{11}\times p(\theta_1|\x)$$
+Hence we choose $H_1$ if $R_1<R_0$ (and visa-versa). \ie
+\[\begin{array}{rrcl}
+&L_{10}\times p(\theta_0|\x)+L_{11}\times p(\theta_1|\x)&<&L_{00}\times p(\theta_0|\x)+L_{01}\times p(\theta_1|\x)\\
+\implies&p(\theta_0|\x)[L_{10}-L_{00}]&<&p(\theta_1|\x)[L_{01}-L_{11}]\\
+\implies&\dfrac{p(\theta_1|\x)}{p(\theta_0|\x)}&>&\dfrac{L_{10}-L_{00}}{L_{01}-L_{11}}\\
+\equiv&\dfrac{p(\x|\theta_1)p(\theta_1)}{p(\x|\theta_0)p(\theta_0)}&>&\dfrac{L_{10}-L_{00}}{L_{01}-L_{11}}\\
+\implies&\dfrac{L(\theta_1;\x)}{L(\theta_0;\x)}&>&\dfrac{p(\theta_0)[L_{10}-L_{00}]}{p(\theta_1)[L_{11}-L_{11}]}
+\end{array}\]
+Note that is exactly the same form as the \textit{Neyman-Pearson Test}, expt that the \textit{"critical value"} is chosen according to our prior and our assessment of the risk of taking thw wrong decision.\\
+In particular
+\begin{enumerate}
+	\item The greater the cost of a \textit{Type I Error}, $L_{10}$, the higher the threshold.
+	\item The greater the cost of a \textit{Type II Error}, $L_{01}$, the lower the threshold.
+	\item The greater the prior probability of $H_0$, $p(\theta_0)$, the higher the threshold.
+	\item The greater the prior probability of $H_1$, $p(\theta_1)$, the lower the threshold.
+\end{enumerate}
+
+
 \newpage
 \setcounter{section}{-1}
 \section{Appendix}
