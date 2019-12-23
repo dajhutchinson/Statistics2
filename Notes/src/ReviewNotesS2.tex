@@ -105,14 +105,14 @@ and must filfil the following criteria
 \end{enumerate}
 
 \definition{Random Variable}
-A \textit{Random Variable} is a function which maps maps an event in the sample space to a value. $X$ is a random variable if it satisfies the signature
+A \textit{Random Variable} is a function which maps an event in the sample space to a value. $X$ is a random variable if it satisfies the signature
 $$X:\Omega\to\reals$$
 
 \definition{Parametric Models}
 \textit{Parametric Models} are the class of statistical distributions whose probability mass/density function take parameters. These parameters represent values of interest in the population, such as mean or variance. We generally do not know these values so we estimate them from samples.\\
 
 \definition{Quantity of Interest}
-When analysing distributions it often helps to define \textit{Quantities of Interest} about the distributions (\eg Mean). These are defined as functions in terms of the parameters $\tau(\theta)$. We estimate \textit{Quantities of Interest} by passing estimated values of the parameters $\hat{\tau}=\tau(\hat{\theta})$.\\
+When analysing distributions it often helps to define \textit{Quantities of Interest} about the distributions (\eg Mean). These are defined as functions in terms of the parameters $\tau(\theta)$. We estimate \textit{Quantities of Interest} by passing estimated values of the parameters $\hat{\tau}=\tau(\hat{\theta})$.
 
 \subsection{Theorems}
 
@@ -285,7 +285,8 @@ F_{\hat\theta(\X)}(t;\theta^*)&:=&\prob(\hat\theta(\X)\leq t;\theta^*)\\
 \subsection{Confidence Sets}
 
 \definition{Random Interval}
-TODO\\
+A \textit{Random Interval} is an interval of values which depends on a random variable and thus does not have fixed values.
+$$\mathcal{I}(\X):=[L(\X),U(\X)]$$
 
 \definition{Observed Confidence Interval}
 Let $\X$ be a random variable, $\mathcal{I}(\X):=[L(\X),U(\X)]$ and $\x$ be a realisation of $\X$.\\
@@ -348,6 +349,7 @@ $$C(\X_n):=\left\{\theta\in\Theta:\ell(\hat\theta_n;\X_n)-\ell(\theta;\X_n)\leq\
 $$\prob(\theta^*\in C(\X_n);\theta^*)\underset{n\to\infty}{\longrightarrow}1-\alpha$$
 \nb This definition and result are applications of \textbf{Definition 2.4} \& \textbf{Theorem 2.3}.\\
 \nb \textit{Confidence Sets} are hard to define explicitly without a computer.\\
+\nb This is known as \textit{Wilk's Approach}.\\
 
 \theorem{Confidence Set of Reparameterisation}
 Let $\X\sim f(\cdot;\theta^*)$ for $\theta^*\in\Theta$ and $\tau:=g(\theta)$  where $g:\Theta\to G$ is a \underline{bijection}.\\
@@ -382,9 +384,6 @@ $$\{\theta^*\in C(\X)=\{g(\theta^*)\in\tilde{C}(\X)\}$$
 \remark{Confidence Set Rule of Thumb}
 Under the conditions of \textbf{Theorem 2.3} there is a rule of thumb that
 $$\prob(\theta^*\in C(\x))\approx0.95\text{ where }C\approx\left\{\theta\in\Theta:\ell(\hat\theta_n;\x)-\ell(\theta;\x)\leq2\right\}$$
-
-\definition{Wilk's Approach}
-TODO - Is this just confidence sets?
 
 \subsection{Convergence}
 
@@ -681,7 +680,7 @@ Since $W_n\to_{\mathcal{D}(\cdot;\theta^*)}Z\sim\text{Normal}(0,1)$ we have
 \end{array}\]
 Similary to before we have the equivalence of events
 $$\{-z_{\alpha/2}\leq W_n\leq z_{\alpha/2}\}=\left\{\hat{\theta}_n-z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\leq\theta^*\leq\hat{\theta}_n+z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\right\}$$
-So $\lim_{n\to\infty}\prob\left(\hat{\theta}_n(X)-z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\leq\theta^*\leq\hat{\theta}_n(X)+z_{\alpha/2}\frac{\sigma}{\sqrt{n}};\theta^*\right)=1-\alpha$.\proved
+So $\lim_{n\to\infty}\prob\left(\hat{\theta}_n(X)-z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\leq\theta^*\leq\hat{\theta}_n(X)+z_{\alpha/2}\frac{\sigma}{\sqrt{n}};\theta^*\right)=1-\alpha$.$\hfill\square$
 
 
 \subsection{Efficiency of Estimators}
@@ -703,7 +702,342 @@ The sequence $\{\hat\theta_n\}$ is \textit{Asumptotically Efficient} if either
 
 \remarkk{Under the conditions of \textbf{Theorem 2.11} Maximum Likelihood Estimators are Asymptotically Efficient}
 
+\section{Testing}
 
+\subsection{Hypothesis Testing}
+% Significance, Power
+
+\definition{Hypothesis}
+A \textit{Hypothesis} is a statement about the value of one or more parameters in a parameteric model.
+$$H:\theta\in\Theta_0\text{ where }\Theta_0\subseteq\Theta$$
+
+\definition{Simple Hypothesis}
+A \textit{Simple Hypothesis} is a \textit{Hypothesis} which states that $\theta$ has an exact value.\\
+\ie $H:\theta\in\Theta_0$ where $|\Theta_0|=1$.\\
+
+\definition{Composite Hypothesis}
+A \textit{Composite Hypothesis} is a \textit{Hypothesis} which states that $\theta$ takes one of a range of values.\\
+\ie $H:\theta\in\Theta_0$ where $|\Theta_0|>1$.\\
+
+\definition{Hypothesis Testing}
+\textit{Hypothesis Testing} is the process using observed data to determine which of two \textit{hypotheses} is more consistent with the data.\\
+For the \textit{hypotheses} we define a \textit{Null Hypothesis}, $H_0:\theta\in\Theta_0$, which is our default position \& an \textit{Alternative Hypothesis}, $H_1:\theta\in\Theta_1$ where $\Theta_1:=\Theta\backslash\Theta_0$.\\
+
+\proposition{Hypothesis Testing Process}
+Let $\x$ be a realisation of $\X$.
+\begin{enumerate}
+	\item Define a \textit{Model} $f(\dot;\theta)$, for $\theta\in\Theta$, st $\X\sim f(\cdot;\theta)$.
+	\item Define a \textit{Null Hypothesis}, $H_0$, and an \textit{Alternative Hypothesis}, $H_1$.
+	\item Define a \textit{Test Statistic}, $T(\cdot)$.
+	\item Choose a \textit{Significan Level}, $\alpha$, and calculate the resulting \textit{Critical Value}, $c$.
+	\item Calculate the observed value of the \textit{Test Statistic}, $t=T(\x)$.
+	\item If $t\geq c$ then reject $H_0$ in favour of $H_1$, otherwise accept $H_0$.
+\end{enumerate}
+
+\definition{One-Sided Hypothesis Test}
+Consider the two hypotheses $H_0:\theta\in\Theta_0\ \&\ H_1:\theta\in\Theta_1$.\\
+A \textit{Hypothesis Test} on these two hypotheses is said to be a \textit{One-Sided Hypothesis Test} if both $\Theta_0\ \&\ \Theta_1$ are continuous regions of the parameter space.\\
+\ie $\exists\ \theta_0\in\Theta$ st $H_0:\theta\leq\theta_0$ and $H_1:\theta>\theta_0$ (visa-versa) are equivalent definitions to above.\\
+
+\definition{Two-Sided Hypothesis Test}
+Consider the two hypotheses $H_0:\theta\in\Theta_0\ \&\ H_1:\theta\in\Theta_1$.\\
+A \textit{Hypothesis Test} on these two hypotheses is said to be a \textit{Two-Sided Hypothesis Test} if at least one of $\Theta_0\ \&\ \Theta_1$ is not a continuous region of the parameter space.\\
+\ie $\exists\ \theta_0,\theta_1\in\Theta$ st $H_0:\theta\in[\theta_0,\theta_1]$ and $H_1:\theta\not\in[\theta_0,\theta_1]$ (visa-versa) are equivalent definitions to above.\\
+
+\definition{Type I \& Type II Error}
+Consider the table below
+\begin{center}
+\begin{tabular}{|c|cc|}
+\hline
+Truth$\backslash$Action&\textbf{Retain $H_0$}&\textbf{Reject $H_0$}\\
+\hline
+\textbf{$H_0$ is True}&Correct&\textit{Type I Error}\\
+\textbf{$H_1$ is True}&\textit{Type II Error}&Correct\\
+\hline
+\end{tabular}
+\end{center}
+\ \textit{Type I Error} occurs when the \textit{Null Hypothesis} is \underline{rejected}, when in fact it is \underline{true}.\\
+\textit{Type II Error} occurs when the \textit{Null Hypothesis} is \underline{accepted}, when in fact it is \underline{false}.\\
+
+\definition{Significance Level}
+\textit{Signifiance Level}, $\alpha$, is the rate at which we allow \textit{Type I Errors} to occur
+$$\alpha:=\prob(\text{Type I Error})\in[0,1]$$
+\ie What is an acceptable proportion of times to reject $H_0$ when it is in fact true.\\
+\nb Typically $\alpha\leq0.05$.\\
+
+\remark{Significance Level is directly related to the phrase "Statistical Significance"}
+
+\definition{Test Statistic}
+A \textit{Test Statistic} is a random variable, $T$, whose value depends on the observed data set and is used to determime the outcome of a hypothesis test. \textit{Test Statistics} are defined in such a way that they measure how likely a given observation is given a particular hypothesis. Thus is an obseravation is deemed sufficiently unlikely my a \textit{Test Statistic} then we reject that hypothesis, in favour of the alternative.\\
+\nb $T:\mathcal{X}^n\to\reals$ where $n$ is the number of observed values.\\
+
+\propositionn{Common Test Statistics}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Test Statistic}&\textbf{Use}\\
+\hline
+${\displaystyle T(\x)=\frac{1}{n}\sum_{i=1}^nx_i\sim\text{Normal}\left(\mu,\frac{\sigma^2}{n}\right)}$&Testing mean\\
+\hline
+\end{tabular}
+\end{center}
+
+\definition{Equivalent Statistics}
+Let $T(\cdot)\ \&\ T'(\cdot)$ be \textit{Test Statistics} and $\X$ be a \textit{Random Variable}.\\
+We say $T(\cdot)$ and $T'(\cdot)$ are \textit{Equivalent Statistics} if
+$$\forall\ c\in\reals\ \exists\ c'\in\reals\text{ st }\{\x\in\mathcal{X}^n:T(\x)\geq c\}\equiv\{\x\in\mathcal{X}^n:T'(\x)\geq c'\}$$
+
+\proposition{Verifying Equivalent Statistics}
+Let $T(\cdot)\ \&\ T'(\cdot)$ be \textit{Test Statistics}.\\
+To verify that $T(\cdot)$ and $T'(\cdot)$ are \textit{Equivalent Statistics} it is sufficient to factorise $T(\cdot)$ as
+$$T(\x)=Mf(T'(\x))$$
+for some $M,f$ where $M$ is independent of $\x$ and $f(\cdot)$ is an increasing, bijective function.\\
+
+\prooff{Proposition 3.3}
+\[\begin{array}{rcl}
+T(\x)\geq c&\Longleftrightarrow&Mf(T'(\x))\geq c\\
+&\Longleftrightarrow&f(T'(\x))\geq\dfrac{c}{M}\\
+&\Longleftrightarrow&T'(\x)\geq\underbrace{f^{-1}\left(\dfrac{c}{M}\right)}_{c'}
+\end{array}\]
+
+\definition{Critical Value}
+A \textit{Critical Value}, $c\in\reals$, is an explicit value which if the observed value of the test statistic, $T(\x)$, exceeds then we reject the \textit{Null-Hypothesis}.\\
+\ie If $T(\x;H_0)\geq c$ then we reject $H_0$.\\
+\nb The \textit{Critical Value} depends on the \textit{Test Statistic} \& the \textit{Significance Level} used in a given test.\\
+
+\definition{Critical Region}
+The \textit{Critical Region}, $R$, is the set of observations which would lead to us rejecting the \textit{Null-Hypothesis}.\\
+Let $T(\cdot)$ be a \textit{Test Statistic} \& $c$ be a \textit{Critical Value} then
+$$R:=\{\x\in\mathcal{X}^n:T(\x)\geq c\}$$
+\nb $\mathcal{X}^n=R\cup R^c$.\\
+
+\definition{Power Function}
+The \textit{Power Function}, $\pi(\cdot)$ measures the probability of rejecting the \textit{Null-Hypothesis} given that the true value of the parameter is $\theta$.\\
+Let $\X\sim f(\cdot;\theta^*)$, $T(\cdot)$ be a test statistic, $c$ be a \textit{Critical Value} \& $R$ be the \textit{Critical Region}. Then
+$$\pi(\theta;T,c):=\prob(\X\in R;\theta^*=\theta)=\prob(T(\X)\geq c;\theta^*=\theta)$$
+\nb $\pi(\cdot;T,c):\Theta\to[0,1]$.\\
+
+\remark{$\pi(\cdot;T,c)\equiv 1-\prob(\text{Type II Error})$}
+
+\definition{Uniformly Most Powerful Test}
+Define two \textit{Composite Hypotheses}, $H_0:\theta\in\Theta_0\ \&\ H_1:\theta\not\in\Theta_0$ for $|\Theta_0|>1$ and a \textit{Test}, $(T,c)$, for these hypotheses.\\
+We say that this \textit{Test}, $(T,c)$, is a \textit{Uniformly Most Powerful Test} for these hypotheses if
+$$\forall\ (T',c'),\ \pi(\theta;T,c)\geq\pi(\theta;T',c')\text{ for }\theta\in\Theta_1:=\Theta\backslash\Theta_0$$
+\nb We refer to $T$ in this case as the \textit{Uniformly Most Powerful \underline{Test Statistic}}.\\
+
+\remark{A Uniformly Most Powerful Test is not Guaranteed to exist}
+
+\propositionn{Procedure for Hypothesis Testing with Composite Hypotheses}
+\begin{enumerate}
+	\item Calculate the \textit{Likelihood Ratio Test Statistic}, $T_{NP}(\cdot)$.
+	\item Find the simplist \textit{Equivalent} test statistic, $T(\cdot)$, to the \textit{Likelihood Ratio Test Statistic}.
+	\item Compute the \textit{$p$-Value} using the distribution of $T(\cdot)$ under the \textit{Null-Hypothesis}
+	\item Determine whether you accept the \textit{Null-Hypothesis} given the computed \textit{$p$-Value}.
+\end{enumerate}
+
+\definition{$p$-Value}
+The \textit{$p$-Value} of a \textit{Test Statistc} is the probability of observing a test statistic, $T(\X)$, at least as exteme as a realisation of the test statistic, $T(\x)$, under the \textit{Null Hypothesis}.\\
+Let $\X\sim f_n(\cdot;\theta^*)$ be a \textit{Random Vector} for $\theta^*\in\Theta$, $\x$ be a realisation of $\X$, $T(\cdot)$ be a \textit{Test Statistic} and define a \textit{Null Hypothesis}, $H_0:\theta\in\Theta_0$.
+$$p(\x):=\sup_{\theta_0\in\Theta_0}\prob(T(\X)\geq T(\x);\theta_0)$$
+\nb $p(\x)$ is the smallest \textit{Significance Level} at which we would reject the \textit{Null Hypothesis}.\\
+
+\remark{$p$-Value is a measure of the evidence against the Null-Hypothesis}
+
+\definition{Size of a Test}
+The \textit{Size of a Test} is the maximum power of a test under the \textit{Null-Hypothesis}.\\
+Let $T(\cdot)$ be a \textit{Test Statistic} \& $c$ be a \textit{Critical Value}
+$$\alpha:=\sup_{\theta\in\Theta_0}\pi(\theta;T,c)$$
+\ie The greatest possible probability of making a \textit{Type I Error}
+
+\subsubsection{Neyman-Pearson Approach}
+
+\remark{Motivation}
+TODO\\
+
+\definition{Likelihood Ration Test Statistic}
+Let $\x$ be a realisation of $\X\sim f_n(\cdot;\theta)$.\\
+Consider two \textit{Simple Hypotheses} $H_0:\theta=\theta_0$ \& $H_1:\theta=\theta_1$.\\
+The \textit{Likelihood Ratio Test Statistic} is
+$$T_\text{NP}(\x):=\frac{L(\theta_1;\x)}{L(\theta_0;\x)}=\frac{f_n(\x;\theta_1)}{f_n(\x;\theta_0)}$$
+\nb AKA \textit{Neyman-Pearson Test Statistic}.\\
+
+\theorem{The Neyman-Pearson Lemma}
+Let $\x$ be a realisation of $\X\sim f_n(\cdot;\theta)$.\\
+Consider testing $H_0:\theta=\theta_0$ against $H_1:\theta=\theta_1$ using the \textit{Neyman-Pearson Test Statistic}, $T_\text{NP}$.\\
+Let $c_\text{NP}$ be the \textit{Critical Value} st $(T_\text{NP},c_\text{NP})$ has \textit{Size} $\alpha$.
+$$\ie\ c_\text{NP}\text{ st }\prob(T_\text{NP}\geq c_\text{NP};\theta_0)=\alpha$$
+Then $(T_\text{NP},c_\text{NP})$ is \textit{Equivalent} to the \textit{Uniformly Most Powerful $\alpha$-Level Test}.\\
+
+\proof{Theorem 3.1}
+Consider for an arbitrary level $\alpha$ test $(T,c)$, the linear combination of \textit{Type I Errors} and \textit{Type II Errors}.
+$$\phi(T,c):=c_{NP}\alpha(T,c)+\beta(T,c)$$
+where $\alpha(T,c)=\prob(T(\X)\geq c;\theta_0)=\prob(\text{Type I Error})$ and\\ ${\beta(T,c)=\prob(T(\X)<c;\theta_1)=1-\prob(T(\X)\geq c;\theta_1)=\prob(\text{Type II Error})}$.\\
+Then
+\[\begin{array}{rcl}
+\phi(T,c)&=&c_{NP}\alpha(T,c)+\beta(T,c)\\
+&=&c_{NP}\prob(T(\X)\geq c;\theta_0)+[1-\prob(\X)\geq c;\theta_1)]\\
+&=&{\displaystyle\left[c_{NP}\int\mathds{1}\{T(\x)\geq c\}f_n(\x;\theta_0)d\x\right]+\left[1-\int\mathds{1}\{T(\x)\geq c\}f_n(\x;\theta)d\x\right]}\\
+&=&{\displaystyle1+\int\mathds{1}\{T(\x)\geq c\}\left[c_{NP}f_n(\x;\theta_0)-f_n(\x;\theta_1)\right]d\x}\\
+&=&{\displaystyle 1+\int\mathds{1}\{T(\x)\geq c\}\left[c_{NP}-\dfrac{f_n(\x;\theta_1)}{f_n(\x;\theta_0)}\right]f_n(\x;\theta_0)d\x}\\
+&=&{\displaystyle1+\int\mathds{1}\{T(\x)\geq c\}(c_{NP}-T_{NP}(\x))f_n(\x;\theta_0)d\x}
+\end{array}\]
+Now consider the difference
+$$\phi(T,c)-\phi(T_{NP},c_{NP})=\int\big(\mathds{1}\{T(\x)\geq c\}-\mathds{1}\{T_{NP}(\x)\}\geq c_{NP}\}\big)(c_{NP}-T_{NP}(\x))f_n(\x;\theta_0)d\x$$
+We observe that
+$$\mathds{1}\{T_{NP}(\x)\geq c_{NP}\}=1\Longleftrightarrow c_{NP}-T_{NP}(\x)\leq0$$
+and
+$$\mathds{1}\{T_{NP}(\x)\geq c_{NP}\}=0\Longleftrightarrow c_{NP}-T_{NP}(\x)>0$$
+Thus
+$$\forall\ \x\in\mathcal{X}^n,\quad[\mathds{1}\{T(\x)\geq c\}-\mathds{1}\{T_{NP}(\x)\geq c_{NP}\}](c_{NP}-T_{NP}(\x))\geq 0$$
+and hence as the integral of a non-negative function
+$$\phi(T,c)-\phi(T_{NP},c_{NP})\geq0$$
+We have established
+\[\begin{array}{rcl}
+0&\leq&\phi(T,c)-\phi(T_{NP},c_{NP})\\
+&=&c_{NP}\alpha(T,c)+\beta(T,c)-c_{NP}\alpha(T_{NP},c_{NP})-\beta(T_{NP},c_{NP})\\
+&=&\underbrace{c_{NP}}_{\geq0}[\alpha(T,c)-\alpha(T_{NP},c_{NP})]+\underbrace{\beta(T,c)-\beta(T_{NP},c_{NP})}_{\geq0}
+\end{array}\]
+Since $(T,c)$ specifies an $\alpha$-level test, we know $\alpha(T,c)\geq c$ while $(T_{NP},c_{NP})$ specifies an $\alpha$-size test so $\alpha(T_{NP},c_{NP})=\alpha$.\\
+It follows that
+$$\alpha(T,c)-\alpha(T_{NP},c_{NP})$$
+so we have
+$$\beta(T,c)-\beta(T_{NP},c_{NP})\geq0$$
+which means $(T_{NP},c_{NP})$'s \textit{Type II Error} rate is no higher than $(T,c)$.\\
+Since $(T,c)$ is an arbitrary $\alpha$ level test, we conclude that $(T_{NP},c_{NP})$ is the most powerful test with level $\alpha$.\proved\\
+
+\remark{Neyman-Pearson Lemma with Non-Continuous Random Variables}
+If $T(\X)$ is \underline{not} a continuous random variable, then it is possible that no $c_\text{NP}$ exists.\\
+In this situation we perform an appropriate \textit{randomised} test, and this will also be the most powerful $\alpha$-size test.\\
+\nb This is out of scope of this course.\\
+
+\proposition{Neyman-Pearson Testing Procedure}
+From \textbf{Theorem 3.1} we can deduce the \textit{Neyman-Pearson Testing Procedure} for testing two \textit{Simple Hypotheses}, $H_0$ against $H_1$.
+\begin{enumerate}
+	\item Use the \textit{Likelihood Ratio Test Statistic} as the \textit{Test Statistic}
+	$$T_\text{NP}(\x):=\frac{L(\theta_1;\x)}{L(\theta_0;\x)}=\frac{f_n(\x;\theta_1)}{f_n(\x;\theta_0)}$$
+	\item Find a critical value, $c$, st we achieve the desired significance level, $\alpha$.
+	$$\alpha=\pi(\theta_0;T,c)=\prob(T_\text{NP}(\x)\geq c;\theta_0)$$
+	\item Compute the \textit{Power} of the \textit{Alternative Hypothesis}
+	$$\pi(\theta_1;T,c)=\prob(T_\text{NP}(\X)\geq c;\theta_1)$$
+	\item Compute the observed test statistic, $t_\text{obs}:=T(\x)$ and report whether $T(\x)\geq c$.
+	\item Report the power of the \textit{Alternative Hypothesis}, $\pi(\theta_1;T_\text{NP},c)$
+\end{enumerate}
+
+\remarkk{Limitations of Neyman-Pearson Approach to Hypothesis Testing}
+\begin{enumerate}
+	\item Reporting \textit{rejection/acceptance} of the \textit{Null-Hypothesis} does not show the strength of the evidence against the \textit{Null-Hypothesis}.
+	\item We may wish to set the \textit{Significance Level}, $\alpha:=\pi(\theta_0)$, \& \textit{Type II Error Rate}, $\beta:=1-\pi(\theta_1)$ together, or optimise both to be as minimal as possible.
+\end{enumerate}
+
+\subsubsection{Generalised Hypothesis Testing}
+
+\definition{Generalised Likelihood Ratio Test}
+Let $\X\sim f_n(\cdot;\theta)$ be a \textit{Random Vector} and consider \textit{Composite Hypotheses} $H_0:\theta\in\Theta_0\ \&\ H_1:\theta\in\Theta_1$.\\
+We define the \textit{Generalised Likelihhod Ratio Test} to be
+$$\Lambda(\x):=\dfrac{\sup_{\theta\in\Theta_0}f_n(\x;\theta)}{\sup_{\theta\in\Theta}f_n(\x;\theta)}=\min\bigg\{\underbrace{1}_{\hat\theta\in\Theta_0},\underbrace{\dfrac{\sup_{\theta\in\Theta_0}f_n(\x;\theta)}{\sup_{\theta\in\Theta_1}f_n(\x;\theta)}}_{\hat\theta\not\in\Theta_0}\bigg\}$$
+\nb This compares the best fit for the data under the \textit{Null Hypothesis} to the best fit from the whole parameter space.\\
+
+\definition{Nested Parameter Space}
+Assume the \textit{Parameter Space} is $\Theta\subseteq\reals^d$ for some $d\geq1$.\\
+Define a continuously differentiable bijection, $\phi(\cdot):=(\phi_1(\cdot),\phi_2(\cdot)):\Theta\to\Phi_1\times\Phi_2$ where $\Phi_1\subseteq\reals^r\ \&\ \Phi_2\subseteq\reals^{d-r}$ for some $r\in\nats$.\\
+$\Theta_0\subseteq\Theta$ is said to be \textit{Nested} in $\Theta$ if
+$$\Theta_0:=\{\theta\in\Theta:\phi(\theta)=c\}\text{ for some }c\in\Phi_1\subseteq\reals^r$$
+\nb $\text{dim}(\Theta_0)=d-r$.\\
+
+\theorem{}
+Let $\X\iid f(\cdot;\theta)$ be a \textit{Random Vector} for some $\theta\in\Theta_0$ where $\Theta_0$ is \textit{Nested} in $\Theta$.\\
+Then
+$$T_n(\X):=-2\ln\Lambda_n(\X)\to_{\mathcal{D}(\cdot;\theta)}W\sim\chi^2_r$$
+where $r=\text{dim}(\Theta)-\text{dim}(\Theta_0)$.\\
+\nb The proof of this relies on a Taylor Expansion of the Likelihood function.\\
+
+\remark{The fact that $-2\ln\Lambda_n(\X)\to_{\mathcal{D}(\cdot;\theta)}W\sim\chi^2_r$, is a generalisation of the result which motivates Wilks Confidence Sets}
+
+\propositionn{Computing an Approximate $p$-Value for Composite Hypothees}
+\begin{enumerate}
+	\item Compute \textit{Observed Test Statistic}, $T_n(\x):=-2\ln\Lambda_n(\x)$.
+	\item Determine $r=\text{dim}(\Theta)-\text{dim}(\Theta_0)$.
+	\item Compute the approximate \textit{$p$-Value}
+	$$p(\x)=\prob(\chi^2_r\geq-2\ln\Lambda_n(\x))$$
+\end{enumerate}
+
+\subsection{Categorical Distribustions \& Pearson's $\chi^2$-Test}
+
+\definition{Categorical Distributions}
+Consider a scenario where a random variable $Y$ takes one of $m$ possible values, $\{1,\dots,m\}$ (\ie Categories) and $p_i:=\prob(Y=i)$. Then $Y$ is said to have a \textit{Categorical Distribution}
+$$Y\sim\text{Categorical}(\textbf{p})$$
+where $\textbf{p}$ is a vector of probabilities (\ie $\sum p_i=1$ \& $p_i\geq0\ \forall\ i$).\\
+
+\definition{Counts in Categorical Distribution}
+Let $\textbf{Y}\iid\text{Categorical}(\textbf{p})$ be $n$ random variables.\\
+
+\definition{Multinomial Distribution}
+Let $\textbf{Y}\iid\text{Categorical}(\textbf{p})$ be $n$ random variables and $\X:=\{N_1,\dots,N_m\}$, where ${N_k:=\sum_{i=1}^n\mathds{1}\{Y_i=k\}}$, represent the counts from $\textbf{Y}$.\\
+Then $\X$ is said to have a \textit{Multinomial Distribution}
+$$\X\sim\text{Multinomial}(n,\textbf{p})$$
+with
+\[\begin{array}{rcl}
+f_n(\x;\textbf{p})&=&{\displaystyle\mathds{1}\left\{\sum_{i=1}^mx_i=n\right\}\left[\dfrac{n!}{\prod_{i=1}^mx_i!}\right]\prod_{i=1}^np_i^{x_i}}\\
+\expect(N_i)&=&np_i\\
+\var(N_i)&=&np_i(1-p_i)
+\end{array}\]
+
+\theorem{Maximum Likelihood Estimate - Multinomial Distribution}
+Let $\X\sim\text{Multinomial}(n,\textbf{p}^*)$ \& $\x$ be a realisation of $\X$. Then
+$$\hat{\textbf{p}}_\text{MLE}(\x)=(\hat{p}_1(\x),\dots,\hat{p}_m(\x))=\left(\frac{x_1}{n},\dots,\frac{x _m}{n}\right)$$
+
+\proof{Theorem 3.3}
+Note that
+$$\sum_{i=1}^mp_i=1\implies p_m=1-\sum_{i=1}^{m-1}p_i$$
+Hence there are only $m-1$ independent variables and
+\[\begin{array}{rcl}
+L(\textbf{p},\x)&=&L(p_1,\dots,p_{m-1};\x)\\
+&\propto&{\displaystyle \prod_{j=1}^mp_j^{x_j}}\\
+&=&{\displaystyle\left(\prod_{j=1}^{m-1}p_j^{x_j}\right)\left(1-\sum_{i=1}^{m-1}p_i\right)^{x_m}}
+\end{array}\]
+So
+$$\ell(p_1,\dots,p_{m-1};\x)=C+\left(\sum_{i=1}^{m-1}x_j\ln p_j\right)+x_m\ln\left(1-\sum_{i=1}^{m-1}p_i\right)$$
+Now for $k=1,\dots,m-1$.\\
+\[\begin{array}{rrcl}
+\text{Setting}&\frac{\partial}{\partial p_k}\ell(p_1,\dots,p_{m-1};\x)&=&\frac{x_k}{p_k}-\frac{x_m}{1-\sum_{i=1}^{m-1}p_i}\\
+&&=&0\\
+\implies&\frac{x_k}{p_k}&=&\frac{x_m}{p_m}\ \forall\ k\in[1,m]
+\end{array}\]
+So $\frac{x_1}{p_1}=\dots=\frac{x_m}{p_m}=c$ and $\sum_{i=1}^mp_i=1$.\\
+$$\implies\sum_{i=1}^m\frac{x_i}{c}=1\implies\sum_{i=1}^mx_i=c\implies n=c$$
+Hence $\frac{x_k}{p_k}=n\implies\hat{p}_j=\frac{x_k}{n}\ \forall\ k\in[1,m]$.\\
+In order to confirm that this is a maximum we will show that $\ell(\textbf{p};\x)$ is concave.\\
+\ie for $\lambda\in[0,1]\ \ell(\lambda \textbf{p}+(1-\alpha)\textbf{p}';\x)\geq\lambda\ell(\textbf{p};\x)+(1-\lambda)\ell(\textbf{p}';\x)$.
+\[\begin{array}{rcl}
+\ell(\lambda\textbf{p}+(1-\lambda)\textbf{p}';\x)&=&\sum_{i=1}^mx_i\ln(\lambda p_i+(1-\lambda)p_i')\\
+&\geq&\sum_{i=1}^mx_i\left[\lambda_i\ln p_i + (1-\lambda)\ln p_i'\right]\text{ since $\ln x$ is concave}\\
+&=&[\lambda\sum_{i=1}^mx_i\ln p_i]+x_i(1-\lambda)\ln p'_i\\
+&=&\lambda\ell(\textbf{p};\x)+(1-\lambda)\ell(\textbf{p}';\x)
+\end{array}\]
+Thus concave.\\
+It follows that
+$$\Lambda_n(\x)=\frac{f_n(\x;\textbf{p}_0)}{\sup_{\textbf{p}\in\mathcal{S}_m}f_n(\x;\textbf{p})}=\prod_{i=1}^m\frac{p_{0,i}^{x_i}}{\hat{p}_i^{x_i}}=\prod_{i=1}^m\frac{p_{0,i}^{x_i}}{(x_i/n)^{x_i}}$$
+so that
+$$T_n(\x)=-2\ln\Lambda_n(\x)=-2\sum_{i=1}^mx_i\{\ln p_{0,i}-\ln(x_i/n)\}$$
+is the \textit{Generalised Likelihood Ratio} test statistic. From the general theorem
+$$T_n(\x)\to_{\mathcal{D}(\cdot;\textbf{p}_0)}\chi^2_{m-1}$$
+since $\text{dim}(\mathcal{S}_m)=m-1$.\\
+Many people rewrite this statistic as
+\[\begin{array}{rcl}
+T_n(\x)&=&{\displaystyle2\sum_{j=1}^mo_j\ln\left(\frac{0_j}{e_j}\right)}\\
+&=&{\displaystyle2\sum_{j=1}^mn_j\ln\left(\frac{x_j/n}{p_{0,j}}\right)}\\
+&=&{\displaystyle-2\sum_{j=1}^mn_j\ln\left(\frac{x_j}{np_{0,j}}\right)}
+\end{array}\]
+where $o_j=n_j$ is the observered number in category $j$ and $e_j=np_{0,j}$ is the expected number in category $j$.$\hfill\square$.\\
+
+\definition{Pearson's $\chi^2$ Test Statistic}
+Let $\X\sim\text{Categoritcal}(\textbf{p})$ where $\textbf{p}:=(p_0,\dots,p_m)$ and $\x$ is a relisation of $\X$.\\
+We define \textit{Pearson's $\chi^2$ Test Statistic}  as
+$$T_\text{Pearson}(\x):=\sum_{j=1}^m\frac{(x_j-np_{j})^2}{np_{j}}=\sum_{j=1}^m\frac{(o_j-e_j)^2}{e_j}\to_{\mathcal{D}(\cdot;\textbf{p})}\chi^2_{m-1}$$
+where $o_j$ is the number of observations of category $j$ and $e_j$ is the expected number of observations of category $j$.
+\nb TODO - something about degrees of freedom.\\
+
+\section{Bayesian Inference}
 
 \newpage
 \setcounter{section}{-1}
@@ -833,6 +1167,16 @@ $$\forall\ a>0\quad\prob(X\geq a)\leq\frac{\expect(X)}{a}$$
 
 \subsection{Probability Distributions}
 
+\definition{$\beta$-Distribution}
+Let $X\sim\text{Beta}(\alpha,\beta)$.\\
+A \textit{continuous} random variable with shape parameters $\alpha,\beta>0$. Then
+\[\begin{array}{rcl}
+f_X(x)&\propto&x^{\alpha-1}(1-x)^{\beta-1}\mathds{1}\{x\in[0,1]\}\\
+\expect(X)&=&\dfrac{\alpha}{\alpha+\beta}\\
+\var(X)&=&\dfrac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}\\
+\mathcal{M}_X(t)&=&1+{\displaystyle\sum_{k=1}^\infty\left(\prod_{r=0}^{k-1}\dfrac{\alpha+r}{\alpha+\beta+r}\right)\dfrac{t^k}{k!}}
+\end{array}\]
+
 \definition{Bernoulli Distribution}
 Let $X\sim\text{Bernoulli}(p)$.\\
 A \textit{discrete} random variable which takes 1 with probability $p$ \& 0 with probability $(1-p)$. Then
@@ -894,8 +1238,8 @@ F_X(x)&=&\dfrac{\Gamma(\alpha)}\gamma(\alpha,\beta x)\\
 \nb There is an equivalent definition of a \textit{Gamma Distribution} in terms of a shape \& \underline{scale} parameter. The scale parameter is 1 over the rate parameter in this definition.\\
 
 \definition{Normal Distribution}
-Let $X$ be a continuous random variable modelled by a \textit{Normal Distribution} with mean $\mu$ \& variance $\sigma^2$.\\
-Then
+Let $X\sim\text{Normal}(\mu,\sigma^2)$.\\
+A \textit{continuous} random variable  with mean $\mu$ \& variance $\sigma^2$.
 \[\begin{array}{rcl}
 f_X(x)&=&\dfrac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}\\
 F_X(x)&=&\dfrac{1}{\sqrt{2\pi\sigma^2}}\int\limits_{-\infty}^xe^{-\frac{(y-\mu)^2}{2\sigma^2}}dy\\
