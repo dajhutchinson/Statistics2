@@ -112,7 +112,16 @@ $$X:\Omega\to\reals$$
 \textit{Parametric Models} are the class of statistical distributions whose probability mass/density function take parameters. These parameters represent values of interest in the population, such as mean or variance. We generally do not know these values so we estimate them from samples.\\
 
 \definition{Quantity of Interest}
-When analysing distributions it often helps to define \textit{Quantities of Interest} about the distributions (\eg Mean). These are defined as functions in terms of the parameters $\tau(\theta)$. We estimate \textit{Quantities of Interest} by passing estimated values of the parameters $\hat{\tau}=\tau(\hat{\theta})$.
+When analysing distributions it often helps to define \textit{Quantities of Interest} about the distributions (\eg Mean). These are defined as functions in terms of the parameters $\tau(\theta)$. We estimate \textit{Quantities of Interest} by passing estimated values of the parameters $\hat{\tau}=\tau(\hat{\theta})$.\\
+
+\definition{Frequentist Approach}
+The \textit{Frequentist Approach} to probability is an interpretation of probability where \textit{Probability} refers to the limiting relative frequencies of events. \textit{Probabilities} are objective properties of the world.
+$$\prob(X=x)=\lim_{n\to\infty}\frac{k}{n}$$
+where $k$ is the number of times $x$ is observed in $n$ samples.\\
+\nb Most of this module follows this approach.\\
+
+\definition{Bayesian Approach}
+The \textit{Frequentist Approach} to probability is an interpretation of probability where \textit{Probability} is a reasonable expectation given our beliefs about the system so we can model features beyond the data. We encode our beliefs using the components of \textit{Bayes' Theorem}.
 
 \subsection{Theorems}
 
@@ -1034,10 +1043,143 @@ where $o_j=n_j$ is the observered number in category $j$ and $e_j=np_{0,j}$ is t
 Let $\X\sim\text{Categoritcal}(\textbf{p})$ where $\textbf{p}:=(p_0,\dots,p_m)$ and $\x$ is a relisation of $\X$.\\
 We define \textit{Pearson's $\chi^2$ Test Statistic}  as
 $$T_\text{Pearson}(\x):=\sum_{j=1}^m\frac{(x_j-np_{j})^2}{np_{j}}=\sum_{j=1}^m\frac{(o_j-e_j)^2}{e_j}\to_{\mathcal{D}(\cdot;\textbf{p})}\chi^2_{m-1}$$
-where $o_j$ is the number of observations of category $j$ and $e_j$ is the expected number of observations of category $j$.
-\nb TODO - something about degrees of freedom.\\
+where $o_j$ is the number of observations of category $j$ and $e_j$ is the expected number of observations of category $j$.\\
+\nb TODO - something about degrees of freedom.
 
 \section{Bayesian Inference}
+
+\theorem{Bayes' Theorem}
+Consider $X\sim f(\cdot;\theta)$.
+$$\underbrace{p(\theta|X)}_\text{Posterior}=\dfrac{\overbrace{p(X|\theta)}^\text{Likelihood}\overbrace{p(\theta)}^\text{Prior}}{\underbrace{p(X)}_\text{Evidence}}$$
+
+\definition{Prior Distribution, $p(\theta)$}
+Consider random variable $X\sim f(\cdot;\theta)$.\\
+A \textit{Prior Distribution} encodes our beliefs about the model parameters, $p(\theta)$, before any data is observed. Typically \textit{Priors} have less affect as the number of observed data points increases.\\
+
+\definition{Posterior, $\prob(\theta|\X)$}
+Consider random variable $X\sim f(\cdot;\theta)$ and let $\x$ be a set of realisations of $X$.\\
+A \textit{Posterior Distribution} is used to learn possible values for the parameters of a model, given a set of observations from the model.\\
+
+\definition{Conjugacy}
+A \textit{Prior} is said to be \textit{Conjugate} if its distribution is in the same family as the \textit{Poseterior}. When a \textit{Prior} is \underline{not} \textit{Conjugate} one typically requires a computer to conduct \textit{Bayesian Inference}.\\
+
+\proposition{Modelling Parameters}
+Consider $X\sim f(\cdot;\theta)$.\\
+Here we can consider $\theta$ to be a realisation of some random variable $\vartheta$ and theorise the distribution of $\vartheta$ in our \textit{Prior}.\\
+\nb Often $\beta$-\textit{Distributions} are used, $\vartheta\sim\text{Beta}(\alpha,\beta)$. To set the values of $\alpha\ \&\ \beta$ we set the \textit{mean} \& \textit{variance} and then solve the resulting simultaneous equations.\\
+
+\proposition{Generalisation of Posterior Distributions}
+Consider \textit{Random Variable} $\X\sim f_n(\cdot;\theta)$ and $\X$ be a realisations of $X$.\\
+Given a \textit{Prior Distribution}, $p(\theta)$, we can generalise the \textit{Posterior Distribution}
+$$p(\theta|\x)=\dfrac{f_n(\x;\theta)p(\theta)}{\int_\Theta f_n(\x;\xi)p(\xi)d\xi}=\dfrac{L(\theta;\x)p(\theta)}{\int_\Theta L(\xi;\x)p(\xi)d\xi}\propto L(\theta;\x)p(\theta)$$
+\nb This is equivalent to a \textit{Maximum Likelihood Estimate} from the \textit{Frequentist Approach}, but is a distribution rather than a point estimate.\\
+
+\proposition{Making Estimations}
+Given a \textit{Poseterior Distribution}, $p(\theta|\x)$, there are an infinite number of point estimates which could be used. Ones worth considering using are
+\begin{enumerate}
+	\item The \textit{Mean} of the \textit{Poseterior Distribution} (Common when the \textit{Posterior} is \textit{Unimodal}).
+	$$\hat\theta=\int_\Theta\theta p(\theta|\x)d\theta$$
+	\item The \textit{Maximum a Posteriori}. This might be misleading in certain situations.
+	$$\hat\theta=\text{argmax}_{\theta\in\Theta}p(\theta|\x)$$
+	\item The \textit{Median} of the \textit{Posterior Distribution} (Or other quantiles)
+	$$p(\theta\geq\hat\theta)=0.5$$
+	\item The \textit{Variance} of the \textit{Posterior Distribution} which depends on the model used.
+	$$\hat\theta=\var(X)$$
+\end{enumerate}
+
+\definition{Posterior Expected Loss}
+Consider a \textit{Random Vector} $\X\sim f_n(\cdot;\theta)$, $\x$ be a realisation of $\X$ \& $\hat\theta$ be an estimate of $\theta$.\\
+Then the \textit{Posterior Expected Loss} of $\hat\theta$ is defined to be
+$$R(\hat\theta|\x)=\int_\Theta L(\theta,\hat\theta)p(\theta|\x)d\theta$$
+where $L(\theta,\hat\theta)$ is a non-negative \textit{Loss Function}.\\
+\nb AKA \textit{Posterior Risk}.
+
+\proposition{Loss Functions}
+A \textit{Loss Function} is a measure of how much an estimate of a parameter deviates from the true value.\\
+Some popular \textit{Loss Functions} are
+\begin{center}\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Name}&\textbf{Form}&\textbf{Bayes Estimate}\\
+\hline
+Squared Error Loss&$L(\theta,\hat\theta)=(\theta-\hat\theta)^2$&$\hat\theta_\text{Bayes}=\displaystyle\int_\Theta\theta p(\theta|\x)d\theta$  (Posterior Mean)\\
+Absolute Value&$L(\theta,\hat\theta)=|\theta-\hat\theta|$&$\hat\theta_\text{Bayes}=\theta\text{ where }p(\theta|\x)=0.5$ (Posterior Median)\\
+&$L(\theta,\hat\theta)=\mathds{1}(\theta\neq\hat\theta)$&$\hat\theta_\text{Bayes}=\text{argmax}_{\theta\in\Theta}p(\theta|\x)$ (Posterior Mode)\\
+\hline
+\end{tabular}\end{center}
+
+\definition{Bayes Estimate}
+Consider a \textit{Random Vector} $\X\sim f_n(\cdot;\theta)$ \& $\x$ be a realisation of $\X$.\\
+A \textit{Bayes Estimate} of $\theta$ is 
+$$\hat\theta_\text{Bayes}=\text{argmin}_{\theta\in\Theta}R(\hat\theta|\x)$$
+\ie The value which minimise the \textit{Posterior Expected Loss}
+
+\subsection{Credible Intervals}
+
+\definition{Symmetric Credible Interval}
+Consider a \textit{Random Variable} $\X\sim f_n(\cdot;\theta)$ and a realisation $\x$ of $\X$.\\
+Let $\alpha\in[0,1]$.\\
+An interval $(\theta_1,\theta_2)$, for $\theta_1,\theta_2\in\Theta$, is called a \textit{Symmetric $(1-\alpha)$ Credible Interval} if
+$$\prob(\theta\in[\theta_1,\theta_2]|\x)=\int_{\theta_1}^{\theta_2}p(\theta|\x)d\theta=1-\alpha$$
+\nb This is hard to generalise to the multidimensional scenario.\\
+
+\definition{High Posterior Density Set}
+Consider a \textit{Random Variable} $\X\sim f_n(\cdot;\theta)$ and a realisation $\x$ of $\X$.\\
+Let $\alpha\in[0,1]$.\\
+The $(1-\alpha)$ \textit{High Posterior Denisty} is the \textit{Level Set} defined as
+$$\mathcal{HPD}_v:=\{\theta\in\Theta:p(\theta|\x)\geq v\}$$
+where $v$ is chosen st
+$$\prob(\theta\in\mathcal{HPD}_v|\x)=\int_{\mathcal{HPD}_v}p(\theta|\x)d\theta=1-\alpha$$
+\nb These sets are difficult to compute \underline{without} a computer.\\
+
+\theoremm{The $\mathcal{HPD}(1-\alpha)$ Credible Set is the smallest Subset of $\Theta$ containing exactly $1-\alpha$ of the total density/probability.}
+
+\subsection{Bayesian Hypothesis Testing}
+
+\remark{Difference to Frequentist Approach}
+Consider a \textit{Random Variable} $\X\sim f_n(\cdot;\theta)$ where $\theta$ is a realisation of $\vartheta$ and ${\x\text{ is a realisation of }\X}$.\\
+Consider testing the \textit{Composite Hypotheses}: $H_0:\theta\in\Theta_1,\ H_1:\theta\in\Theta_2$.\\
+In the \textit{Bayesian Approach} we actually calculate
+\[\begin{array}{rrcl}
+&\prob(\vartheta\in\Theta_0|\X=\x)&=&\displaystyle\int_{\Theta_0}p(\theta|\x)d\theta\\
+\text{and}&\prob(\vartheta\in\Theta_1|\X=\x)&=&\displaystyle\int_{\Theta_1}p(\theta|\x)d\theta
+\end{array}\]
+
+\example{Bayesian Hypothesis Testing}
+Consider the testing the \textit{Simple Hypotheses} $H_0:\theta=\theta_0\text{ against }H_1:\theta=\theta_1$.\\
+In a \textit{Bayesian} framework we can take into account the cost of making an error, and base our decision on the minimisation of this cost.\\
+We construct a loss table
+\begin{center}\begin{tabular}{|c|c|c|}
+\hline
+Truth $\backslash$ Decision&$\theta_0$&$\theta_1$\\
+\hline
+$\theta_0$&$L_{00}$&$L_{10}$\\
+\hline
+$\theta_1$&$L_{10}$&$L_{11}$\\
+\hline
+\end{tabular}\end{center}
+$L_{ij}$ is the loss for choosing $H_i$ when actually $\theta=\theta_j$.\\
+We assume $L_{ik}>L_{jj}$ for $i\neq j$ (\ie it is always more costly to make a wrong decision).\\
+We aim to choose the hypothesis with the smallest \textit{Posterior Expected Cost}.\\
+When we choose $H_0$ we \textit{risk} the following loss
+$$R_0=L_{00}\times p(\theta_0|\x)+L_{01}\times p(\theta_1|\x)$$
+and when we chosse $H_1$ we risk the loss
+$$R_1=L_{10}\times p(\theta_0|\x)+L_{11}\times p(\theta_1|\x)$$
+Hence we choose $H_1$ if $R_1<R_0$ (and visa-versa). \ie
+\[\begin{array}{rrcl}
+&L_{10}\times p(\theta_0|\x)+L_{11}\times p(\theta_1|\x)&<&L_{00}\times p(\theta_0|\x)+L_{01}\times p(\theta_1|\x)\\
+\implies&p(\theta_0|\x)[L_{10}-L_{00}]&<&p(\theta_1|\x)[L_{01}-L_{11}]\\
+\implies&\dfrac{p(\theta_1|\x)}{p(\theta_0|\x)}&>&\dfrac{L_{10}-L_{00}}{L_{01}-L_{11}}\\
+\equiv&\dfrac{p(\x|\theta_1)p(\theta_1)}{p(\x|\theta_0)p(\theta_0)}&>&\dfrac{L_{10}-L_{00}}{L_{01}-L_{11}}\\
+\implies&\dfrac{L(\theta_1;\x)}{L(\theta_0;\x)}&>&\dfrac{p(\theta_0)[L_{10}-L_{00}]}{p(\theta_1)[L_{11}-L_{11}]}
+\end{array}\]
+Note that is exactly the same form as the \textit{Neyman-Pearson Test}, expt that the \textit{"critical value"} is chosen according to our prior and our assessment of the risk of taking thw wrong decision.\\
+In particular
+\begin{enumerate}
+	\item The greater the cost of a \textit{Type I Error}, $L_{10}$, the higher the threshold.
+	\item The greater the cost of a \textit{Type II Error}, $L_{01}$, the lower the threshold.
+	\item The greater the prior probability of $H_0$, $p(\theta_0)$, the higher the threshold.
+	\item The greater the prior probability of $H_1$, $p(\theta_1)$, the lower the threshold.
+\end{enumerate}
 
 \newpage
 \setcounter{section}{-1}
@@ -1201,6 +1343,13 @@ P_X(k)&=&\sum_{i=1}^k{n\choose i}p^i(1-p)^{n-i}\\
 \end{array}\]
 \nb If $Y:=\sum_{i=1}^nX_i$ where $\X\iid\text{Bernoulli}(p)$ then $Y\sim\text{Binomial}(n,p)$.\\
 
+\definition{Categorical Distribution}
+Let $X\sim\text{Categorical}(\textbf{p})$.\\
+A \textit{discrete} random varaible where probability vector $\textbf{p}$ for a set of events $\{1,\dots,m\}$.\\
+\[\begin{array}{rcl}
+f_X(i)=p_i
+\end{array}\]
+
 \definition{$\chi^2$ Distribution}
 Let $X\sim\chi^2_r$.\\
 A \textit{continuous} random variable modelled by the \textit{$\chi^2$ Distribution} with $r$ degrees of freedom. Then
@@ -1236,6 +1385,18 @@ F_X(x)&=&\dfrac{\Gamma(\alpha)}\gamma(\alpha,\beta x)\\
 \mathcal{M}_X(t)&=&\indicator\{t<\beta\}\left(1-\frac{t}{\beta}\right)^{-\alpha}
 \end{array}\]
 \nb There is an equivalent definition of a \textit{Gamma Distribution} in terms of a shape \& \underline{scale} parameter. The scale parameter is 1 over the rate parameter in this definition.\\
+
+\definition{Multinomial Distribution}
+Let $\X\sim\text{Multinomial}(n,\textbf{p})$.\\
+A \textit{discrete} random varible which models $n$ events with probability vector $\textbf{p}$ for events $\{1,\dots,m\}$.\\
+\[\begin{array}{rcl}
+f_\X(\x)&=&{\displaystyle\mathds{1}\left\{\sum_{i=1}^mx_i\equiv m\right\}\frac{n!}{x_1!\cdot\dots\cdot x_n!}\prod_{i=1}^np_i^{x_i}}\\
+\expect(X_i)&=&np_i\\
+\var(X_i)&=&np_i(1-p_i)\\
+\cov(X_i,x_j)&=&-np_ip_j\text{ for }i\neq j\\
+\mathcal{M}_{X_i}(\theta_i)&=&\left(\displaystyle\sum_{i=1}^mp_ie^{\theta_i}\right)^n
+\end{array}\]
+\nb In a realisation $\x$ of $\X$, $x_i$ is the number of times event $i$ has occured.\\
 
 \definition{Normal Distribution}
 Let $X\sim\text{Normal}(\mu,\sigma^2)$.\\
