@@ -337,7 +337,9 @@ $$\hat\sigma_n^2:=\frac{1}{n-1}\sum_{i=1}^n(\X_i-\hat\mu_n)^2$$
 \definition{Wald's Approach}
 Let $\X\iid f(\cdot;\theta^*)$ for $\theta^*\in\Theta\subset\reals$.\\
 Using \textit{Wald's Approach} we can define a confidence interval for $\theta^*$ using the asymptotic distribution of the \textit{Maximum Likelihood Estimator} for $\theta^*$.
-$$\mathcal{I}(\tau^*):=[L(\X),U(\X)]\text{ where } L(\x):=\hat\theta_n-z_{\alpha/2}\sqrt{nI(\theta^*)}\text{ and }U(\x)=\hat\theta_n+z_{\alpha/2}\sqrt{nI(\theta^*)}$$
+$$\mathcal{I}(\tau^*):=[L(\X),U(\X)]\text{ where } L(\x):=\hat\theta_n-\frac{z_{\alpha/2}}{\sqrt{nI(\theta^*)}}\text{ and }U(\x)=\hat\theta_n+\frac{z_{\alpha/2}}{\sqrt{nI(\theta^*)}}$$
+When we have a realisation we use the \textit{Observed Fisher Information}
+$$L(\x):=\hat\theta_n-\frac{z_{\alpha/2}}{\sqrt{nJ(\theta^*)}}\text{ and }U(\x)=\hat\theta_n+\frac{z_{\alpha/2}}{\sqrt{nJ(\theta^*)}}$$
 \nb This definition ensures that as $\prob(\theta\in\mathcal{I}(\X))\underset{n\to\infty}{\longrightarrow}1-\alpha$.\\
 
 \remark{Limitations of Wald's Approach}
@@ -506,7 +508,7 @@ I_n(\theta)&:=&\expect(\ell'_n(\theta;\X)^2;\theta)\\
 \definition{Observed Fisher Information}
 Let $\X\iid f(\cdot;\theta^*)$ be a random n-dimensional vector.\\
 The \textit{Observed Fisher Information} at $\theta$ is
-$$nJ_n(\theta)=-\ell''(\theta;\X)=-\sum_{i=1}^n\ell''(\theta;X_i)$$
+$$J_n(\theta)=-\frac{1}{n}\ell''(\theta;\X)=-\frac{1}{n}\sum_{i=1}^n\ell''(\theta;X_i)$$
 \nb $\expect(J_n(\theta^*;\theta^*)=I(\theta^*)$. This is a deterministic value, not an expectation like \textit{Fisher Information}.\\
 
 \theorem{Fisher Information of Reparameterisation}
